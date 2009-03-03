@@ -3,10 +3,13 @@
 from optparse import OptionParser, OptionGroup
 import logging, os
 from os.path import join
+import logging
 
 from deploy.config import *
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
+    
     usage = "usage: %prog [OPTIONS...] [FILE]..."
 
     parser = OptionParser(usage)
