@@ -2,21 +2,8 @@
 
 from optparse import OptionParser
 import logging
-from ConfigParser import RawConfigParser, ConfigParser
 
-def parse_config(f):
-    # fixme: check if 'f' is ok
-    config = ConfigParser()
-    config.read(['/etc/deploy.cfg', f])
-    
-    return config
-#     create_apache_config(config.get('apache', 'dest'), 
-#                          config.get('apache', 'content'))
-
-#     for section in config.sections():
-#         print config.items(section)
-
-#     print config.get('apache', 'dest')
+from deploy.config import *
 
 if __name__ == '__main__':
     usage = "usage: %prog [OPTIONS...] [FILE]..."
@@ -27,6 +14,7 @@ if __name__ == '__main__':
     parser.add_option("-x", "--extract", 
                       action="store_true", dest="extract",
                       help="extract files from an archive")
+
     parser.add_option("--components", 
                       action="store", type="string", dest="components",
                       default="all",
@@ -50,13 +38,14 @@ if __name__ == '__main__':
         if len(args) < 1:
             parser.error("missing configuration file")
         else:
-            import create
+            from  deploy import create
+            config = parse_config(args[0])
             # ...
     elif options.extract:
         if len(args) < 1:
             parser.error("missing archive")
         else:
-            import extract
+            from deploy import extract
             # get config file
             f = extract.get_project_config(args[0])
             config = parse_config(f)
