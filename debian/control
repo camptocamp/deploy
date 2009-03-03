@@ -1,13 +1,15 @@
 Source: deploy
-Section: 
+Section: sig/sysadmin
 Priority: extra
 Maintainer: Frederic Junod <frederic.junod@camptocamp.com>
 Build-Depends: debhelper (>= 5)
+Build-Depends-Indep: python (>= 2.1), python-support (>= 0.3), python-setuptools
 Standards-Version: 3.8
 
 Package: deploy
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}
+XS-Python-Version: >= 2.1
+Depends: ${python:Depends}
 Description: the c2c project deploy scripts
  deploy tries to deploys your projet.
 
