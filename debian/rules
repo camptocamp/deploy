@@ -9,7 +9,7 @@ PREFIX := debian/deploy
 
 build: build-stamp
 
-build-stamp: configure-stamp 
+build-stamp:
 	dh_testdir
 	python ./setup.py test
 	touch $@
@@ -17,8 +17,8 @@ build-stamp: configure-stamp
 clean:
 	dh_testdir
 	dh_testroot
-	rm -fr build dist # .egg-info
-	rm -f build-stamp configure-stamp
+	rm -fr build dist deploy.egg-info
+	rm -f build-stamp
 
 	dh_clean *.pyc deploy/*.pyc
 
@@ -29,38 +29,31 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/deploy.
+	python setup.py install --debian --no-compile --root=$(PREFIX)
 
+	mv $(PREFIX)/usr/bin/deploy.py $(PREFIX)/usr/sbin/deploy
+	rmdir $(PREFIX)/usr/bin/
 
 # Build architecture-dependent files here.
 binary-arch: build install
 	dh_testdir
 	dh_testroot
-#	dh_installchangelogs 
-#	dh_installdocs
-#	dh_installexamples
-#	dh_install
-#	dh_installmenu
-#	dh_installdebconf	
-#	dh_installlogrotate
-#	dh_installemacsen
-#	dh_installpam
-#	dh_installmime
-#	dh_python
-#	dh_installinit
-#	dh_installcron
-#	dh_installinfo
-	dh_installman
+# 	dh_installchangelogs docs/NEWS.txt
+# 	dh_installdocs
+# 	dh_installexamples
+# 	dh_installman
 	dh_link
-	dh_strip
 	dh_compress
 	dh_fixperms
 	dh_pysupport
-##	chmod +x 
+# 	chmod +x $(PREFIX)$(PYSUPPORT)/TileCache/Service.py
+# 	chmod +x $(PREFIX)$(PYSUPPORT)/TileCache/Client.py
+# 	rm $(PREFIX)$(PYSUPPORT)/TileCache/Caches/S3.py # Suggests python-boto instead. 
 	dh_installdeb
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
 
 binary: binary-indep 
-#binary-arch:
-.PHONY: build clean binary-indep binary-arch binary install configure
+binary-arch:
+.PHONY: build clean binary-indep binary install

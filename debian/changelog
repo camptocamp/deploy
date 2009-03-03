@@ -1,4 +1,4 @@
-deploy (0.1) lenny; urgency=low
+deploy (0.1-0) lenny; urgency=low
 
   * Initial Release.
 
