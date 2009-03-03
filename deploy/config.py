@@ -1,14 +1,27 @@
-from ConfigParser import RawConfigParser, ConfigParser
-from os.path import isfile
+import ConfigParser
+import os, sys
+import logging
+logger = logging.getLogger('config')
 
 def parse_config(f):
-    master = '/etc/deploy.cfg'
-    if not isfile(f):
-        raise Exception("'%s' No such file or directory" % f)
-    if not isfile(master):
-        raise Exception("'%s' No such file or directory" % master)
+    globalconf = '/etc/deploy.cfg'
+    localconf = f
+    
+    if not os.path.isfile(globalconf):
+        logger.error("can't find global configuration file '%s'" % globalconf)
+        sys.exit(1)
+    if not os.path.isfile(localconf):
+        localconf = os.path.join(localconf, 'deploy.cfg') 
+        if not os.path.isfile(localconf):
+            logger.error("can't find project configuration file '%s'" % localconf)
+            sys.exit(1)
 
-    config = ConfigParser()
-    config.read([master, f])
+    logger.debug("using '%(globalconf)s' and '%(localconf)s'" % {'globalconf': globalconf,
+                                                                 'localconf': localconf})
+    config = ConfigParser.ConfigParser()
+    config.read([globalconf, localconf])
     
     return config
+
+# def get_archive():
+#     pass

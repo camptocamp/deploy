@@ -1,10 +1,9 @@
-from os import makedirs
-from os.path import join, isdir
-from shutil import copy
+import os
+import shutil
 
 def create_update_archive(base, configfile, components="all"):
-    if not isdir(base):
-        makedirs(base)
+    if not os.path.isdir(base):
+        os.makedirs(base)
 
-    copy(configfile, base)
+    shutil.copy(configfile, os.path.join(base, 'deploy.cfg'))
     return base

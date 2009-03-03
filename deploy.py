@@ -5,7 +5,7 @@ import logging, os
 from os.path import join
 import logging
 
-from deploy.config import *
+import deploy
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
@@ -51,26 +51,27 @@ if __name__ == '__main__':
         if len(args) < 1:
             parser.error("missing destination")
         else:
-            from  deploy import create, database, files, code
-            config = parse_config(options.create)
+            config = deploy.config.parse_config(options.create)
             # create 
-            dest = create.create_update_archive(join(args[0], config.get('DEFAULT', 'project')),
-                                                options.create)
-
-            database.dump(dict(config.items('databases')), 
-                          join(dest, 'databases'))
-
-            files.dump(dict(config.items('files')), 
-                       join(dest, 'files'))
+            destdir = deploy.create.create_update_archive(join(args[0], config.get('DEFAULT', 'project')),
+                                                          options.create)
             
-            code.dump(dict(config.items('code')),
-                      join(dest, 'code'))
+            deploy.database.dump(dict(config.items('databases')), 
+                                 join(destdir, 'databases'))
+
+#             files.dump(dict(config.items('files')), 
+#                        join(destdir, 'files'))
+            
+#             code.dump(dict(config.items('code')),
+#                       join(destdir, 'code'))
             
     elif options.extract:
-        from deploy import extract
-        # get config file
-        f = extract.get_project_config(options.extract)
-        config = parse_config(f)
+        config = deploy.config.parse_config(os.path.join(options.extract))
+        srcdir = deploy.extract.get_archive_dir(options.extract)
+        
+        deploy.database.restore(dict(config.items('databases')), 
+                                join(srcdir, 'databases'))
+
 
         # if not error: run preextract.sh (apache and postgresql)
         #extract.extract_project(args[0])
