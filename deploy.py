@@ -43,7 +43,9 @@ if __name__ == '__main__':
 
     if options.create and options.extract:
         parser.error("options -c and -x are mutually exclusive")
-
+    if not options.create and not options.extract:
+        parser.error("missing action")
+    
     if options.create:
         if len(args) < 1:
             parser.error("missing configuration file")
