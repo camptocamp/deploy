@@ -2,11 +2,13 @@ from ConfigParser import RawConfigParser, ConfigParser
 from os.path import isfile
 
 def parse_config(f):
-    # fixme: check if 'f' is ok and is a valid config file
+    master = '/etc/deploy.cfg'
     if not isfile(f):
-        raise Exception("'%s' do not exists")
+        raise Exception("'%s' No such file or directory" % f)
+    if not isfile(master):
+        raise Exception("'%s' No such file or directory" % master)
 
     config = ConfigParser()
-    config.read(['/etc/deploy.cfg', f])
+    config.read([master, f])
     
     return config

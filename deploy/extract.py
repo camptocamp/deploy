@@ -16,6 +16,5 @@ def get_project_config(name):
     else:
         raise Exception("'%s' unknow error." % name)
 
-
 def extract_project(name):
     pass
