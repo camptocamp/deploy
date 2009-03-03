@@ -1,0 +1,66 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# deploy debian/rules that uses debhelper.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+PREFIX := debian/deploy
+
+build: build-stamp
+
+build-stamp: configure-stamp 
+	dh_testdir
+	python ./setup.py test
+	touch $@
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -fr build dist # .egg-info
+	rm -f build-stamp configure-stamp
+
+	dh_clean *.pyc deploy/*.pyc
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k 
+	dh_installdirs
+
+	# Add here commands to install the package into debian/deploy.
+
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+#	dh_installchangelogs 
+#	dh_installdocs
+#	dh_installexamples
+#	dh_install
+#	dh_installmenu
+#	dh_installdebconf	
+#	dh_installlogrotate
+#	dh_installemacsen
+#	dh_installpam
+#	dh_installmime
+#	dh_python
+#	dh_installinit
+#	dh_installcron
+#	dh_installinfo
+	dh_installman
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_pysupport
+##	chmod +x 
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep 
+#binary-arch:
+.PHONY: build clean binary-indep binary-arch binary install configure
