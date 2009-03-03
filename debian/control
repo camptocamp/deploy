@@ -8,6 +8,6 @@ Standards-Version: 3.8
 Package: deploy
 Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: The c2c project deploy utilities
+Description: the c2c project deploy scripts
  deploy tries to deploys your projet.
 
