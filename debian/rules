@@ -28,14 +28,14 @@ install: build
 	dh_clean -k 
 	dh_installdirs
 
-	# Add here commands to install the package into debian/deploy.
+# Add here commands to install the package into debian/deploy.
 	python setup.py install --debian --no-compile --root=$(PREFIX)
 
 	mv $(PREFIX)/usr/bin/deploy.py $(PREFIX)/usr/sbin/deploy
 	rmdir $(PREFIX)/usr/bin/
 
 # Build architecture-dependent files here.
-binary-arch: build install
+binary-indep: build install
 	dh_testdir
 	dh_testroot
 # 	dh_installchangelogs docs/NEWS.txt
