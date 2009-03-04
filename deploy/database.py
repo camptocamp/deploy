@@ -2,7 +2,6 @@ from deploy.common import *
 import subprocess
 import os, sys, glob
 import logging
-
 logger = logging.getLogger('databases')
 
 __all__ = ['dump', 'restore']
@@ -20,7 +19,7 @@ def dump(config, savedir):
         output = file(os.path.join(savedir, name + '.dump'), 'w+b')
         errors = file(os.path.join(savedir, name + '.dump.log'), 'w')
         logger.info("dump '%(name)s' database to '%(dest)s'" %{'name': name, 'dest': output.name})
-        logger.debug("%(name)s' dumped with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
+        logger.debug("'%(name)s' dumped with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
 
         exitcode = subprocess.call(cmd, stdout=output, stderr=errors)
         output.close()

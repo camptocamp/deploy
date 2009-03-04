@@ -9,7 +9,7 @@ def dump(config, savedir, symlink=False):
     makedirs_silent(savedir)
     linkdst = os.path.join(savedir, config['project'])
     if symlink:
-        logger.debug("symlink '%(src)s' to '%(dest)s'" %{'src': src, 'dest': linkdst})
+        logger.info("symlink '%(src)s' to '%(dest)s'" %{'src': src, 'dest': linkdst})
         symlink_silent(src, linkdst)
     else:
         logger.error("copy '%(src)s' to '%(dest)s' NOT IMPLEMENTED" %{'src': src, 'dest': savedir})

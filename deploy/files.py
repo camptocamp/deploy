@@ -17,7 +17,7 @@ def dump(config, savedir, symlink=False):
         
         if symlink:
             makedirs_silent(os.path.dirname(dest))
-            logger.debug("symlink '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
+            logger.info("symlink '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
             symlink_silent(src, dest)
         else:
             logger.error("copy '%(src)s' to '%(dest)s' NOT IMPLEMENTED" %{'src': src, 'dest': dest})
