@@ -20,6 +20,14 @@ if __name__ == '__main__':
                        action="store", dest="create",
                        metavar="config",
                        help="create a new archive")
+    c_group.add_option("--symlink",
+                       action="store_true", dest="symlink", default=True,
+                       help="use symlinks for 'files' and 'code' [default]")
+
+    c_group.add_option("--no-symlink",
+                       action="store_false", dest="symlink",
+                       help="don't use symlinks for 'files' and 'code' (copy content)")
+    
     x_group.add_option("-x", "--extract",
                        action="store", dest="extract",
                        metavar="archive",
@@ -52,33 +60,35 @@ if __name__ == '__main__':
             parser.error("missing destination")
         else:
             config = deploy.config.parse_config(options.create)
-            # create 
             destdir = deploy.create.create_update_archive(join(args[0], config.get('DEFAULT', 'project')),
                                                           options.create)
             
-            deploy.database.dump(dict(config.items('databases')), 
+            deploy.database.dump(dict(config.items('databases')),
                                  join(destdir, 'databases'))
             
-            deploy.files.dump(dict(config.items('files')), 
-                              join(destdir, 'files'))
+            deploy.files.dump(dict(config.items('files')),
+                              join(destdir, 'files'),
+                              options.symlink)
             
             deploy.code.dump(dict(config.items('code')),
-                             join(destdir, 'code'))
-            
+                             join(destdir, 'code'),
+                             options.symlink)
+
+            # if symlinks, use:: rsync -avz --copy-links bar ab-swisstopo.camptocamp.net:/tmp
     elif options.extract:
         config = deploy.config.parse_config(os.path.join(options.extract))
         srcdir = deploy.extract.get_archive_dir(options.extract)
-        
+
+        # FIXME: run prerestore.sh (apache and postgresql)
+
         deploy.database.restore(dict(config.items('databases')), 
                                 join(srcdir, 'databases'))
 
-        deploy.files.dump(dict(config.items('files')), 
-                          join(srcdir, 'files'))
+        deploy.files.restore(dict(config.items('files')), 
+                             join(srcdir, 'files'))
         
-        deploy.code.dump(dict(config.items('code')),
-                         join(srcdir, 'code'))
+        deploy.code.restore(dict(config.items('code')),
+                            join(srcdir, 'code'))
 
-        # if not error: run preextract.sh (apache and postgresql)
-        #extract.extract_project(args[0])
 
-        # if not error: run postextract.sh (apache and postgresql)
+        # FIXME: run postrestore.sh (apache and postgresql)

@@ -1,6 +1,16 @@
 import os
 from shutil import copy2, copystat, rmtree, Error
 
+__all__ = ['copytree', 'makedirs_silent', 'symlink_silent']
+
+def symlink_silent(src, dst):
+    if not os.path.exists(dst):
+        os.symlink(src, dst)
+
+def makedirs_silent(name, mode=0777):
+    if not os.path.exists(name):
+        os.makedirs(name, mode)
+    
 def copytree(src, dst, symlinks=False, ignore=None):
     names = os.listdir(src)
     if ignore is not None:

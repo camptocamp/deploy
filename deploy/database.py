@@ -1,18 +1,18 @@
+from deploy.common import * 
 import subprocess
 import os, sys, glob
 import logging
+
 logger = logging.getLogger('databases')
+
+__all__ = ['dump', 'restore']
 
 def get_databases(config):
     return [n.strip() for n in config['names'].split(',')]
 
-# def get_dumpfiles(config):
-#     return [n.strip() + '.dump' for n in config['names'].split(',')]
-
 def dump(config, savedir):
     # FIXME: table only dump
-    if not os.path.isdir(savedir):
-        os.makedirs(savedir)
+    makedirs_silent(savedir)
 
     dump = config['dump'].split()
     for name in get_databases(config):
