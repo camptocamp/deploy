@@ -54,7 +54,7 @@ def drop_database(name):
             logger.error("'%(name)s' drop error:\n %(errors)s" %{'name': name, 'errors': errors.read()})
             sys.exit(1)
         else:
-            logger.info("'%(name)s' droped with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
+            logger.debug("'%(name)s' droped with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
         
 def restore(config, srcdir):
     # FIXME: go to maintenance mode: kill connection, restrict to local connections only
