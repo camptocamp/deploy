@@ -43,7 +43,7 @@ def restore(config, srcdir):
             logger.debug("'%(dumpfile)s' not found, database '%(name)' not restored" %{'name': name, 'dumpfile': dumpfile})
             continue
 
-        sql = 'DROP DATABASE %(name)s;' %{'name': name}
+        drop = 'DROP DATABASE %(name)s;' %{'name': name}
         
         cmd = restore + [dumpfile]
         logger.info("restoring '%(name)s' from '%(dumpfile)s'" %{'name': name, 'dumpfile': dumpfile})
@@ -57,4 +57,3 @@ def restore(config, srcdir):
 
     ## restore a single table
     # pg_restore -Fc -t foo -d %(name)s %(dump)s
-    pass

@@ -58,12 +58,12 @@ if __name__ == '__main__':
             
             deploy.database.dump(dict(config.items('databases')), 
                                  join(destdir, 'databases'))
-
-#             files.dump(dict(config.items('files')), 
-#                        join(destdir, 'files'))
             
-#             code.dump(dict(config.items('code')),
-#                       join(destdir, 'code'))
+            deploy.files.dump(dict(config.items('files')), 
+                              join(destdir, 'files'))
+            
+            deploy.code.dump(dict(config.items('code')),
+                             join(destdir, 'code'))
             
     elif options.extract:
         config = deploy.config.parse_config(os.path.join(options.extract))
@@ -72,6 +72,11 @@ if __name__ == '__main__':
         deploy.database.restore(dict(config.items('databases')), 
                                 join(srcdir, 'databases'))
 
+        deploy.files.dump(dict(config.items('files')), 
+                          join(srcdir, 'files'))
+        
+        deploy.code.dump(dict(config.items('code')),
+                         join(srcdir, 'code'))
 
         # if not error: run preextract.sh (apache and postgresql)
         #extract.extract_project(args[0])
