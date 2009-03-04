@@ -24,5 +24,5 @@ def dump(config, savedir, symlink=False):
             sys.exit(1)
             #copytree(src, dest, symlinks=True)
 
-def restore(config):
+def restore(config, srcdir):
     pass

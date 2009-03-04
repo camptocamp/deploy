@@ -1,25 +1,32 @@
 #!/usr/bin/env python
 
 from optparse import OptionParser, OptionGroup
-import logging, os
-from os.path import join
+import os
 import logging
+from deploy.common import rmtree_silent
+logger = logging.getLogger('main')
 
 import deploy
 
+components = ['databases', 'files', 'code']
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     
-    usage = "usage: %prog [OPTIONS...] [FILE]..."
+    usage = "usage: %prog -c [OPTIONS]... FILE DIRECTORY\n" + \
+            "   or: %prog -x [OPTIONS]... DIRECTORY"
 
     parser = OptionParser(usage)
     c_group = OptionGroup(parser, "Create an archive")
     x_group = OptionGroup(parser, "Extract an archive")
 
     c_group.add_option("-c", "--create",
-                       action="store", dest="create",
-                       metavar="config",
+                       action="store_true",
+#                        metavar="config",
                        help="create a new archive")
+    c_group.add_option("--components",
+                       default="all",
+                       help="restrict component to update. [%s]. default to all" % ','.join(components))
+
     c_group.add_option("--symlink",
                        action="store_true", dest="symlink", default=True,
                        help="use symlinks for 'files' and 'code' [default]")
@@ -29,14 +36,10 @@ if __name__ == '__main__':
                        help="don't use symlinks for 'files' and 'code' (copy content)")
     
     x_group.add_option("-x", "--extract",
-                       action="store", dest="extract",
-                       metavar="archive",
+                       action="store_true",
+#                        metavar="archive",
                        help="extract files from an archive")
 
-    parser.add_option("--components",
-                      action="store", type="string", dest="components",
-                      default="all",
-                      help="restrict component to update.")
 
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose", default=True,
@@ -52,43 +55,65 @@ if __name__ == '__main__':
 
     if options.create and options.extract:
         parser.error("options -c and -x are mutually exclusive")
+
+    if options.components == 'all':
+        options.components = components
+        
     if not options.create and not options.extract:
         parser.error("missing action")
 
     if options.create:
-        if len(args) < 1:
-            parser.error("missing destination")
+        if len(args) < 2:
+            parser.error("missing config and/or archive destination")
         else:
-            config = deploy.config.parse_config(options.create)
-            destdir = deploy.create.create_update_archive(join(args[0], config.get('DEFAULT', 'project')),
-                                                          options.create)
-            
-            deploy.database.dump(dict(config.items('databases')),
-                                 join(destdir, 'databases'))
-            
-            deploy.files.dump(dict(config.items('files')),
-                              join(destdir, 'files'),
-                              options.symlink)
-            
-            deploy.code.dump(dict(config.items('code')),
-                             join(destdir, 'code'),
-                             options.symlink)
+            config = deploy.config.parse_config(args[0])
+            destdir = os.path.join(args[1], config.get('DEFAULT', 'project'))
+
+            destpath = dict([(c, os.path.join(destdir, c)) for c in components])
+
+            deploy.create.create_update_archive(destdir, args[0])
+
+            if 'databases' in options.components:
+                deploy.database.dump(dict(config.items('databases')),
+                                     destpath['databases'])
+            else:
+                logger.debug("removing '%(path)s'" %{'path': destpath['databases']})
+                rmtree_silent(destpath['databases'])
+                
+            if 'files' in options.components:
+                deploy.files.dump(dict(config.items('files')),
+                                  destpath['files'],
+                                  options.symlink)
+            else:
+                logger.debug("removing '%(path)s'" %{'path': destpath['files']})
+                rmtree_silent(destpath['files'])
+                
+            if 'code' in options.components:
+                deploy.code.dump(dict(config.items('code')),
+                                 destpath['code'],
+                                 options.symlink)
+            else:
+                logger.debug("removing '%(path)s'" %{'path': destpath['code']})
+                rmtree_silent(destpath['code'])
 
             # if symlinks, use:: rsync -avz --copy-links bar ab-swisstopo.camptocamp.net:/tmp
     elif options.extract:
-        config = deploy.config.parse_config(os.path.join(options.extract))
-        srcdir = deploy.extract.get_archive_dir(options.extract)
+        if len(args) < 1:
+            parser.error("missing archive path")
+        else:
 
-        # FIXME: run prerestore.sh (apache and postgresql)
+            config = deploy.config.parse_config(os.path.join(options.extract))
+            srcdir = deploy.extract.get_archive_dir(options.extract)
 
-        deploy.database.restore(dict(config.items('databases')), 
-                                join(srcdir, 'databases'))
+            # FIXME: run prerestore.sh (apache and postgresql)
 
-        deploy.files.restore(dict(config.items('files')), 
-                             join(srcdir, 'files'))
+            deploy.database.restore(dict(config.items('databases')), 
+                                    os.path.join(srcdir, 'databases'))
+
+            deploy.files.restore(dict(config.items('files')), 
+                                 os.path.join(srcdir, 'files'))
         
-        deploy.code.restore(dict(config.items('code')),
-                            join(srcdir, 'code'))
-
-
+            deploy.code.restore(dict(config.items('code')),
+                                os.path.join(srcdir, 'code'))
+            
         # FIXME: run postrestore.sh (apache and postgresql)

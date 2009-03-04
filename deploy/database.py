@@ -21,7 +21,9 @@ def dump(config, savedir):
         logger.info("dump '%(name)s' database to '%(dest)s'" %{'name': name, 'dest': output.name})
         logger.debug("'%(name)s' dumped with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
 
-        exitcode = subprocess.call(cmd, stdout=output, stderr=errors)
+        p = subprocess.Popen(cmd, stdout=output, stderr=errors)
+        exitcode = p.wait()
+
         output.close()
         errors.close()
 
@@ -31,22 +33,46 @@ def dump(config, savedir):
             sys.exit(1)
         else:
             os.remove(errors.name)
-            
+
+def drop_database(name):
+    errors = tempfile.NamedTemporaryFile()
+
+    cmd = ['dropdb', name]
+    drop = subprocess.Popen(cmd, stderr=errors)
+    exitcode = drop.wait()
+    errors.close()
+    if exitcode != 0:
+        logger.error("drop error, see '%(errors)s'" %{'errors': errors.name})
+        sys.exit(1)
+    else:
+        logger.info("'%(name)s' droped with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
+    
+    ##drop = 'DROP DATABASE %(name)s;' %{'name': name}
+    
 def restore(config, srcdir):
     # FIXME: go to maintenance mode: kill connection, restrict to local connections only
-    restore = config['restore'].split()
+    # FIXME: table only restore
     
+    restore = config['restore'].split()
+    psql = config['psql'].split()
     for name in get_databases(config):
         dumpfile = os.path.join(srcdir, name + '.dump')
         if not os.path.isfile(dumpfile):
-            logger.debug("'%(dumpfile)s' not found, database '%(name)' not restored" %{'name': name, 'dumpfile': dumpfile})
-            continue
+            logger.warning("'%(dumpfile)s' not found, database '%(name)' not restored" %{'name': name, 'dumpfile': dumpfile})
+        else:
+            #drop_database(name)
+            cmd = restore + [dumpfile]
 
-        drop = 'DROP DATABASE %(name)s;' %{'name': name}
-        
-        cmd = restore + [dumpfile]
-        logger.info("restoring '%(name)s' from '%(dumpfile)s'" %{'name': name, 'dumpfile': dumpfile})
-        logger.debug("'%(name)s' restored with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
+            # try to restore the database
+            restore_p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+            psql_p = subprocess.Popen(psql, stdin=restore_p.stdout)
+            psql_p.communicate()
+            
+            restore_exiitcode = restore_p.wait()
+            psql_exiitcode = psql_p.wait()
+
+#             logger.info("restoring '%(name)s' from '%(dumpfile)s'" %{'name': name, 'dumpfile': dumpfile})
+#             logger.debug("'%(name)s' restored with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
         
     # FIXME: quit maintenance mode
 

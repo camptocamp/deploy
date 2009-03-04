@@ -1,8 +1,12 @@
-import os
-from shutil import copy2, copystat, rmtree, Error
+import os, shutil
 
-__all__ = ['copytree', 'makedirs_silent', 'symlink_silent']
+__all__ = ['copytree', 'makedirs_silent', 'symlink_silent', 'rmtree_silent']
 
+
+def rmtree_silent(path, ignore_errors=False, onerror=None):
+    if os.path.exists(path):
+        shutil.rmtree(path, ignore_errors, onerror)
+        
 def symlink_silent(src, dst):
     if not os.path.exists(dst):
         os.symlink(src, dst)
@@ -19,7 +23,7 @@ def copytree(src, dst, symlinks=False, ignore=None):
         ignored_names = set()
 
     if os.path.exists(dst):
-        rmtree(dst)
+        shutil.rmtree(dst)
     os.makedirs(dst)
         
     errors = []
@@ -35,18 +39,18 @@ def copytree(src, dst, symlinks=False, ignore=None):
             elif os.path.isdir(srcname):
                 copytree(srcname, dstname, symlinks, ignore)
             else:
-                copy2(srcname, dstname)
+                shutil.copy2(srcname, dstname)
             # XXX What about devices, sockets etc.?
         except (IOError, os.error), why:
             errors.append((srcname, dstname, str(why)))
         # catch the Error from the recursive copytree so that we can
         # continue with other files
-        except Error, err:
+        except shutil.Error, err:
             errors.extend(err.args[0])
     try:
-        copystat(src, dst)
+        shutil.copystat(src, dst)
     except OSError, why:
         errors.extend((src, dst, str(why)))
     if errors:
-        raise Error, errors
+        raise shutil.Error, errors
 

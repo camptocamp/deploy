@@ -15,5 +15,5 @@ def dump(config, savedir, symlink=False):
         logger.error("copy '%(src)s' to '%(dest)s' NOT IMPLEMENTED" %{'src': src, 'dest': savedir})
         sys.exit(1)
         
-def restore(config):
+def restore(config, srcdir):
     pass
