@@ -1,6 +1,6 @@
 from deploy.common import * 
 import subprocess
-import os, sys, glob
+import os, sys, glob, tempfile
 import logging
 logger = logging.getLogger('databases')
 
@@ -34,21 +34,26 @@ def dump(config, savedir):
         else:
             os.remove(errors.name)
 
-def drop_database(name):
-    errors = tempfile.NamedTemporaryFile()
+# def database_exists(name):
+#     return False
 
-    cmd = ['dropdb', name]
-    drop = subprocess.Popen(cmd, stderr=errors)
-    exitcode = drop.wait()
-    errors.close()
-    if exitcode != 0:
-        logger.error("drop error, see '%(errors)s'" %{'errors': errors.name})
-        sys.exit(1)
-    else:
-        logger.info("'%(name)s' droped with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
+# def drop_database(name):
+#     if database_exists(name):
+#         errors = tempfile.TemporaryFile()
     
-    ##drop = 'DROP DATABASE %(name)s;' %{'name': name}
-    
+#         cmd = ['dropdb', name]
+
+#         drop = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
+#         exitcode = drop.wait()
+
+#         if exitcode != 0:
+#             errors.flush()
+#             errors.seek(0)
+#             logger.error("'%(name)s' drop error:\n %(errors)s" %{'name': name, 'errors': errors.read()})
+#             sys.exit(1)
+#         else:
+#             logger.info("'%(name)s' droped with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
+        
 def restore(config, srcdir):
     # FIXME: go to maintenance mode: kill connection, restrict to local connections only
     # FIXME: table only restore
@@ -61,16 +66,51 @@ def restore(config, srcdir):
             logger.warning("'%(dumpfile)s' not found, database '%(name)' not restored" %{'name': name, 'dumpfile': dumpfile})
         else:
             #drop_database(name)
-            cmd = restore + [dumpfile]
-
-            # try to restore the database
-            restore_p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-            psql_p = subprocess.Popen(psql, stdin=restore_p.stdout)
-            psql_p.communicate()
             
+            cmd = restore + [dumpfile]
+            errors = tempfile.TemporaryFile()
+            restore_p = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
             restore_exiitcode = restore_p.wait()
-            psql_exiitcode = psql_p.wait()
+            
+            if restore_exiitcode != 0:
+                errors.flush()
+                errors.seek(0)
+                logger.error("'%(name)s' restore error" %{'name': name})
+                sys.exit(1)
+            else:
+                logger.info("'%(name)s' database restored from '%(dump)s'" %{'name': name, 'dump': dumpfile})
 
+#             restore_sql.flush()
+#             restore_sql.seek(0)
+
+#             # restore database
+#             errors = tempfile.TemporaryFile()
+#             psql_p = subprocess.Popen(psql + ['-f', restore_sql.name, 'template1'])
+#             #psql_p = subprocess.Popen(psql + ['-f', restore_sql.name, 'template1'], stdout=errors, stderr=subprocess.STDOUT)
+#             psql_exiitcode = psql_p.wait()
+#             restore_sql.close()
+#             print psql_exiitcode
+            
+#             #######################3
+#             errors = tempfile.TemporaryFile()
+
+#             # try to restore the database
+#             restore_p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+#             psql_p = subprocess.Popen(psql, stdin=restore_p.stdout, stdout=errors, stderr=subprocess.STDOUT)
+#             psql_p.communicate()
+            
+#             restore_exiitcode = restore_p.wait()
+#             psql_exiitcode = psql_p.wait()
+
+#             if restore_exiitcode + psql_exiitcode != 0:
+#                 errors.flush()
+#                 errors.seek(0)
+#                 logger.error("'%(name)s' restore error:\n %(errors)s" %{'name': name, 'errors': errors.read()})
+#                 sys.exit(1)
+#             else:
+#                 logger.info("'%(name)s' database restored from '%(src)s'" %{'name': name, 'dest': dumpfile})
+#                 #logger.debug("'%(name)s' restore with '%(errors)s'" %{'name': name, 'errors': errors.read()})
+                
 #             logger.info("restoring '%(name)s' from '%(dumpfile)s'" %{'name': name, 'dumpfile': dumpfile})
 #             logger.debug("'%(name)s' restored with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
         

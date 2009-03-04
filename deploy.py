@@ -101,9 +101,8 @@ if __name__ == '__main__':
         if len(args) < 1:
             parser.error("missing archive path")
         else:
-
-            config = deploy.config.parse_config(os.path.join(options.extract))
-            srcdir = deploy.extract.get_archive_dir(options.extract)
+            config = deploy.config.parse_config(os.path.join(args[0]))
+            srcdir = deploy.extract.get_archive_dir(args[0])
 
             # FIXME: run prerestore.sh (apache and postgresql)
 
