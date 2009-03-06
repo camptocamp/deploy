@@ -63,11 +63,11 @@ def drop_database(name, tries=10):
         
         
 def restore(config, srcdir):
-    # FIXME: go to maintenance mode: kill connection, restrict to local connections only
-    # FIXME: table only restore
-    
+    # FIXME: table only restore    
     restore = config['restore'].split()
     psql = config['psql'].split()
+
+    run_hook('pre-restore-database');
     for name in get_databases(config):
         dumpfile = os.path.join(srcdir, name + '.dump')
         if not os.path.isfile(dumpfile):
@@ -87,3 +87,4 @@ def restore(config, srcdir):
                 sys.exit(1)
             else:
                 logger.info("'%(name)s' database restored from '%(dump)s'" %{'name': name, 'dump': dumpfile})
+    run_hook('post-restore-database');

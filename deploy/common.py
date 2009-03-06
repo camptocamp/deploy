@@ -1,12 +1,20 @@
-import os, shutil
+import os, shutil, subprocess
+import logging
 
-__all__ = ['copytree', 'makedirs_silent', 'symlink_silent', 'rmtree_silent']
-
+__all__ = ['run_hook',
+           'copytree', 'makedirs_silent',
+           'symlink_silent', 'rmtree_silent']
 
 def run_hook(name):
-    pass
-
-
+    logger = logging.getLogger('hook')
+    
+    hookdir = '/etc/deploy/hooks'
+    hook = os.path.join(hookdir, name)
+    print hook
+    if os.path.exists(hook):
+        logger.debug("running '%(name)s'" %{'name': name})
+        exitcode = subprocess.Popen(hook, shell=True)
+    
 def rmtree_silent(path, ignore_errors=False, onerror=None):
     if os.path.exists(path):
         shutil.rmtree(path, ignore_errors, onerror)
