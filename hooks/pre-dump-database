@@ -1,0 +1,5 @@
+#!/bin/sh
+
+sudo /etc/init.d/apache2 stop
+
+exit 0
