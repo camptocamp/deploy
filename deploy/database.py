@@ -1,6 +1,6 @@
 from deploy.common import * 
 import subprocess
-import os, sys, glob, tempfile
+import os, sys, glob, tempfile, time
 import logging
 logger = logging.getLogger('databases')
 
@@ -39,22 +39,28 @@ def database_exists(name):
     exists = subprocess.Popen(['psql', name, '-c', ''], stdout=devnull, stderr=subprocess.STDOUT)
     return exists.wait() == 0
 
-def drop_database(name):
+def drop_database(name, tries=10):
     if database_exists(name):
         errors = tempfile.TemporaryFile()
-    
-        cmd = ['dropdb', name]
+        while tries:
+            cmd = ['dropdb', name]
+            drop = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
+            exitcode = drop.wait()
 
-        drop = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
-        exitcode = drop.wait()
+            if exitcode != 0:
+                tries -= 1
+                logger.debug("'%(name)s' drop error, sleeping 5s, %(tries)d left" %{'name': name, 'tries': tries})
+                time.sleep(5)
 
-        if exitcode != 0:
-            errors.flush()
-            errors.seek(0)
-            logger.error("'%(name)s' drop error:\n %(errors)s" %{'name': name, 'errors': errors.read()})
-            sys.exit(1)
-        else:
-            logger.debug("'%(name)s' droped with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
+            else:
+                logger.debug("'%(name)s' droped with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
+                return True
+            
+        errors.flush()
+        errors.seek(0)
+        logger.error("'%(name)s' drop error:\n%(errors)s" %{'name': name, 'errors': errors.read()})
+        sys.exit(1)
+        
         
 def restore(config, srcdir):
     # FIXME: go to maintenance mode: kill connection, restrict to local connections only

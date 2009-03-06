@@ -3,6 +3,10 @@ import os, shutil
 __all__ = ['copytree', 'makedirs_silent', 'symlink_silent', 'rmtree_silent']
 
 
+def run_hook(name):
+    pass
+
+
 def rmtree_silent(path, ignore_errors=False, onerror=None):
     if os.path.exists(path):
         shutil.rmtree(path, ignore_errors, onerror)
