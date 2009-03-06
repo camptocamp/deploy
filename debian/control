@@ -11,5 +11,5 @@ Architecture: all
 XS-Python-Version: >= 2.1
 Depends: ${python:Depends}
 Description: the c2c project deploy scripts
- deploy tries to deploys your projet.
+ deploy tries to deploy your projet.
 
