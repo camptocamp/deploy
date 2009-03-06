@@ -10,10 +10,10 @@ def run_hook(name):
     
     hookdir = '/etc/deploy/hooks'
     hook = os.path.join(hookdir, name)
-    print hook
     if os.path.exists(hook):
         logger.debug("running '%(name)s'" %{'name': name})
-        exitcode = subprocess.Popen(hook, shell=True)
+        h = subprocess.Popen(hook, shell=True)
+        exitcode = h.wait()
     
 def rmtree_silent(path, ignore_errors=False, onerror=None):
     if os.path.exists(path):
