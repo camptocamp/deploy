@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys
+from glob import glob
 
 try:
     from setuptools import setup
@@ -17,26 +17,17 @@ classifiers = [
         'Programming Language :: Python'
 ]
 
-# We'd like to let debian install the /etc/deploy.cfg,
-# but put them in tilecache/tilecache.cfg using setuptools
-# otherwise. 
-extra = {}
-if "--debian" in sys.argv:
-    extra['data_files']=[('/etc', ['deploy.cfg'])]
-    sys.argv.remove("--debian")
-else:
-   extra['data_files']=[('deploy', ['tilecache.cfg'])]
-
-setup(name='deploy',
-      version='0.1',
-      description='the c2c project deploy scripts',
-      author='Camptocamp SA',
-      packages=['deploy'],
-      scripts=['deploy.py'],
-      zip_safe=False,
-      classifiers=classifiers, 
-      **extra 
+setup(name = 'deploy',
+      version = '0.1',
+      description = 'the c2c project deploy scripts',
+      author = 'Camptocamp SA',
+      packages = ['deploy'],
+      scripts = ['deploy.py'],
+      zip_safe = False,
+      classifiers = classifiers,
+      data_files = [('/etc', ['deploy.cfg']),
+                    ('/etc/deploy/hooks', glob('hooks/*'))]
 )
 
-      
-      
+
+

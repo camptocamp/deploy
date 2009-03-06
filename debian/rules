@@ -29,26 +29,19 @@ install: build
 	dh_installdirs
 
 # Add here commands to install the package into debian/deploy.
-	python setup.py install --debian --no-compile --root=$(PREFIX)
+	python setup.py install --no-compile --root=$(PREFIX)
 
-	mv $(PREFIX)/usr/bin/deploy.py $(PREFIX)/usr/sbin/deploy
-	rmdir $(PREFIX)/usr/bin/
+	mv $(PREFIX)/usr/bin/deploy.py $(PREFIX)/usr/bin/deploy
 
 # Build architecture-dependent files here.
 binary-indep: build install
 	dh_testdir
 	dh_testroot
-# 	dh_installchangelogs docs/NEWS.txt
-# 	dh_installdocs
-# 	dh_installexamples
-# 	dh_installman
 	dh_link
 	dh_compress
 	dh_fixperms
 	dh_pysupport
-# 	chmod +x $(PREFIX)$(PYSUPPORT)/TileCache/Service.py
-# 	chmod +x $(PREFIX)$(PYSUPPORT)/TileCache/Client.py
-# 	rm $(PREFIX)$(PYSUPPORT)/TileCache/Caches/S3.py # Suggests python-boto instead. 
+	chmod +x $(PREFIX)/etc/deploy/hooks/*
 	dh_installdeb
 	dh_gencontrol
 	dh_md5sums
