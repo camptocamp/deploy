@@ -3,7 +3,7 @@
 from optparse import OptionParser, OptionGroup
 import os
 import logging
-from deploy.common import rmtree_silent
+from deploy.common import rmtree_silent, run_hook
 logger = logging.getLogger('main')
 
 import deploy
@@ -71,6 +71,8 @@ if __name__ == '__main__':
 
             destpath = dict([(c, os.path.join(destdir, c)) for c in components])
 
+            run_hook('pre-create')
+
             deploy.create.create_update_archive(destdir, args[0])
 
             if 'databases' in options.components:
@@ -96,6 +98,10 @@ if __name__ == '__main__':
                 logger.debug("removing '%(path)s'" %{'path': destpath['code']})
                 rmtree_silent(destpath['code'])
 
+            run_hook('post-create')
+
+            logger.info("done")
+
             # if symlinks, use:: rsync -avz --copy-links bar ab-swisstopo.camptocamp.net:/tmp
     elif options.extract:
         if len(args) < 1:
@@ -104,7 +110,7 @@ if __name__ == '__main__':
             config = deploy.config.parse_config(os.path.join(args[0]))
             srcdir = deploy.extract.get_archive_dir(args[0])
 
-            # FIXME: run prerestore.sh (apache and postgresql)
+            run_hook('pre-restore')
 
             deploy.database.restore(dict(config.items('databases')), 
                                     os.path.join(srcdir, 'databases'))
@@ -114,5 +120,5 @@ if __name__ == '__main__':
         
             deploy.code.restore(dict(config.items('code')),
                                 os.path.join(srcdir, 'code'))
-            
-        # FIXME: run postrestore.sh (apache and postgresql)
+
+            run_hook('post-restore')

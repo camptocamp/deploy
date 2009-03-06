@@ -1,0 +1,8 @@
+possible hooks are.
+  pre-create
+  post-create
+
+  pre-restore
+  post-restore
+
+and maybe more one day ...
