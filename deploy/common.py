@@ -1,7 +1,7 @@
 import os, shutil, subprocess
 import logging
 
-__all__ = ['run_hook',
+__all__ = ['run_hook', 'dirname',
            'copytree', 'makedirs_silent',
            'symlink_silent', 'rmtree_silent']
 
@@ -15,7 +15,14 @@ def run_hook(name, arguments=''):
         h = subprocess.Popen(hook + arguments, shell=True)
         exitcode = h.wait()
         # FIXME: check exitcode
-        
+
+
+def dirname(path):
+    if path.endswith('/'):
+        return os.path.dirname(path[:-1])
+    else:
+        return os.path.dirname(path)
+
 def rmtree_silent(path, ignore_errors=False, onerror=None):
     if os.path.exists(path):
         shutil.rmtree(path, ignore_errors, onerror)
