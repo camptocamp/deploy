@@ -77,6 +77,7 @@ def restore(config, srcdir):
             
             cmd = restore + [dumpfile]
             errors = tempfile.TemporaryFile()
+            logger.info("restoring '%(name)s' from '%(dump)s'" %{'name': name, 'dump': dumpfile})
             restore_p = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
             restore_exiitcode = restore_p.wait()
             
@@ -84,7 +85,6 @@ def restore(config, srcdir):
                 errors.flush()
                 errors.seek(0)
                 logger.error("'%(name)s' restore error" %{'name': name})
-                sys.exit(1)
-            else:
-                logger.info("'%(name)s' database restored from '%(dump)s'" %{'name': name, 'dump': dumpfile})
+                sys.exit(1) # FIXME: run post-restore-database bore leaving ?
+                
     run_hook('post-restore-database')
