@@ -71,7 +71,7 @@ def restore(config, srcdir):
     for name in get_databases(config):
         dumpfile = os.path.join(srcdir, name + '.dump')
         if not os.path.isfile(dumpfile):
-            logger.warning("'%(dumpfile)s' not found, database '%(name)' not restored" %{'name': name, 'dumpfile': dumpfile})
+            logger.warning("'%(dumpfile)s' not found, database '%(name)s' not restored" %{'name': name, 'dumpfile': dumpfile})
         else:
             drop_database(name)
             
