@@ -21,23 +21,21 @@ if __name__ == '__main__':
 
     c_group.add_option("-c", "--create",
                        action="store_true",
-#                        metavar="config",
                        help="create a new archive")
     c_group.add_option("--components",
                        default="all",
                        help="restrict component to update. [%s]. default to all" % ','.join(components))
 
     c_group.add_option("--symlink",
-                       action="store_true", dest="symlink", default=True,
-                       help="use symlinks for 'files' and 'code' [default]")
+                       action="store_true", dest="symlink",
+                       help="use symlinks for 'files' and 'code'")
 
     c_group.add_option("--no-symlink",
-                       action="store_false", dest="symlink",
-                       help="don't use symlinks for 'files' and 'code' (copy content)")
+                       action="store_false", dest="symlink", default=False,
+                       help="don't use symlinks for 'files' and 'code' (copy content) [default]")
     
     x_group.add_option("-x", "--extract",
                        action="store_true",
-#                        metavar="archive",
                        help="extract files from an archive")
 
 
