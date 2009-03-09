@@ -20,9 +20,10 @@ def dump(config, savedir, symlink=False):
             logger.info("symlink '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
             symlink_silent(src, dest)
         else:
-            logger.error("copy '%(src)s' to '%(dest)s' NOT IMPLEMENTED" %{'src': src, 'dest': dest})
-            sys.exit(1)
-            #copytree(src, dest, symlinks=True)
+            logger.info("copy '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
+            copytree(src, dest)
 
 def restore(config, srcdir):
-    pass
+    run_hook('pre-restore-files')
+    # TODO
+    run_hook('post-restore-files')

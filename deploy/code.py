@@ -7,13 +7,15 @@ __all__ = ['dump', 'restore']
 def dump(config, savedir, symlink=False):
     src = config['dir']
     makedirs_silent(savedir)
-    linkdst = os.path.join(savedir, config['project'])
+    dest = os.path.join(savedir, config['project'])
     if symlink:
-        logger.info("symlink '%(src)s' to '%(dest)s'" %{'src': src, 'dest': linkdst})
-        symlink_silent(src, linkdst)
+        logger.info("symlink '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
+        symlink_silent(src, dest)
     else:
-        logger.error("copy '%(src)s' to '%(dest)s' NOT IMPLEMENTED" %{'src': src, 'dest': savedir})
-        sys.exit(1)
+        logger.info("copy '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
+        copytree(src, dest)
         
 def restore(config, srcdir):
-    pass
+    run_hook('pre-restore-code')
+    # TODO
+    run_hook('post-restore-code')

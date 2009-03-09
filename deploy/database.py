@@ -67,7 +67,7 @@ def restore(config, srcdir):
     restore = config['restore'].split()
     psql = config['psql'].split()
 
-    run_hook('pre-restore-database');
+    run_hook('pre-restore-database')
     for name in get_databases(config):
         dumpfile = os.path.join(srcdir, name + '.dump')
         if not os.path.isfile(dumpfile):
@@ -87,4 +87,4 @@ def restore(config, srcdir):
                 sys.exit(1)
             else:
                 logger.info("'%(name)s' database restored from '%(dump)s'" %{'name': name, 'dump': dumpfile})
-    run_hook('post-restore-database');
+    run_hook('post-restore-database')
