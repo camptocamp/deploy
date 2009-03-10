@@ -29,7 +29,7 @@ def restore(config, srcdir):
     run_hook('pre-restore-files')
 
     for src in get_dirs(config['dirs']):
-        
+        pass
 #         print src
 #         print dirname(src)
     
