@@ -85,6 +85,7 @@ if __name__ == '__main__':
                                   destpath['files'],
                                   options.symlink)
             else:
+                # FIXME: multiples values !!!
                 logger.debug("removing '%(path)s'" %{'path': destpath['files']})
                 rmtree_silent(destpath['files'])
                 
@@ -118,5 +119,7 @@ if __name__ == '__main__':
         
             deploy.code.restore(dict(config.items('code')),
                                 os.path.join(srcdir, 'code'))
+
+            deploy.apache.restore(dict(config.items('apache')))
 
             run_hook('post-restore')

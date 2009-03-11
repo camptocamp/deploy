@@ -16,6 +16,14 @@ def dump(config, savedir, symlink=False):
         copytree(src, dest)
         
 def restore(config, srcdir):
+    dest = config['dir']
+    # FIXME: assert destdir exists
     run_hook('pre-restore-code')
-    # TODO
+
+    logger.info("deleting '%(dest)s'" %{'dest': dest})
+    ###rmtree_silent(dest)
+
+    src = srcdir
+    logger.info("copying '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
+
     run_hook('post-restore-code')
