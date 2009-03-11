@@ -1,7 +1,7 @@
 from deploy.common import * 
 import os, shutil
 import logging
-logger = logging.getLogger('create')
+logger = logging.getLogger('deploy.create')
 
 def create_update_archive(base, configfile):
     # FIXME: add version ?

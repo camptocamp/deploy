@@ -1,11 +1,15 @@
 from deploy.common import * 
 import os, sys, logging
-logger = logging.getLogger('code')
+logger = logging.getLogger('deploy.code')
 
 __all__ = ['dump', 'restore']
 
 def dump(config, savedir, symlink=False):
-    src = config['dir']
+    if 'src' in config:
+        dest = config['src']
+    else:
+        src = config['dir']
+
     makedirs_silent(savedir)
     dest = os.path.join(savedir, config['project'])
     if symlink:
@@ -16,7 +20,11 @@ def dump(config, savedir, symlink=False):
         copytree(src, dest)
         
 def restore(config, srcdir):
-    dest = config['dir']
+    if 'dest' in config:
+        dest = config['dest']
+    else:
+        dest = config['dir']
+        
     # FIXME: assert destdir exists
     run_hook('pre-restore-code')
 

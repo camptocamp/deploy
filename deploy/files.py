@@ -1,6 +1,6 @@
 from deploy.common import * 
 import os, sys, logging
-logger = logging.getLogger('files')
+logger = logging.getLogger('deploy.files')
 
 __all__ = ['dump', 'restore']
 

@@ -1,7 +1,7 @@
 import ConfigParser
 import os, sys
 import logging
-logger = logging.getLogger('config')
+logger = logging.getLogger('deploy.config')
 
 def parse_config(f):
     globalconf = '/etc/deploy.cfg'

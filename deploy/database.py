@@ -2,7 +2,7 @@ from deploy.common import *
 import subprocess
 import os, sys, glob, tempfile, time
 import logging
-logger = logging.getLogger('databases')
+logger = logging.getLogger('deploy.databases')
 
 __all__ = ['dump', 'restore']
 

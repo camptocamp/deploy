@@ -1,17 +1,27 @@
 #!/usr/bin/env python
 
 from optparse import OptionParser, OptionGroup
-import os
+import os, sys
 import logging
-from deploy.common import rmtree_silent, run_hook
-logger = logging.getLogger('main')
-
+from logging.handlers import SysLogHandler
 import deploy
+from deploy.common import rmtree_silent, run_hook
 
 components = ['databases', 'files', 'code']
+
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
-    
+    # setup log
+    logger = logging.getLogger('deploy.main')
+    logger.setLevel(logging.DEBUG)
+    format = logging.Formatter("%(name)s: %(message)s")
+
+    syslog = SysLogHandler(address='/dev/log')
+    syslog.setFormatter(format)
+    logger.addHandler(syslog)
+
+    console = logging.StreamHandler()
+    logger.addHandler(console)
+
     usage = "usage: %prog -c [OPTIONS]... FILE DIRECTORY\n" + \
             "   or: %prog -x [OPTIONS]... DIRECTORY"
 
@@ -85,7 +95,6 @@ if __name__ == '__main__':
                                   destpath['files'],
                                   options.symlink)
             else:
-                # FIXME: multiples values !!!
                 logger.debug("removing '%(path)s'" %{'path': destpath['files']})
                 rmtree_silent(destpath['files'])
                 
@@ -99,8 +108,9 @@ if __name__ == '__main__':
 
             run_hook('post-create')
 
-            logger.info("done")
-
+            logger.info("done creating archive")
+            sys.exit(0)
+            
             # if symlinks, use:: rsync -avz --copy-links bar ab-swisstopo.camptocamp.net:/tmp
     elif options.extract:
         if len(args) < 1:
@@ -108,6 +118,8 @@ if __name__ == '__main__':
         else:
             config = deploy.config.parse_config(os.path.join(args[0]))
             srcdir = deploy.extract.get_archive_dir(args[0])
+
+            logger.info("restoring archive from '%(archive)s'" %{'archive': srcdir})
 
             run_hook('pre-restore')
 
@@ -123,3 +135,6 @@ if __name__ == '__main__':
             deploy.apache.restore(dict(config.items('apache')))
 
             run_hook('post-restore')
+
+            logger.info("done restoring")
+            sys.exit(0)

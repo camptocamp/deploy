@@ -1,6 +1,6 @@
 from deploy.common import * 
 import os, sys, logging
-logger = logging.getLogger('apache')
+logger = logging.getLogger('deploy.apache')
 
 __all__ = ['restore']
 
