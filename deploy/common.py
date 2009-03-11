@@ -1,7 +1,7 @@
 import os, shutil, subprocess
 import logging
 
-__all__ = ['run_hook', 'dirname',
+__all__ = ['run_hook', 'dirname', 'basename',
            'copytree', 'makedirs_silent',
            'symlink_silent', 'rmtree_silent']
 
@@ -16,6 +16,11 @@ def run_hook(name, arguments=''):
         exitcode = h.wait()
         # FIXME: check exitcode
 
+def basename(path):
+    if path.endswith('/'):
+        return os.path.basename(path[:-1])
+    else:
+        return os.path.basename(path)
 
 def dirname(path):
     if path.endswith('/'):

@@ -28,16 +28,14 @@ def dump(config, savedir, symlink=False):
 def restore(config, srcdir):
     run_hook('pre-restore-files')
 
-    for src in get_dirs(config['dirs']):
-        pass
-#         print src
-#         print dirname(src)
-    
-#     for d in os.listdir(srcdir):
-#         src = os.path.join(srcdir, d)
-#         dest = os.path.join('/', d)
+    for dest in get_dirs(config['dirs']):
+        logger.info("deleting '%(dest)s'" %{'dest': dest})
+        rmtree_silent(dest)
+        
+        # first '/' removed in second arg
+        src = os.path.join(srcdir, dest[1:])
 
-#         logger.info("copy '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
-#         #copytree(src, dest, overwrite=False)
+        logger.info("copying '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
+        copytree(src, dest)
 
     run_hook('post-restore-files')
