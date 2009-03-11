@@ -42,8 +42,9 @@ def database_exists(name):
 def drop_database(name, tries=10):
     if database_exists(name):
         errors = tempfile.TemporaryFile()
+        cmd = ['dropdb', name]
+        logger.debug("dropping '%(name)s' with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
         while tries:
-            cmd = ['dropdb', name]
             drop = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
             exitcode = drop.wait()
 
@@ -51,16 +52,13 @@ def drop_database(name, tries=10):
                 tries -= 1
                 logger.debug("'%(name)s' drop error, sleeping 5s, %(tries)d left" %{'name': name, 'tries': tries})
                 time.sleep(5)
-
             else:
-                logger.debug("'%(name)s' droped with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
                 return True
             
         errors.flush()
         errors.seek(0)
         logger.error("'%(name)s' drop error:\n%(errors)s" %{'name': name, 'errors': errors.read()})
         sys.exit(1)
-        
         
 def restore(config, srcdir):
     # FIXME: table only restore    
