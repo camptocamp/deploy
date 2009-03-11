@@ -10,17 +10,20 @@ from deploy.common import rmtree_silent, run_hook
 components = ['databases', 'files', 'code']
 
 if __name__ == '__main__':
-    # setup log
-    logger = logging.getLogger('deploy.main')
-    logger.setLevel(logging.DEBUG)
+    # configure the root logger
+    logging.getLogger('').setLevel(logging.DEBUG)
     format = logging.Formatter("%(name)s: %(message)s")
 
     syslog = SysLogHandler(address='/dev/log')
     syslog.setFormatter(format)
-    logger.addHandler(syslog)
+    logging.getLogger('').addHandler(syslog)
 
     console = logging.StreamHandler()
-    logger.addHandler(console)
+    console.setFormatter(format)
+    logging.getLogger('').addHandler(console)
+
+    # get the main logger
+    logger = logging.getLogger('deploy.main')
 
     usage = "usage: %prog -c [OPTIONS]... FILE DIRECTORY\n" + \
             "   or: %prog -x [OPTIONS]... DIRECTORY"
