@@ -64,9 +64,10 @@ def restore(config, srcdir):
     # FIXME: table only restore    
     restore = config['restore'].split()
     psql = config['psql'].split()
+    databases = get_databases(config)
 
-    run_hook('pre-restore-database', logger=logger)
-    for name in get_databases(config):
+    run_hook('pre-restore-database', databases, logger=logger)
+    for name in databases:
         dumpfile = os.path.join(srcdir, name + '.dump')
         if not os.path.isfile(dumpfile):
             logger.warning("'%(dumpfile)s' not found, database '%(name)s' not restored" %{'name': name, 'dumpfile': dumpfile})
@@ -85,4 +86,4 @@ def restore(config, srcdir):
                 logger.error("'%(name)s' restore error" %{'name': name})
                 sys.exit(1) # FIXME: run post-restore-database before leaving ?
                 
-    run_hook('post-restore-database', logger=logger)
+    run_hook('post-restore-database', databases, logger=logger)
