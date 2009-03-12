@@ -31,8 +31,11 @@ def restore(config, srcdir):
 
     logger.info("deleting '%(dest)s'" %{'dest': dest})
     rmtree_silent(dest)
+    os.makedirs(dest)
 
     logger.info("copying '%(src)s' to '%(dest)s'" %{'src': srcdir, 'dest': dest})
-    copytree(srcdir, dest)
+    copytree(srcdir, dirname(dest), keepdst=True)
 
     run_hook('post-restore-code', [config['project'], dest], logger=logger)
+
+    return dest

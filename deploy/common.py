@@ -43,17 +43,17 @@ def makedirs_silent(name, mode=0777):
     if not os.path.exists(name):
         os.makedirs(name, mode)
     
-def copytree(src, dst, symlinks=False, ignore=None):
+def copytree(src, dst, symlinks=False, ignore=None, keepdst=False):
     names = os.listdir(src)
     if ignore is not None:
         ignored_names = ignore(src, names)
     else:
         ignored_names = set()
 
-    if os.path.exists(dst):
+    if not keepdst and os.path.exists(dst):
         shutil.rmtree(dst)
-    os.makedirs(dst)
-        
+    makedirs_silent(dst)
+
     errors = []
     for name in names:
         if name in ignored_names:
@@ -65,7 +65,7 @@ def copytree(src, dst, symlinks=False, ignore=None):
                 linkto = os.readlink(srcname)
                 os.symlink(linkto, dstname)
             elif os.path.isdir(srcname):
-                copytree(srcname, dstname, symlinks, ignore)
+                copytree(srcname, dstname, symlinks, ignore, keepdst)
             else:
                 shutil.copy2(srcname, dstname)
             # XXX What about devices, sockets etc.?

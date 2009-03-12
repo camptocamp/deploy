@@ -83,6 +83,6 @@ def restore(config, srcdir):
                 errors.flush()
                 errors.seek(0)
                 logger.error("'%(name)s' restore error" %{'name': name})
-                sys.exit(1) # FIXME: run post-restore-database bore leaving ?
+                sys.exit(1) # FIXME: run post-restore-database before leaving ?
                 
     run_hook('post-restore-database', logger=logger)

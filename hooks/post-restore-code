@@ -4,9 +4,7 @@ PROJECT=$1
 PROJECT_DIR=$2
 
 cd $PROJECT_DIR
-sh deploy-$PROJECT.sh -r
-
-# should do a ./deploy-project. -r here
-
+###sh deploy-$PROJECT.sh -r
+sh deploy-$PROJECT.sh -i
 
 exit 0

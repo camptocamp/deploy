@@ -133,16 +133,16 @@ if __name__ == '__main__':
 
             run_hook('pre-restore')
 
-            deploy.database.restore(dict(config.items('databases')), 
-                                    os.path.join(srcdir, 'databases'))
+#             deploy.database.restore(dict(config.items('databases')), 
+#                                     os.path.join(srcdir, 'databases'))
 
-            deploy.files.restore(dict(config.items('files')), 
-                                 os.path.join(srcdir, 'files'))
+#             deploy.files.restore(dict(config.items('files')), 
+#                                  os.path.join(srcdir, 'files'))
         
-            deploy.code.restore(dict(config.items('code')),
-                                os.path.join(srcdir, 'code'))
+            destdir = deploy.code.restore(dict(config.items('code')),
+                                          os.path.join(srcdir, 'code'))
 
-#            deploy.apache.restore(dict(config.items('apache')))
+            deploy.apache.restore(dict(config.items('apache')), destdir)
 
             run_hook('post-restore')
 
