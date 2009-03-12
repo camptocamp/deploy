@@ -17,10 +17,13 @@ def setup_logging(verbose=False):
     syslog.setFormatter(format)
     logging.getLogger('').addHandler(syslog)
 
-    if verbose:
-        console = logging.StreamHandler()
-        console.setFormatter(format)
-        logging.getLogger('').addHandler(console)
+    console = logging.StreamHandler()
+    console.setFormatter(format)
+    if not verbose:
+        console.setLevel(logging.ERROR)
+
+    logging.getLogger('').addHandler(console)
+
     
 components = ['databases', 'files', 'code']
 
