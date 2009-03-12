@@ -1,5 +1,7 @@
 #!/bin/sh
 
-sudo /etc/init.d/apache2 stop 2>&1 /dev/null
+# apache must be down to prevent database connection from 
+# pylons or mapserver
+sudo /etc/init.d/apache2 stop
 
 exit 0
