@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# fixme: check if config is ok
+
+exit 0
