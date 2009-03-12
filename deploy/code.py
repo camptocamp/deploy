@@ -6,7 +6,7 @@ __all__ = ['dump', 'restore']
 
 def dump(config, savedir, symlink=False):
     if 'src' in config:
-        dest = config['src']
+        src = config['src']
     else:
         src = config['dir']
 
