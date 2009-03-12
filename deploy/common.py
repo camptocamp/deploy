@@ -1,17 +1,18 @@
-import os, shutil, subprocess
-import logging
-logger = logging.getLogger('deploy.hook')
+import os, shutil, subprocess, logging
 
 __all__ = ['run_hook', 'dirname', 'basename',
            'copytree', 'makedirs_silent',
            'symlink_silent', 'rmtree_silent']
 
-def run_hook(name, arguments=''):    
+def run_hook(name, arguments=[], logger=None):
+    if logger is None:
+        logger = logging.getLogger('deploy.hook')
+        
     hookdir = '/etc/deploy/hooks'
     hook = os.path.join(hookdir, name)
     if os.path.exists(hook):
         logger.debug("running '%(name)s'" %{'name': hook})
-        h = subprocess.Popen(hook + arguments, shell=True)
+        h = subprocess.Popen(' '.join([hook] + arguments), shell=True)
         exitcode = h.wait()
 
         return exitcode == 0

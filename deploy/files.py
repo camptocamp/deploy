@@ -26,7 +26,7 @@ def dump(config, savedir, symlink=False):
             copytree(src, dest)
 
 def restore(config, srcdir):
-    run_hook('pre-restore-files')
+    run_hook('pre-restore-files', logger=logger)
 
     for dest in get_dirs(config['dirs']):
         logger.info("deleting '%(dest)s'" %{'dest': dest})
@@ -38,4 +38,4 @@ def restore(config, srcdir):
         logger.info("copying '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
         copytree(src, dest)
 
-    run_hook('post-restore-files')
+    run_hook('post-restore-files', logger=logger)

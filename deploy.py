@@ -7,24 +7,24 @@ from logging.handlers import SysLogHandler
 import deploy
 from deploy.common import rmtree_silent, run_hook
 
-components = ['databases', 'files', 'code']
 
-if __name__ == '__main__':
+def setup_logging(verbose=False):
     # configure the root logger
     logging.getLogger('').setLevel(logging.DEBUG)
     format = logging.Formatter("%(name)s: %(message)s")
-
+    
     syslog = SysLogHandler(address='/dev/log')
     syslog.setFormatter(format)
     logging.getLogger('').addHandler(syslog)
 
-    console = logging.StreamHandler()
-    console.setFormatter(format)
-    logging.getLogger('').addHandler(console)
+    if verbose:
+        console = logging.StreamHandler()
+        console.setFormatter(format)
+        logging.getLogger('').addHandler(console)
+    
+components = ['databases', 'files', 'code']
 
-    # get the main logger
-    logger = logging.getLogger('deploy.main')
-
+if __name__ == '__main__':
     usage = "usage: %prog -c [OPTIONS]... FILE DIRECTORY\n" + \
             "   or: %prog -x [OPTIONS]... DIRECTORY"
 
@@ -63,6 +63,10 @@ if __name__ == '__main__':
     parser.add_option_group(x_group)
 
     (options, args) = parser.parse_args()
+
+    setup_logging(options.verbose)
+    # get the main logger
+    logger = logging.getLogger('deploy.main')
 
     if options.create and options.extract:
         parser.error("options -c and -x are mutually exclusive")
@@ -119,10 +123,10 @@ if __name__ == '__main__':
         if len(args) < 1:
             parser.error("missing archive path")
         else:
-            config = deploy.config.parse_config(os.path.join(args[0]))
             srcdir = deploy.extract.get_archive_dir(args[0])
-
             logger.info("restoring archive from '%(archive)s'" %{'archive': srcdir})
+            
+            config = deploy.config.parse_config(os.path.join(args[0]))
 
             run_hook('pre-restore')
 
@@ -135,7 +139,7 @@ if __name__ == '__main__':
             deploy.code.restore(dict(config.items('code')),
                                 os.path.join(srcdir, 'code'))
 
-            deploy.apache.restore(dict(config.items('apache')))
+#            deploy.apache.restore(dict(config.items('apache')))
 
             run_hook('post-restore')
 

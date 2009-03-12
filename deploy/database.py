@@ -50,7 +50,7 @@ def drop_database(name, tries=10):
 
             if exitcode != 0:
                 tries -= 1
-                logger.debug("'%(name)s' drop error, sleeping 5s, %(tries)d left" %{'name': name, 'tries': tries})
+                logger.debug("'%(name)s' drop error, sleeping 5s, %(tries)d tries left" %{'name': name, 'tries': tries})
                 time.sleep(5)
             else:
                 return True
@@ -65,7 +65,7 @@ def restore(config, srcdir):
     restore = config['restore'].split()
     psql = config['psql'].split()
 
-    run_hook('pre-restore-database')
+    run_hook('pre-restore-database', logger=logger)
     for name in get_databases(config):
         dumpfile = os.path.join(srcdir, name + '.dump')
         if not os.path.isfile(dumpfile):
@@ -85,4 +85,4 @@ def restore(config, srcdir):
                 logger.error("'%(name)s' restore error" %{'name': name})
                 sys.exit(1) # FIXME: run post-restore-database bore leaving ?
                 
-    run_hook('post-restore-database')
+    run_hook('post-restore-database', logger=logger)
