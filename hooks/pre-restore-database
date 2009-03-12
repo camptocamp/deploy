@@ -1,5 +1,5 @@
 #!/bin/sh
 
-sudo /etc/init.d/apache2 stop
+sudo /etc/init.d/apache2 stop 2>&1 /dev/null
 
 exit 0
