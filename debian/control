@@ -1,5 +1,5 @@
 Source: deploy
-Section: sig/sysadmin
+Section: sysadmin/admin
 Priority: extra
 Maintainer: Frederic Junod <frederic.junod@camptocamp.com>
 Build-Depends: debhelper (>= 5)
