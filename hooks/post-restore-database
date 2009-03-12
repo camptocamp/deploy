@@ -1,5 +1,10 @@
 #!/bin/sh
 
-sudo /etc/init.d/apache2 start
+DATABASES=$@
+
+for b in $DATABASES
+do
+  psql -c "VACUUM ANALYZE;" $b
+done
 
 exit 0
