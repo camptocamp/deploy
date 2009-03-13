@@ -18,7 +18,7 @@ classifiers = [
 ]
 
 setup(name = 'deploy',
-      version = '0.1',
+      version = '0.2',
       description = 'the c2c project deploy scripts',
       author = 'Camptocamp SA',
       packages = ['deploy'],

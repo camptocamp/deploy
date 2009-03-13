@@ -78,7 +78,9 @@ def copytree(src, dst, symlinks=False, ignore=None, keepdst=False):
     try:
         shutil.copystat(src, dst)
     except OSError, why:
-        errors.extend((src, dst, str(why)))
+        # don't care about permission errors
+        #errors.extend((src, dst, str(why)))
+        pass
     if errors:
         raise shutil.Error, errors
 

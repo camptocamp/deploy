@@ -4,7 +4,6 @@ PROJECT=$1
 PROJECT_DIR=$2
 
 cd $PROJECT_DIR
-###sh deploy-$PROJECT.sh -r 2>&1 /dev/null
-sh deploy-$PROJECT.sh -i
+sh deploy-$PROJECT.sh -r
 
 exit 0
