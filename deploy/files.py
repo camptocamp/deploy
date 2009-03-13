@@ -4,11 +4,16 @@ logger = logging.getLogger('deploy.files')
 
 __all__ = ['dump', 'restore']
 
-def get_dirs(str):
-    return [n.strip() for n in str.split(',')]
+def get_dirs(dirs):
+    if dirs == '':
+        return []
+    else:
+        return [n.strip() for n in dirs.split(',')]
 
 def dump(config, savedir, symlink=False):
-    for src in get_dirs(config['dirs']):
+    dirs = get_dirs(config['dirs'])
+    
+    for src in dirs:
         if src.startswith('/'):
             dest = os.path.join(savedir, src[1:])
             if src.endswith('/'):

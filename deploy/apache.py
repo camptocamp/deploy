@@ -11,8 +11,12 @@ def restore(config, codedir):
 
     run_hook('pre-restore-apache', logger=logger)
     f = file(config['dest'], 'w')
-    f.write("Include %(codedir)s/%(project)s/apache/*.conf\n"%{'codedir': os.path.normpath(codedir),
-                                                               'project': config['project']})
+    if 'content' not in config:
+        f.write("Include %(codedir)s/%(project)s/apache/*.conf\n"%{'codedir': os.path.normpath(codedir),
+                                                                   'project': config['project']})
+    else:
+        f.write(config['content'])
+
     f.close()
     
     run_hook('post-restore-apache', logger=logger)
