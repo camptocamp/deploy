@@ -20,8 +20,8 @@ def parse_config(f):
                                                                  'localconf': localconf})
     config = ConfigParser.ConfigParser()
     config.read([globalconf, localconf])
+
+    # setup 'here' magic variable
+    config.set('DEFAULT', 'here', os.path.dirname(f))
     
     return config
-
-# def get_archive():
-#     pass
