@@ -5,19 +5,24 @@ __all__ = ['run_hook', 'dirname', 'basename',
            'symlink_silent', 'rmtree_silent', 'set_hookdir']
 
 _hookdir = None
+_default_hookdir = '/etc/deploy/hooks'
 
 def set_hookdir(path):
-    global _hookdir
+    global _hookdir, _default_hookdir
     _hookdir = path
-    return os.path.normpath(_hookdir) != '/etc/deploy/hooks'
+    return os.path.normpath(_hookdir) != os.path.normpath(_default_hookdir)
 
 def run_hook(name, arguments=[], logger=None):
-    global _hookdir
+    global _hookdir, _default_hookdir
 
     if logger is None:
         logger = logging.getLogger('deploy.hook')
 
     hook = os.path.join(_hookdir, name)
+    if not os.path.exists(hook):
+        # back to default hook
+        hook = os.path.join(_default_hookdir, name)
+        
     if os.path.exists(hook):
         logger.info("running '%(name)s'" %{'name': hook})
         h = subprocess.Popen(' '.join([hook] + arguments), shell=True)
