@@ -28,12 +28,14 @@ def setup_logging(verbose=False):
 components = ['databases', 'files', 'code']
 
 if __name__ == '__main__':
-    usage = "usage: %prog -c [OPTIONS]... FILE DIRECTORY\n" + \
-            "   or: %prog -x [OPTIONS]... DIRECTORY"
+    usage = "usage: %prog -c [OPTIONS]... CONFIG_FILE DIRECTORY\n" + \
+            "   or: %prog -x [OPTIONS]... DIRECTORY" + \
+            "   or: %prog -r [OPTIONS] CONFIG_FILE DIRECTORY"
 
     parser = OptionParser(usage)
     c_group = OptionGroup(parser, "Create an archive")
     x_group = OptionGroup(parser, "Extract an archive")
+    r_group = OptionGroup(parser, "Create, copy and extract")
 
     c_group.add_option("-c", "--create",
                        action="store_true",
@@ -54,6 +56,9 @@ if __name__ == '__main__':
                        action="store_true",
                        help="extract files from an archive")
 
+    r_group.add_option("-r", "--remote",
+                       action="store_true",
+                       help="create, copy and restore an archive to a remote server")
 
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose", default=True,
@@ -64,6 +69,7 @@ if __name__ == '__main__':
 
     parser.add_option_group(c_group)
     parser.add_option_group(x_group)
+    parser.add_option_group(r_group)
 
     (options, args) = parser.parse_args()
 
@@ -77,9 +83,14 @@ if __name__ == '__main__':
     if options.components == 'all':
         options.components = components
         
-    if not options.create and not options.extract:
+    if not options.create and not options.extract and not options.remote:
         parser.error("missing action")
 
+#     if options.remote:
+#         remote_destination = args[1]
+#         #print args[1]
+#         options.create = True
+        
     if options.create:
         if len(args) < 2:
             parser.error("missing config and/or archive destination")
