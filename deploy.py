@@ -5,7 +5,7 @@ import os, sys
 import logging
 from logging.handlers import SysLogHandler
 import deploy
-from deploy.common import rmtree_silent, run_hook
+from deploy.common import rmtree_silent, set_hookdir, run_hook
 
 
 def setup_logging(verbose=False):
@@ -85,6 +85,8 @@ if __name__ == '__main__':
             parser.error("missing config and/or archive destination")
         else:
             config = deploy.config.parse_config(args[0])
+            set_hookdir(config.get('main', 'hookdir'))
+           
             destdir = os.path.join(args[1], config.get('DEFAULT', 'project'))
 
             destpath = dict([(c, os.path.join(destdir, c)) for c in components])
@@ -130,6 +132,7 @@ if __name__ == '__main__':
             logger.info("restoring archive from '%(archive)s'" %{'archive': srcdir})
             
             config = deploy.config.parse_config(os.path.join(args[0]))
+            set_hookdir(config.get('main', 'hookdir'))
 
             run_hook('pre-restore')
 

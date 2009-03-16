@@ -1,3 +1,10 @@
+deploy (0.2-5) lenny; urgency=low
+
+  * fix path ending (alex)
+  * custom hookdir in 'main' section	
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 16 Mar 2009 08:11:03 +0100
+
 deploy (0.2-4) lenny; urgency=low
 
   * handle projects with not files
