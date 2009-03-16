@@ -8,14 +8,15 @@ _hookdir = None
 
 def set_hookdir(path):
     global _hookdir
-    _hookdir = path            
+    _hookdir = path
+    return os.path.normpath(_hookdir) != '/etc/deploy/hooks'
 
 def run_hook(name, arguments=[], logger=None):
     global _hookdir
-        
+
     if logger is None:
         logger = logging.getLogger('deploy.hook')
-        
+
     hook = os.path.join(_hookdir, name)
     if os.path.exists(hook):
         logger.info("running '%(name)s'" %{'name': hook})
@@ -41,7 +42,7 @@ def dirname(path):
 def rmtree_silent(path, ignore_errors=False, onerror=None):
     if os.path.exists(path):
         shutil.rmtree(path, ignore_errors, onerror)
-        
+
 def symlink_silent(src, dst):
     if not os.path.exists(dst):
         os.symlink(src, dst)
@@ -49,7 +50,7 @@ def symlink_silent(src, dst):
 def makedirs_silent(name, mode=0777):
     if not os.path.exists(name):
         os.makedirs(name, mode)
-    
+
 def copytree(src, dst, symlinks=False, ignore=None, keepdst=False):
     names = os.listdir(src)
     if ignore is not None:

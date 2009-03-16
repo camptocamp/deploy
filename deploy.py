@@ -85,8 +85,8 @@ if __name__ == '__main__':
             parser.error("missing config and/or archive destination")
         else:
             config = deploy.config.parse_config(args[0])
-            set_hookdir(config.get('main', 'hookdir'))
-           
+            has_custom_hooks = set_hookdir(config.get('main', 'hookdir'))
+            
             destdir = os.path.join(args[1], config.get('DEFAULT', 'project'))
 
             destpath = dict([(c, os.path.join(destdir, c)) for c in components])
@@ -94,6 +94,11 @@ if __name__ == '__main__':
             run_hook('pre-create')
 
             deploy.create.create_update_archive(destdir, args[0])
+            if has_custom_hooks:
+                deploy.create.copy_hooks(config.get('main', 'hookdir'), destdir)
+            else:
+                # remove hook dir ?
+                pass
 
             if 'databases' in options.components:
                 deploy.database.dump(dict(config.items('databases')),
