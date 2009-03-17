@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from optparse import OptionParser, OptionGroup
-import os, sys
+import os, sys, socket
 import logging
 from logging.handlers import SysLogHandler
 import deploy
@@ -10,15 +10,15 @@ from deploy.common import rmtree_silent, set_hookdir, run_hook
 
 def setup_logging(verbose=False):
     # configure the root logger
+    fqdn = socket.getfqdn()
     logging.getLogger('').setLevel(logging.DEBUG)
-    format = logging.Formatter("%(name)s: %(message)s")
-    
+   
     syslog = SysLogHandler(address='/dev/log')
-    syslog.setFormatter(format)
+    syslog.setFormatter(logging.Formatter("%(name)s: %(message)s"))
     logging.getLogger('').addHandler(syslog)
 
     console = logging.StreamHandler()
-    console.setFormatter(format)
+    console.setFormatter(logging.Formatter(fqdn + " %(name)s: %(message)s"))
     if not verbose:
         console.setLevel(logging.ERROR)
 
@@ -86,10 +86,12 @@ if __name__ == '__main__':
     if not options.create and not options.extract and not options.remote:
         parser.error("missing action")
 
-#     if options.remote:
-#         remote_destination = args[1]
-#         #print args[1]
-#         options.create = True
+    if options.remote:
+        remote_destination = args[1]
+        logger.info("remote deploy to '%(remote)s'" %{'remote': remote_destination})
+        args[1] = '/var/deploy/'
+        # let's start creating the archive
+        options.create = True
         
     if options.create:
         if len(args) < 2:
@@ -137,9 +139,16 @@ if __name__ == '__main__':
             run_hook('post-create')
 
             logger.info("done creating archive")
-            sys.exit(0)
+            if options.remote:
+                success = deploy.remote.remote_copy(destdir, remote_destination)
+                if success:
+                    success = deploy.remote.remote_extract(config.get('DEFAULT', 'project'),
+                                                           remote_destination)
+                else:
+                    pass
+            else:
+                sys.exit(0)
             
-            # if symlinks, use:: rsync -avz --copy-links bar ab-swisstopo.camptocamp.net:/tmp
     elif options.extract:
         if len(args) < 1:
             parser.error("missing archive path")
