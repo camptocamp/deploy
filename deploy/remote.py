@@ -1,9 +1,14 @@
+from deploy.common import * 
 import logging
+
 logger = logging.getLogger('deploy.remote')
 
 def remote_copy(src, host):
-    logger.info("copying '%(src)s' to '%(host)s'"%{'src': src, 'host': host})
-    cmd = "rsync -avz "
+    #logger.info("copying '%(src)s' to '%(host)s'"%{'src': src, 'host': host})
+    cmd = "rsync -avz %(srcdir)s %(host)s:%(dstdir)s"% {'srcdir': src, 
+                                                        'dstdir': dirname(src),
+                                                        'host': host}
+    logger.info("running '%(cmd)s' "%{'cmd': cmd}) 
     # rsync -avz 
     return True
 

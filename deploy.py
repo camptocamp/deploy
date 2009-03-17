@@ -88,7 +88,7 @@ if __name__ == '__main__':
 
     if options.remote:
         # FIXME: use config variable
-        packages_dir = '/var/sig/deploy-packages/'
+        packages_dir = '/var/sig/deploy-archives/'
         
         config = deploy.config.parse_config(args[0])
         #remote_destination = args[1] + ':' + packages_dir
