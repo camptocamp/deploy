@@ -20,22 +20,21 @@ def dump(config, savedir, symlink=False):
         copytree(src, dest)
         
 def restore(config, srcdir):
-    # FIXME: make it real
     if 'dest' in config:
         dest = config['dest']
     else:
         dest = config['dir']
+
+    if os.path.exists(dest):
+        run_hook('pre-restore-code', [config['project'], dest], logger=logger)
+
+        logger.info("deleting '%(dest)s'" %{'dest': dest})
+        rmtree_silent(dest)
+        os.makedirs(dest)
         
-    # FIXME: assert destdir exists
-    run_hook('pre-restore-code', [config['project'], dest], logger=logger)
+        logger.info("copying '%(src)s' to '%(dest)s'" %{'src': srcdir, 'dest': dest})
+        copytree(srcdir, dirname(dest), keepdst=True)
 
-    logger.info("deleting '%(dest)s'" %{'dest': dest})
-    rmtree_silent(dest)
-    os.makedirs(dest)
-
-    logger.info("copying '%(src)s' to '%(dest)s'" %{'src': srcdir, 'dest': dest})
-    copytree(srcdir, dirname(dest), keepdst=True)
-
-    run_hook('post-restore-code', [config['project'], dest], logger=logger)
-
+        run_hook('post-restore-code', [config['project'], dest], logger=logger)
+        
     return dest
