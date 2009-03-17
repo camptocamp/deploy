@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
 from optparse import OptionParser, OptionGroup
-import os, sys, socket
+import os, sys, socket, time
 import logging
 from logging.handlers import SysLogHandler
 import deploy
-from deploy.common import rmtree_silent, set_hookdir, run_hook
+from deploy.common import rmtree_silent, set_hookdir, run_hook, dirname
 
 
 def setup_logging(verbose=False):
@@ -87,9 +87,16 @@ if __name__ == '__main__':
         parser.error("missing action")
 
     if options.remote:
+        # FIXME: use config variable
+        packages_dir = '/var/sig/deploy-packages/'
+        
+        config = deploy.config.parse_config(args[0])
+        #remote_destination = args[1] + ':' + packages_dir
         remote_destination = args[1]
         logger.info("remote deploy to '%(remote)s'" %{'remote': remote_destination})
-        args[1] = '/var/deploy/'
+        args[1] = os.path.join(packages_dir,
+                               config.get('DEFAULT', 'project') + '_' + str(int(time.time())))
+
         # let's start creating the archive
         options.create = True
         
@@ -140,12 +147,18 @@ if __name__ == '__main__':
 
             logger.info("done creating archive")
             if options.remote:
-                success = deploy.remote.remote_copy(destdir, remote_destination)
-                if success:
-                    success = deploy.remote.remote_extract(config.get('DEFAULT', 'project'),
-                                                           remote_destination)
+                if deploy.remote.remote_copy(dirname(destdir), remote_destination):
+                    if deploy.remote.remote_extract(dirname(destdir), remote_destination):
+                        #remote_extract success
+                        pass
+                    else:
+                        #remote_extract failed:
+                        # rename
+                        pass
                 else:
-                    pass
+                     #remote_copy failed
+                     # rename
+                     pass
             else:
                 sys.exit(0)
             
