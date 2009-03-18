@@ -179,9 +179,9 @@ if __name__ == '__main__':
             parser.error("missing archive path")
         else:
             srcdir = deploy.extract.get_archive_dir(args[0])
+            config = deploy.config.parse_config(srcdir)
             logger.info("restoring archive from '%(archive)s'" %{'archive': srcdir})
             
-            config = deploy.config.parse_config(os.path.join(args[0]))
             set_hookdir(config.get('main', 'hookdir'))
 
             run_hook('pre-restore')
