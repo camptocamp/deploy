@@ -29,8 +29,8 @@ components = ['databases', 'files', 'code']
 if __name__ == '__main__':
     
     usage = "usage: %prog -c [OPTIONS]... CONFIG_FILE DIRECTORY\n" + \
-            "   or: %prog -x [OPTIONS]... DIRECTORY" + \
-            "   or: %prog -r [OPTIONS] CONFIG_FILE DIRECTORY"
+            "   or: %prog -x [OPTIONS]... DIRECTORY\n" + \
+            "   or: %prog -r [OPTIONS] CONFIG_FILE HOST"
 
     parser = OptionParser(usage)
     c_group = OptionGroup(parser, "Create an archive")
