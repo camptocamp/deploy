@@ -1,7 +1,10 @@
 remote:
  * allow multiple hosts
+
+archives managment
  * remove archive dir on remote server ?
  * if the remote deploy failed, mark the archive dir ? (mv dir dir-failed)
+ * what do we need to kkep on the source machine ? only the last working version ?
 
 new mode: manage archives
 
