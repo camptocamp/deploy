@@ -1,2 +1,12 @@
 remote:
  * allow multiple hosts
+ * remove archive dir on remote server ?
+ * if the remote deploy failed, mark the archive dir ? (mv dir dir-failed)
+
+new mode: manage archives
+
+  deploy --list
+list existant archives
+
+  deploy -r /var/sig/foo_12345 example.com
+remote deploy an exixtant archive 
