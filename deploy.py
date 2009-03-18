@@ -24,10 +24,10 @@ def setup_logging(verbose=False):
 
     logging.getLogger('').addHandler(console)
 
-    
 components = ['databases', 'files', 'code']
 
 if __name__ == '__main__':
+    
     usage = "usage: %prog -c [OPTIONS]... CONFIG_FILE DIRECTORY\n" + \
             "   or: %prog -x [OPTIONS]... DIRECTORY" + \
             "   or: %prog -r [OPTIONS] CONFIG_FILE DIRECTORY"
@@ -71,8 +71,22 @@ if __name__ == '__main__':
     parser.add_option_group(x_group)
     parser.add_option_group(r_group)
 
-    (options, args) = parser.parse_args()
+    # handle remote call: only allow rsync and extract
+    sshcmd = os.getenv('SSH_ORIGINAL_COMMAND')
 
+    if sshcmd is None:        
+        # local mode
+        (options, args) = parser.parse_args()
+    else:
+        if sshcmd.startswith("rsync --server"):
+            os.system(sshcmd)
+            sys.exit(0)
+        elif sshcmd.startswith("deploy"):
+            (options, args) = parser.parse_args(sshcmd.split()[1:])
+        else:
+            # FIXME: remote command error
+            pass
+        
     setup_logging(options.verbose)
     # get the main logger
     logger = logging.getLogger('deploy.main')
