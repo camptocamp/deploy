@@ -1,3 +1,10 @@
+deploy (0.2-6) lenny; urgency=low
+
+  * run default hooks
+  * remote deploy
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 18 Mar 2009 12:34:56 +0100
+
 deploy (0.2-5) lenny; urgency=low
 
   * fix path ending (alex)

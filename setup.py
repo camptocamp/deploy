@@ -28,6 +28,3 @@ setup(name = 'deploy',
       data_files = [('/etc', ['deploy.cfg']),
                     ('/etc/deploy/hooks', glob('hooks/*'))]
 )
-
-
-
