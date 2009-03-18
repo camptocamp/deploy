@@ -194,8 +194,8 @@ if __name__ == '__main__':
         
             destdir = deploy.code.restore(dict(config.items('code')),
                                           os.path.join(srcdir, 'code'))
-
-            deploy.apache.restore(dict(config.items('apache')), destdir)
+            if destdir:
+                deploy.apache.restore(dict(config.items('apache')), destdir)
 
             run_hook('post-restore')
 

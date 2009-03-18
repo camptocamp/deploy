@@ -25,7 +25,7 @@ def restore(config, srcdir):
     else:
         dest = config['dir']
 
-    if os.path.exists(dest):
+    if os.path.exists(srcdir):
         run_hook('pre-restore-code', [config['project'], dest], logger=logger)
 
         logger.info("deleting '%(dest)s'" %{'dest': dest})
@@ -37,4 +37,6 @@ def restore(config, srcdir):
 
         run_hook('post-restore-code', [config['project'], dest], logger=logger)
         
-    return dest
+        return dest
+    else:
+        return None
