@@ -1,19 +1,20 @@
 from deploy.common import * 
-import logging
+import subprocess, logging
 
 logger = logging.getLogger('deploy.remote')
 
 def remote_copy(src, host):
     #logger.info("copying '%(src)s' to '%(host)s'"%{'src': src, 'host': host})
-    cmd = "rsync -avz %(srcdir)s %(host)s:%(dstdir)s"% {'srcdir': src, 
+    cmd = "rsync -az %(srcdir)s %(host)s:%(dstdir)s"% {'srcdir': src, 
                                                         'dstdir': dirname(src),
                                                         'host': host}
-    logger.info("running '%(cmd)s' "%{'cmd': cmd}) 
-    # rsync -avz 
-    return True
+    logger.info("running '%(cmd)s' "%{'cmd': cmd})
+    p = subprocess.Popen(cmd, shell=True)
+    return p.wait() == 0
 
 def remote_extract(dir, host):
-    #logger.info("start extracting '%(project)s' at '%(host)s'"%{'project': project, 'host': host})
     cmd = "ssh %(host)s deploy -x %(dir)s" % {'host': host, 'dir': dir}
     logger.info("running '%(cmd)s'"%{'cmd': cmd})
-    return True
+
+    p = subprocess.Popen(cmd, shell=True)
+    return p.wait() == 0

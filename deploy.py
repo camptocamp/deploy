@@ -101,11 +101,8 @@ if __name__ == '__main__':
         parser.error("missing action")
 
     if options.remote:
-        # FIXME: use config variable
-        packages_dir = '/var/sig/deploy-archives/'
-        
         config = deploy.config.parse_config(args[0])
-        #remote_destination = args[1] + ':' + packages_dir
+        packages_dir = config.get('main', 'packages_dir')        
         remote_destination = args[1]
         logger.info("remote deploy to '%(remote)s'" %{'remote': remote_destination})
         args[1] = os.path.join(packages_dir,
@@ -170,6 +167,7 @@ if __name__ == '__main__':
                         # rename
                         pass
                 else:
+                    
                      #remote_copy failed
                      # rename
                      pass
