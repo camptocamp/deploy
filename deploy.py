@@ -112,7 +112,21 @@ if __name__ == '__main__':
         config = deploy.config.parse_config(args[0])
         packages_dir = config.get('main', 'packages_dir')
         remote_destination = args[1:]
-        logger.info("remote deploy to '%(remote)s'" %{'remote': remote_destination})
+
+        if not remote_destination:
+            parser.error("missing hosts or profile name")
+        
+        elif len(remote_destination) == 1:
+            # find a remote profile
+            if config.has_section('remote_hosts') and config.has_option('remote_hosts', remote_destination[0]):
+                hosts = [h.strip() for h in config.get('remote_hosts', remote_destination[0]).split(',')]
+            else:
+                hosts = remote_destination
+        else:
+            # simple hosts list
+            hosts = remote_destination
+
+        logger.info("remote deploy to '%(remote)s'" %{'remote': hosts})
         args[1] = os.path.join(packages_dir,
                                config.get('DEFAULT', 'project') + '_' + str(int(time.time())))
 
@@ -166,7 +180,7 @@ if __name__ == '__main__':
 
             logger.info("done creating archive")
             if options.remote:
-                for host in remote_destination:
+                for host in hosts:
                     if deploy.remote.remote_copy(dirname(destdir), host):
                         if deploy.remote.remote_extract(dirname(destdir), host):
                             #remote_extract success
