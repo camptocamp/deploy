@@ -56,6 +56,14 @@ if __name__ == '__main__':
                        action="store_true",
                        help="extract files from an archive")
 
+    x_group.add_option("-d", "--delete",
+                       action="store_true", dest="delete" ,default=True,
+                       help="delete the archive after the restoration")
+
+    x_group.add_option("-k", "--keep",
+                       action="store_false", dest="delete",
+                       help="don't delete the archive after the restoration")
+
     r_group.add_option("-r", "--remote",
                        action="store_true",
                        help="create, copy and restore an archive to a remote server")
@@ -102,8 +110,8 @@ if __name__ == '__main__':
 
     if options.remote:
         config = deploy.config.parse_config(args[0])
-        packages_dir = config.get('main', 'packages_dir')        
-        remote_destination = args[1]
+        packages_dir = config.get('main', 'packages_dir')
+        remote_destination = args[1:]
         logger.info("remote deploy to '%(remote)s'" %{'remote': remote_destination})
         args[1] = os.path.join(packages_dir,
                                config.get('DEFAULT', 'project') + '_' + str(int(time.time())))
@@ -158,20 +166,21 @@ if __name__ == '__main__':
 
             logger.info("done creating archive")
             if options.remote:
-                if deploy.remote.remote_copy(dirname(destdir), remote_destination):
-                    if deploy.remote.remote_extract(dirname(destdir), remote_destination):
-                        #remote_extract success
-                        pass
-                    else:
-                        #remote_extract failed:
-                        # rename
-                        pass
-                else:
-                    
-                     #remote_copy failed
-                     # rename
-                     pass
+                for host in remote_destination:
+                    if deploy.remote.remote_copy(dirname(destdir), host):
+                        if deploy.remote.remote_extract(dirname(destdir), host):
+                            #remote_extract success
+                            pass
+                        else:
+                            #remote_extract failed:
+                            # rename
+                            pass
+                    else:                
+                         #remote_copy failed
+                         # rename
+                         pass
             else:
+                # no remote mode
                 sys.exit(0)
             
     elif options.extract:

@@ -4,7 +4,6 @@ import subprocess, logging
 logger = logging.getLogger('deploy.remote')
 
 def remote_copy(src, host):
-    #logger.info("copying '%(src)s' to '%(host)s'"%{'src': src, 'host': host})
     cmd = "rsync -az %(srcdir)s %(host)s:%(dstdir)s"% {'srcdir': src, 
                                                         'dstdir': dirname(src),
                                                         'host': host}
