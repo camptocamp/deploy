@@ -1,6 +1,7 @@
 import ConfigParser
 import os, sys
 import logging
+from deploy.common import * 
 logger = logging.getLogger('deploy.config')
 
 def parse_config(f):
@@ -22,6 +23,6 @@ def parse_config(f):
     config.read([globalconf, localconf])
 
     # setup 'here' magic variable
-    config.set('DEFAULT', 'here', os.path.dirname(f))
+    config.set('DEFAULT', 'here', dirname(localconf))
     
     return config

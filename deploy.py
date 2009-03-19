@@ -222,5 +222,10 @@ if __name__ == '__main__':
 
             run_hook('post-restore')
 
+            if options.delete:
+                logger.info("deleting '%(destdir)s'"%{'destdir': destdir})
+                # FIXME
+                
             logger.info("done restoring")
+            
             sys.exit(0)
