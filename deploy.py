@@ -223,8 +223,8 @@ if __name__ == '__main__':
             run_hook('post-restore')
 
             if options.delete:
-                logger.info("deleting '%(destdir)s'"%{'destdir': destdir})
-                # FIXME
+                logger.info("deleting '%(srcdir)s'"%{'srcdir': srcdir})
+                rmtree_silent(srcdir)
                 
             logger.info("done restoring")
             
