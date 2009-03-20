@@ -31,6 +31,10 @@ def dump(config, savedir, symlink=False):
             copytree(src, dest)
 
 def restore(config, srcdir):
+    if not os.path.exists(srcdir):
+        logger.debug("'%(srcdir)s' don't exists, no files to restore" %{'srcdir': srcdir})
+        return
+
     run_hook('pre-restore-files', logger=logger)
 
     for dest in get_dirs(config['dirs']):

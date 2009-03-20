@@ -39,4 +39,5 @@ def restore(config, srcdir):
         
         return dest
     else:
+        logger.debug("'%(srcdir)s' don't exists, no code to restore" %{'srcdir': srcdir})
         return None

@@ -61,7 +61,11 @@ def drop_database(name, tries=10):
         sys.exit(1)
         
 def restore(config, srcdir):
-    # FIXME: table only restore    
+    
+    if not os.path.exists(srcdir):
+        logger.debug("'%(srcdir)s' don't exists, no database to restore" %{'srcdir': srcdir})
+        return
+        
     restore = config['restore'].split()
     psql = config['psql'].split()
     databases = get_databases(config)
