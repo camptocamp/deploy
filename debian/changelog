@@ -1,3 +1,16 @@
+deploy (0.2-8) lenny; urgency=low
+
+  * be nice when restoring packages without componant
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 20 Mar 2009 14:29:20 +0100
+
+deploy (0.2-7) lenny; urgency=low
+
+  * bugfix
+  * remote deploy hosts
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Thu, 19 Mar 2009 14:52:14 +0100
+
 deploy (0.2-6) lenny; urgency=low
 
   * run default hooks
