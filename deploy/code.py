@@ -17,7 +17,7 @@ def dump(config, savedir, symlink=False):
         symlink_silent(src, dest)
     else:
         logger.info("copy '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
-        copytree(src, dest)
+        copytree(src, dest, symlinks=True)
         
 def restore(config, srcdir):
     if 'dest' in config:
@@ -33,7 +33,7 @@ def restore(config, srcdir):
         os.makedirs(dest)
         
         logger.info("copying '%(src)s' to '%(dest)s'" %{'src': srcdir, 'dest': dest})
-        copytree(srcdir, dirname(dest), keepdst=True)
+        copytree(srcdir, dirname(dest), symlinks=True, keepdst=True)
 
         run_hook('post-restore-code', [config['project'], dest], logger=logger)
         

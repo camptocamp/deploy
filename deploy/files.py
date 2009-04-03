@@ -28,7 +28,7 @@ def dump(config, savedir, symlink=False):
             symlink_silent(src, dest)
         else:
             logger.info("copying '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
-            copytree(src, dest)
+            copytree(src, dest, symlinks=True)
 
 def restore(config, srcdir):
     if not os.path.exists(srcdir):
@@ -45,6 +45,6 @@ def restore(config, srcdir):
         src = os.path.join(srcdir, dest[1:])
 
         logger.info("copying '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
-        copytree(src, dest)
+        copytree(src, dest, symlinks=True)
 
     run_hook('post-restore-files', logger=logger)
