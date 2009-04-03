@@ -1,6 +1,6 @@
-
 remote:
  * [DONE] allow multiple hosts
+ * display remote user in logs
 
 archives managment
  * [DONE] remove archive dir on remote server ?
