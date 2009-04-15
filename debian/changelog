@@ -1,3 +1,15 @@
+deploy (0.2-10) lenny; urgency=low
+
+  * allow to deploy project without databases
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 15 Apr 2009 17:04:07 +0200
+
+deploy (0.2-9) lenny; urgency=low
+
+  * include symlinks in code and files
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 03 Apr 2009 11:58:36 +0200
+
 deploy (0.2-8) lenny; urgency=low
 
   * be nice when restoring packages without componant
