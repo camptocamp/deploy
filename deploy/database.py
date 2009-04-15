@@ -7,7 +7,7 @@ logger = logging.getLogger('deploy.databases')
 __all__ = ['dump', 'restore']
 
 def get_databases(config):
-    return [n.strip() for n in config['names'].split(',')]
+    return [n.strip() for n in config['names'].split(',') if n]
 
 def dump(config, savedir):
     # FIXME: table only dump
