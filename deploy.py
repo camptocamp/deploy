@@ -44,6 +44,10 @@ if __name__ == '__main__':
                        default="all",
                        help="restrict component to update. [%s]. default to all" % ','.join(components))
 
+    c_group.add_option("--tables",
+                       default=None,
+                       help="only include TABLES")
+
     c_group.add_option("--symlink",
                        action="store_true", dest="symlink",
                        help="use symlinks for 'files' and 'code'")
@@ -101,13 +105,16 @@ if __name__ == '__main__':
 
     if options.create and options.extract:
         parser.error("options -c and -x are mutually exclusive")
-
-    if options.components == 'all':
-        options.components = components
         
     if not options.create and not options.extract and not options.remote:
         parser.error("missing action")
 
+    if options.components == 'all':
+        options.components = components
+
+    if options.tables and 'databases' not in options.components:
+        parser.error("can't have a 'tables' option without the 'databases' components")
+    
     if options.remote:
         config = deploy.config.parse_config(args[0])
         packages_dir = config.get('main', 'packages_dir')
@@ -155,6 +162,7 @@ if __name__ == '__main__':
 
             if 'databases' in options.components:
                 deploy.database.dump(dict(config.items('databases')),
+                                     options.tables,
                                      destpath['databases'])
             else:
                 logger.debug("removing '%(path)s'" %{'path': destpath['databases']})
