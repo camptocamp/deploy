@@ -1,7 +1,6 @@
 deploy (0.2-11) lenny; urgency=low
 
-  * NOT RELEASED
-  * allow to deploy only database table
+  * allow to deploy only database tables
   * allow to cleanely deactivate the 'file', 'code', 'database' or 'apache' component 
 
  -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 15 May 2009 10:38:04 +0200
