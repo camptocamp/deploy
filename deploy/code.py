@@ -5,6 +5,9 @@ logger = logging.getLogger('deploy.code')
 __all__ = ['dump', 'restore']
 
 def dump(config, savedir, symlink=False):
+    if 'active' in config and config['active'] in ('false', 'off', '0'):
+        return
+
     if 'src' in config:
         src = config['src']
     else:

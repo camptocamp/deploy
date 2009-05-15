@@ -11,6 +11,9 @@ def get_dirs(dirs):
         return [n.strip() for n in dirs.split(',')]
 
 def dump(config, savedir, symlink=False):
+    if 'active' in config and config['active'] in ('false', 'off', '0'):
+        return
+    
     dirs = get_dirs(config['dirs'])
     
     for src in dirs:

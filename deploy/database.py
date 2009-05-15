@@ -29,6 +29,8 @@ def get_tables_from_dir(srcdir):
     return get_tables(','.join(files))
 
 def dump(config, rawtables, savedir):
+    if 'active' in config and config['active'] in ('false', 'off', '0'):
+        return
 
     makedirs_silent(savedir)
 
