@@ -5,6 +5,9 @@ logger = logging.getLogger('deploy.apache')
 __all__ = ['restore']
 
 def restore(config, codedir):
+    if 'active' in config and config['active'] in ('false', 'off', '0'):
+        return
+    
     if not os.path.exists(os.path.dirname(config['dest'])):
         logger.error("'%(dir)s' do not exists" %{'dir': config['dest']})
         sys.exit(1)
