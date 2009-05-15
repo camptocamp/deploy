@@ -1,3 +1,10 @@
+deploy (0.2-12) lenny; urgency=low
+
+  * NOT RELEASED
+  * nicer variable name in hooks
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 15 May 2009 11:43:04 +0200
+
 deploy (0.2-11) lenny; urgency=low
 
   * allow to deploy only database tables
