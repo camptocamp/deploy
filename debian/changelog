@@ -2,6 +2,7 @@ deploy (0.2-12) lenny; urgency=low
 
   * NOT RELEASED
   * nicer variable name in hooks
+  * fix comments typo in deploy.cfg
 
  -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 15 May 2009 11:43:04 +0200
 
