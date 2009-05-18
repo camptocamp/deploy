@@ -1,6 +1,7 @@
 deploy (0.2-12) lenny; urgency=low
 
   * NOT RELEASED
+  * add pre,post-create-code hooks
   * nicer variable name in hooks
   * fix comments typo in deploy.cfg
 

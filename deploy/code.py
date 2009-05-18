@@ -13,6 +13,8 @@ def dump(config, savedir, symlink=False):
     else:
         src = config['dir']
 
+    run_hook('pre-create-code', [config['project'], src], logger=logger)
+
     makedirs_silent(savedir)
     dest = os.path.join(savedir, config['project'])
     if symlink:
@@ -21,6 +23,8 @@ def dump(config, savedir, symlink=False):
     else:
         logger.info("copy '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
         copytree(src, dest, symlinks=True)
+
+    run_hook('post-create-code', [config['project'], src], logger=logger)
         
 def restore(config, srcdir):
     if 'dest' in config:
