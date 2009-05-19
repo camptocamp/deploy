@@ -1,4 +1,4 @@
-import os, shutil, subprocess, logging
+import os, shutil, subprocess, logging, fnmatch
 
 __all__ = ['run_hook', 'set_hookdir',
            'dirname', 'basename',
