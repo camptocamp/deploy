@@ -1,8 +1,10 @@
 import os, shutil, subprocess, logging
 
-__all__ = ['run_hook', 'dirname', 'basename',
+__all__ = ['run_hook', 'set_hookdir',
+           'dirname', 'basename',
+           'ignore_patterns'
            'copytree', 'makedirs_silent',
-           'symlink_silent', 'rmtree_silent', 'set_hookdir']
+           'symlink_silent', 'rmtree_silent']
 
 _hookdir = None
 _default_hookdir = '/etc/deploy/hooks'
@@ -97,3 +99,14 @@ def copytree(src, dst, symlinks=False, ignore=None, keepdst=False):
     if errors:
         raise shutil.Error, errors
 
+def ignore_patterns(*patterns):
+    """Function that can be used as copytree() ignore parameter.                
+                                                                                
+    Patterns is a sequence of glob-style patterns                               
+    that are used to exclude files"""
+    def _ignore_patterns(path, names):
+        ignored_names = []
+        for pattern in patterns:
+            ignored_names.extend(fnmatch.filter(names, pattern))
+        return set(ignored_names)
+    return _ignore_patterns
