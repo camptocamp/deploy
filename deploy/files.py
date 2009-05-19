@@ -15,7 +15,12 @@ def dump(config, savedir, symlink=False):
         return
     
     dirs = get_dirs(config['dirs'])
-    
+
+    if 'ignore' in config:
+        ignore = ignore_patterns(*[p.strip() for p in config['ignore'].split(',')])
+    else:
+        ignore = None
+
     for src in dirs:
         if src.startswith('/'):
             dest = os.path.join(savedir, src[1:])
@@ -31,7 +36,7 @@ def dump(config, savedir, symlink=False):
             symlink_silent(src, dest)
         else:
             logger.info("copying '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
-            copytree(src, dest, symlinks=True)
+            copytree(src, dest, symlinks=True, ignore=ignore)
 
 def restore(config, srcdir):
     if not os.path.exists(srcdir):

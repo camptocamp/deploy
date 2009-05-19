@@ -13,6 +13,11 @@ def dump(config, savedir, symlink=False):
     else:
         src = config['dir']
 
+    if 'ignore' in config:
+        ignore = ignore_patterns(*[p.strip() for p in config['ignore'].split(',')])
+    else:
+        ignore = None
+
     run_hook('pre-create-code', [config['project'], src], logger=logger)
 
     makedirs_silent(savedir)
@@ -22,7 +27,7 @@ def dump(config, savedir, symlink=False):
         symlink_silent(src, dest)
     else:
         logger.info("copy '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
-        copytree(src, dest, symlinks=True)
+        copytree(src, dest, symlinks=True, ignore=ignore)
 
     run_hook('post-create-code', [config['project'], src], logger=logger)
         
