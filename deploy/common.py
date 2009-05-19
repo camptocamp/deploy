@@ -2,7 +2,7 @@ import os, shutil, subprocess, logging
 
 __all__ = ['run_hook', 'set_hookdir',
            'dirname', 'basename',
-           'ignore_patterns'
+           'ignore_patterns',
            'copytree', 'makedirs_silent',
            'symlink_silent', 'rmtree_silent']
 
