@@ -132,7 +132,7 @@ def restore(config, srcdir):
             # database without a table: restore all database
             dumpfile = os.path.join(srcdir, database + '.dump')
             drop_database(database)
-            cmd = [restore, dumpfile]
+            cmd = restore + [dumpfile]
             jobs.append({'cmd': cmd})
             
         else:

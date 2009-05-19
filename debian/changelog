@@ -1,3 +1,10 @@
+deploy (0.2-13) lenny; urgency=low
+
+  * NOT RELEASED
+  * fix bug in database restore 
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Tue, 19 May 2009 14:32:46 +0200
+
 deploy (0.2-12) lenny; urgency=low
 
   * add pre-create-code and post-create-code hooks
