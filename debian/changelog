@@ -1,3 +1,11 @@
+deploy (0.2-14) lenny; urgency=low
+
+  * NOT RELEASED
+  * nicer output in logs
+  * give hooks a working dir
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 27 May 2009 16:35:19 +0200
+
 deploy (0.2-13) lenny; urgency=low
 
   * fix bug in database restore 
