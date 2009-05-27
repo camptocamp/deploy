@@ -27,7 +27,7 @@ def run_hook(name, arguments=[], logger=None):
         
     if os.path.exists(hook):
         logger.info("running '%(name)s'" %{'name': hook})
-        h = subprocess.Popen(' '.join([hook] + arguments), shell=True)
+        h = subprocess.Popen(' '.join([hook] + arguments), shell=True, cwd=dirname(hook))
         exitcode = h.wait()
 
         return exitcode == 0
