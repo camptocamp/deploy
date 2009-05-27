@@ -12,13 +12,15 @@ def setup_logging(verbose=False):
     # configure the root logger
     fqdn = socket.getfqdn()
     logging.getLogger('').setLevel(logging.DEBUG)
+
+    format = "[%(name)s] %(message)s"
    
     syslog = SysLogHandler(address='/dev/log')
-    syslog.setFormatter(logging.Formatter("%(name)s: %(message)s"))
+    syslog.setFormatter(logging.Formatter(format))
     logging.getLogger('').addHandler(syslog)
 
     console = logging.StreamHandler()
-    console.setFormatter(logging.Formatter(fqdn + " %(name)s: %(message)s"))
+    console.setFormatter(logging.Formatter(fqdn + " " + format))
     if not verbose:
         console.setLevel(logging.ERROR)
 
