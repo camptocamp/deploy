@@ -6,7 +6,7 @@ logger = logging.getLogger('deploy.config')
 
 def parse_config(f):
     globalconf = '/etc/deploy.cfg'
-    localconf = f
+    localconf = os.path.abspath(f)
     
     if not os.path.isfile(globalconf):
         logger.error("can't find global configuration file '%s'" % globalconf)
