@@ -1,6 +1,5 @@
 deploy (0.2-14) lenny; urgency=low
 
-  * NOT RELEASED
   * nicer output in logs
   * give hooks a working dir
   * the magic 'here' path is now always absolute
