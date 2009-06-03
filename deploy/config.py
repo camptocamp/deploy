@@ -4,7 +4,7 @@ import logging
 from deploy.common import * 
 logger = logging.getLogger('deploy.config')
 
-def parse_config(f):
+def parse_config(f, rawenv=None):
     globalconf = '/etc/deploy.cfg'
     localconf = os.path.abspath(f)
     
@@ -24,5 +24,14 @@ def parse_config(f):
 
     # setup 'here' magic variable
     config.set('DEFAULT', 'here', dirname(localconf))
+    
+    # setup env section
+    if not config.has_section('env'):
+        config.add_section('env')
+
+    if rawenv:
+        env = dict([tuple(i.split('=')) for i in rawenv.split(',')])
+        for k,v in env.iteritems():
+            config.set('env', k, v)
     
     return config
