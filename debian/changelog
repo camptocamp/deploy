@@ -2,8 +2,10 @@ deploy (0.2-16) lenny; urgency=low
 
   * NOT RELEASED
   * fix indent, add comments
+  * remote mode: added --no-time-dir option to always create the package in the same
+    directory.
 
- -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 03 Jun 2009 13:58:46 +0200
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 03 Jun 2009 14:13:29 +0200
 
 deploy (0.2-15) lenny; urgency=low
 

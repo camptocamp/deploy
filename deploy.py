@@ -74,6 +74,10 @@ if __name__ == '__main__':
                        action="store_true",
                        help="create, copy and restore an archive to a remote server")
 
+    r_group.add_option("--no-time-dir",
+                       action="store_false", dest="timedir", default=True,
+                       help="don't create separated archive directory for each remote deploy [default false]")
+
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose", default=True,
                       help="make lots of noise [default]")
@@ -136,8 +140,11 @@ if __name__ == '__main__':
             hosts = remote_destination
 
         logger.info("remote deploy to '%(remote)s'" %{'remote': hosts})
-        args[1] = os.path.join(packages_dir,
-                               config.get('DEFAULT', 'project') + '_' + str(int(time.time())))
+
+        destpath = config.get('DEFAULT', 'project')
+        if options.timedir:
+            destpath += '_' + str(int(time.time()))
+        args[1] = os.path.join(packages_dir, destpath)
 
         # let's start creating the archive
         options.create = True
