@@ -160,7 +160,6 @@ if __name__ == '__main__':
             has_custom_hooks = setup_hooks(config)
             
             destdir = os.path.join(args[1], config.get('DEFAULT', 'project'))
-
             destpath = dict([(c, os.path.join(destdir, c)) for c in components])
 
             run_hook('pre-create')
@@ -202,7 +201,7 @@ if __name__ == '__main__':
             if options.remote:
                 for host in hosts:
                     if deploy.remote.remote_copy(dirname(destdir), host):
-                        if deploy.remote.remote_extract(dirname(destdir), host):
+                        if deploy.remote.remote_extract(dirname(destdir), host, options.env):
                             #remote_extract success
                             pass
                         else:
