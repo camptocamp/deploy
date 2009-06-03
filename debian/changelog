@@ -1,3 +1,9 @@
+deploy (0.2-15) lenny; urgency=low
+
+  * don't copy hooks .svn
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 03 Jun 2009 11:55:09 +0200
+
 deploy (0.2-14) lenny; urgency=low
 
   * nicer output in logs

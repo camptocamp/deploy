@@ -16,4 +16,4 @@ def create_update_archive(base, configfile):
 
 def copy_hooks(hooks, dest):
     logger.debug("copy hooks from '%(hooks)s' to '%(dest)s'" %{'hooks': hooks, 'dest': dest})
-    copytree(hooks, os.path.join(dest, basename(hooks)))
+    copytree(hooks, os.path.join(dest, basename(hooks)), ignore=ignore_patterns('.svn'))
