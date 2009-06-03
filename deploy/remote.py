@@ -11,8 +11,12 @@ def remote_copy(src, host):
     p = subprocess.Popen(cmd, shell=True)
     return p.wait() == 0
 
-def remote_extract(dir, host):
-    cmd = "ssh %(host)s deploy -x %(dir)s" % {'host': host, 'dir': dir}
+def remote_extract(dir, host, rawenv=None):
+    cmd = "ssh %(host)s deploy "%{'host': host}
+    if rawenv:
+        cmd += "-e %(rawenv)s "%{'rawenv': rawenv}
+    
+    cmd += "-x %(dir)s" %{'dir': dir}
     logger.info("running '%(cmd)s'"%{'cmd': cmd})
 
     p = subprocess.Popen(cmd, shell=True)
