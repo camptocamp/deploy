@@ -5,8 +5,7 @@ import os, sys, socket, time
 import logging
 from logging.handlers import SysLogHandler
 import deploy
-from deploy.common import rmtree_silent, set_hookdir, run_hook, dirname
-
+from deploy.common import rmtree_silent, setup_hooks, run_hook, dirname
 
 def setup_logging(verbose=False):
     # configure the root logger
@@ -42,6 +41,7 @@ if __name__ == '__main__':
     c_group.add_option("-c", "--create",
                        action="store_true",
                        help="create a new archive")
+    
     c_group.add_option("--components",
                        default="all",
                        help="restrict component to update. [%s]. default to all" % ','.join(components))
@@ -85,6 +85,9 @@ if __name__ == '__main__':
                       action="store_false", dest="verbose",
                       help="be vewwy quiet")
 
+    parser.add_option("-e", "--env",
+                       help="additionals environement variables, eg: '-e target=prod,foo=bar'")
+
     parser.add_option_group(c_group)
     parser.add_option_group(x_group)
     parser.add_option_group(r_group)
@@ -122,7 +125,7 @@ if __name__ == '__main__':
         parser.error("can't have a 'tables' option without the 'databases' components")
     
     if options.remote:
-        config = deploy.config.parse_config(args[0])
+        config = deploy.config.parse_config(args[0], options.env)
         packages_dir = config.get('main', 'packages_dir')
         remote_destination = args[1:]
 
@@ -153,8 +156,8 @@ if __name__ == '__main__':
         if len(args) < 2:
             parser.error("missing config and/or archive destination")
         else:
-            config = deploy.config.parse_config(args[0])
-            has_custom_hooks = set_hookdir(config.get('main', 'hookdir'))
+            config = deploy.config.parse_config(args[0], options.env)
+            has_custom_hooks = setup_hooks(config)
             
             destdir = os.path.join(args[1], config.get('DEFAULT', 'project'))
 
@@ -219,11 +222,11 @@ if __name__ == '__main__':
             parser.error("missing archive path")
         else:
             srcdir = deploy.extract.get_archive_dir(args[0])
-            config = deploy.config.parse_config(srcdir)
+            config = deploy.config.parse_config(srcdir, options.env)
             logger.info("restoring archive from '%(archive)s'" %{'archive': srcdir})
             
-            set_hookdir(config.get('main', 'hookdir'))
-
+            setup_hooks(config)
+            
             run_hook('pre-restore')
 
             deploy.database.restore(dict(config.items('databases')), 

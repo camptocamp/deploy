@@ -1,21 +1,29 @@
 import os, shutil, subprocess, logging, fnmatch
 
-__all__ = ['run_hook', 'set_hookdir',
+__all__ = ['run_hook', 'setup_hooks',
            'dirname', 'basename',
            'ignore_patterns',
            'copytree', 'makedirs_silent',
            'symlink_silent', 'rmtree_silent']
 
+_env = None
 _hookdir = None
 _default_hookdir = '/etc/deploy/hooks'
 
-def set_hookdir(path):
-    global _hookdir, _default_hookdir
-    _hookdir = path
+def setup_hooks(config):
+    global _hookdir, _default_hookdir, _env
+    _hookdir = config.get('main', 'hookdir')
+    
+    # only keep the real env variables (remove the default values)
+    _env = dict(config.items('env'))
+    for k in config.defaults():
+        del _env[k]
+
+    # return if the project has custom hooks
     return os.path.normpath(_hookdir) != os.path.normpath(_default_hookdir)
 
 def run_hook(name, arguments=[], logger=None):
-    global _hookdir, _default_hookdir
+    global _hookdir, _default_hookdir, _env
 
     if logger is None:
         logger = logging.getLogger('deploy.hook')
@@ -27,7 +35,7 @@ def run_hook(name, arguments=[], logger=None):
         
     if os.path.exists(hook):
         logger.info("running '%(name)s'" %{'name': hook})
-        h = subprocess.Popen(' '.join([hook] + arguments), shell=True, cwd=dirname(hook))
+        h = subprocess.Popen(' '.join([hook] + arguments), shell=True, cwd=dirname(hook), env=_env)
         exitcode = h.wait()
 
         return exitcode == 0
@@ -64,7 +72,7 @@ def copytree(src, dst, symlinks=False, ignore=None, keepdst=False):
         ignored_names = ignore(src, names)
     else:
         ignored_names = set()
-
+    
     if not keepdst and os.path.exists(dst):
         shutil.rmtree(dst)
     makedirs_silent(dst)
