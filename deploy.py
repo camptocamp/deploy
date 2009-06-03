@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
     x_group.add_option("-d", "--delete",
                        action="store_true", dest="delete" ,default=True,
-                       help="delete the archive after the restoration")
+                       help="delete the archive after the restoration [default]")
 
     x_group.add_option("-k", "--keep",
                        action="store_false", dest="delete",

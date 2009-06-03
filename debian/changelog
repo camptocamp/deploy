@@ -1,3 +1,10 @@
+deploy (0.2-16) lenny; urgency=low
+
+  * NOT RELEASED
+  * fix indent, add comments
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 03 Jun 2009 13:58:46 +0200
+
 deploy (0.2-15) lenny; urgency=low
 
   * don't copy hooks .svn
