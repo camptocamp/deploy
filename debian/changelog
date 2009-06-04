@@ -1,7 +1,6 @@
 deploy (0.2-17) lenny; urgency=low
 
-  * NOT RELEASED
-  * hooks env variable via the new '-e' option, works in remote mode
+  * hooks env variable via the new '-e' option, works in remote mode.
 
  -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 03 Jun 2009 16:26:20 +0200
 
