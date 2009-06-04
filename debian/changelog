@@ -1,3 +1,10 @@
+deploy (0.2-18) lenny; urgency=low
+
+  * NOT RELEASED.
+  * '--no-time-dir' forces '-k' in remote mode.
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Thu, 04 Jun 2009 09:51:28 +0200
+
 deploy (0.2-17) lenny; urgency=low
 
   * hooks env variable via the new '-e' option, works in remote mode.
