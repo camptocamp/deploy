@@ -48,7 +48,8 @@ if __name__ == '__main__':
 
     c_group.add_option("--tables",
                        default=None,
-                       help="only include TABLES")
+                       help="only include TABLES. eg: '--tables foo,bar.baz' to include the " +
+                       "database 'foo' and the 'baz' table from the 'bar' database")
 
     c_group.add_option("--symlink",
                        action="store_true", dest="symlink",
@@ -201,7 +202,8 @@ if __name__ == '__main__':
             if options.remote:
                 for host in hosts:
                     if deploy.remote.remote_copy(dirname(destdir), host):
-                        if deploy.remote.remote_extract(dirname(destdir), host, options.env):
+                        if deploy.remote.remote_extract(dirname(destdir), host, options.env,
+                                                        options.timedir or options.delete):
                             #remote_extract success
                             pass
                         else:
