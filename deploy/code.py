@@ -36,7 +36,8 @@ def restore(config, srcdir):
         dest = config['dest']
     else:
         dest = config['dir']
-        
+
+    srcdir = os.path.join(srcdir, config['project'])
     if os.path.exists(srcdir):
         run_hook('pre-restore-code', [config['project'], dest], logger=logger)
 
