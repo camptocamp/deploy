@@ -47,7 +47,6 @@ def restore(config, srcdir):
         
         logger.info("copying '%(src)s' to '%(dest)s'" %{'src': srcdir, 'dest': dest})
         copytree(srcdir, dest, symlinks=True, keepdst=True)
-        #copytree(srcdir, dirname(dest), symlinks=True, keepdst=True) # FIXME: dirname(dest) ???
 
         run_hook('post-restore-code', [config['project'], dest], logger=logger)
         
