@@ -1,3 +1,6 @@
+debian package:
+ * need to create /var/sig/deploy-archives/
+
 remote:
  * [DONE] allow multiple hosts
  * display remote user in logs
