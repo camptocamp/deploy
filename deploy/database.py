@@ -151,7 +151,6 @@ def restore(config, srcdir):
         if exitcode != 0:
             errors.flush()
             errors.seek(0)
-            logger.error("restore error for '%(table)s':\n%(errors)s" %{'table': database + '.' + table,
-                                                                        'errors': errors.read()})
+            logger.error("restore error:\n%(errors)s" %{'errors': errors.read()})
 
     run_hook('post-restore-database', get_tables_from_dir(srcdir).keys(), logger=logger)
