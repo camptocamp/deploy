@@ -204,15 +204,13 @@ if __name__ == '__main__':
                     if deploy.remote.remote_copy(dirname(destdir), host):
                         if deploy.remote.remote_extract(dirname(destdir), host, options.env, options.timedir):
                             #remote_extract success
-                            pass
+                            sys.exit(0)
                         else:
                             #remote_extract failed:
-                            # rename
-                            pass
+                            sys.exit(1)
                     else:                
                          #remote_copy failed
-                         # rename
-                         pass
+                         sys.exit(1)
             else:
                 # no remote mode
                 sys.exit(0)

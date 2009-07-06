@@ -20,7 +20,7 @@ def get_tables(str):
             tables[base_table[0]].append(base_table[1])
         else:
             logger.error("invalid table format : %s''"%table)
-            sys.exit(-1)
+            sys.exit(1)
 
     return tables
 
