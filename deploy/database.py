@@ -100,15 +100,15 @@ def delete_table(database, table):
     if database_exists(database):
         errors = tempfile.TemporaryFile()
         cmd = ['psql', '-c', "DELETE FROM %(table)s"%{'table': table}, database]
-        logger.debug("deleting '%(table)s.%(database)s' with '%(cmd)s'" %{'table': table, 'database': database,
+        logger.debug("deleting '%(database)s.%(table)s' with '%(cmd)s'" %{'table': table, 'database': database,
                                                                           'cmd': ' '.join(cmd)})
         drop = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
         exitcode = drop.wait()
         if exitcode != 0:
             errors.flush()
             errors.seek(0)
-            logger.error("'%(table)s' drop error:\n%(errors)s" %{'table': database + '.' + table,
-                                                                 'errors': errors.read()})
+            logger.error("'%(database)s.%(table)s' drop error:\n%(errors)s" %{'table': table, 'database': database,
+                                                                              'errors': errors.read()})
             sys.exit(1)
         else:
             return True

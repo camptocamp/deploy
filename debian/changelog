@@ -1,3 +1,10 @@
+deploy (0.2-21) lenny; urgency=low
+
+  * NOT RELEASED
+  * fix log messages in database.restore
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 06 Jul 2009 11:39:49 +0200
+
 deploy (0.2-20) lenny; urgency=low
 
   * fix database.restore error message
