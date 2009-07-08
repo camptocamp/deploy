@@ -202,7 +202,7 @@ if __name__ == '__main__':
             if options.remote:
                 for host in hosts:
                     if deploy.remote.remote_copy(dirname(destdir), host):
-                        if deploy.remote.remote_extract(dirname(destdir), host, options.env, options.timedir):
+                        if deploy.remote.remote_extract(dirname(destdir), host, options):
                             #remote_extract success
                             sys.exit(0)
                         else:

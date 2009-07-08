@@ -1,3 +1,9 @@
+deploy (0.2-22) lenny; urgency=low
+
+  * simplify deploy.remote.remote_extract and handle quite option in remote call.
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 08 Jul 2009 15:34:39 +0200
+
 deploy (0.2-21) lenny; urgency=low
 
   * fix log messages in database.restore.
