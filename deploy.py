@@ -204,12 +204,14 @@ if __name__ == '__main__':
                     if deploy.remote.remote_copy(dirname(destdir), host):
                         if deploy.remote.remote_extract(dirname(destdir), host, options):
                             #remote_extract success
-                            sys.exit(0)
+                            pass
                         else:
                             #remote_extract failed:
+                            logger.error("error while deploying to '%s'."%host)
                             sys.exit(1)
                     else:                
                          #remote_copy failed
+                         logger.error("error while copying archive to '%s'."%host)
                          sys.exit(1)
             else:
                 # no remote mode

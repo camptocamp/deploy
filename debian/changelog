@@ -1,3 +1,9 @@
+deploy (0.2-23) lenny; urgency=low
+
+  * stop if a remote copy or deploy failed
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Thu, 09 Jul 2009 10:41:38 +0200
+
 deploy (0.2-22) lenny; urgency=low
 
   * simplify deploy.remote.remote_extract and handle quite option in remote call.
