@@ -158,7 +158,7 @@ if __name__ == '__main__':
             parser.error("missing config and/or archive destination")
         else:
             config = deploy.config.parse_config(args[0], options.env)
-            has_custom_hooks = setup_hooks(config)
+            has_custom_hooks = setup_hooks(config, options.verbose)
             
             destdir = os.path.join(args[1], config.get('DEFAULT', 'project'))
             destpath = dict([(c, os.path.join(destdir, c)) for c in components])
@@ -225,7 +225,7 @@ if __name__ == '__main__':
             config = deploy.config.parse_config(srcdir, options.env)
             logger.info("restoring archive from '%(archive)s'" %{'archive': srcdir})
             
-            setup_hooks(config)
+            setup_hooks(config, options.verbose)
             
             run_hook('pre-restore')
 

@@ -1,4 +1,9 @@
-import os, shutil, subprocess, logging, fnmatch
+import os
+import shutil
+import subprocess
+import logging
+import fnmatch
+from tempfile import TemporaryFile
 
 __all__ = ['run_hook', 'setup_hooks',
            'dirname', 'basename',
@@ -9,9 +14,10 @@ __all__ = ['run_hook', 'setup_hooks',
 _env = None
 _hookdir = None
 _default_hookdir = '/etc/deploy/hooks'
+_verbose = None
 
-def setup_hooks(config):
-    global _hookdir, _default_hookdir, _env
+def setup_hooks(config, verbose=True):
+    global _hookdir, _default_hookdir, _env, _verbose
     _hookdir = config.get('main', 'hookdir')
     
     # only keep the real env variables (remove the default values)
@@ -19,11 +25,12 @@ def setup_hooks(config):
     for k in config.defaults():
         del _env[k]
 
+    _verbose = verbose
     # return if the project has custom hooks
     return os.path.normpath(_hookdir) != os.path.normpath(_default_hookdir)
 
 def run_hook(name, arguments=[], logger=None):
-    global _hookdir, _default_hookdir, _env
+    global _hookdir, _default_hookdir, _env, _verbose
 
     if logger is None:
         logger = logging.getLogger('deploy.hook')
@@ -34,8 +41,13 @@ def run_hook(name, arguments=[], logger=None):
         hook = os.path.join(_default_hookdir, name)
         
     if os.path.exists(hook):
+        stdout = None
+        if not _verbose:
+            stdout = TemporaryFile()
+            
         logger.info("running '%(name)s'" %{'name': hook})
-        h = subprocess.Popen(' '.join([hook] + arguments), shell=True, cwd=dirname(hook), env=_env)
+        h = subprocess.Popen(' '.join([hook] + arguments), shell=True, cwd=dirname(hook), env=_env,
+                             stderr=subprocess.STDOUT, stdout=stdout)
         exitcode = h.wait()
 
         return exitcode == 0

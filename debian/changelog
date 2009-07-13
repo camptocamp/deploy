@@ -1,3 +1,9 @@
+deploy (0.2-24) lenny; urgency=low
+
+  * don't display hooks stdout and stderr if running in slient mode.
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 13 Jul 2009 15:05:45 +0200
+
 deploy (0.2-23) lenny; urgency=low
 
   * stop if a remote copy or deploy failed
