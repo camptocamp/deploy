@@ -1,3 +1,9 @@
+deploy (0.2-25) lenny; urgency=low
+
+  * fix typo in remote_extract
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 21 Aug 2009 09:40:16 +0200
+
 deploy (0.2-24) lenny; urgency=low
 
   * don't display hooks stdout and stderr if running in slient mode.

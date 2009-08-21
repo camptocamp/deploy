@@ -14,7 +14,7 @@ def remote_copy(src, host):
 def remote_extract(dir, host, options):
     cmd = "ssh %(host)s deploy "%{'host': host}
     if options.env:
-        cmd += "-e %(rawenv)s "%{'rawenv': rawenv}
+        cmd += "-e %(env)s "%{'env': options.env}
     if not options.timedir:
         cmd += "-k "
     if not options.verbose:
