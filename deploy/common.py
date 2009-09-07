@@ -25,6 +25,9 @@ def setup_hooks(config, verbose=True):
     for k in config.defaults():
         del _env[k]
 
+    # uppercase the keys
+    _env = dict([(k.upper(), v) for k, v in _env.iteritems()])
+    
     _verbose = verbose
     # return if the project has custom hooks
     return os.path.normpath(_hookdir) != os.path.normpath(_default_hookdir)
