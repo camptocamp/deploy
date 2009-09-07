@@ -87,7 +87,8 @@ if __name__ == '__main__':
                       help="be vewwy quiet")
 
     parser.add_option("-e", "--env",
-                       help="additionals environement variables, eg: '-e target=prod,foo=bar'")
+                      default='',
+                      help="additionals environement variables, eg: '-e target=prod,foo=bar'")
 
     parser.add_option_group(c_group)
     parser.add_option_group(x_group)
