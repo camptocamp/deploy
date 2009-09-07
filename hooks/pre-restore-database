@@ -2,8 +2,8 @@
 
 DATABASES=$@
 
-# apache must be down to prevent database connection from 
-# pylons or mapserver
+# apache must be stopped to prevent database connection during 
+# databases / tables restore.
 sudo /etc/init.d/apache2 stop
 
 exit 0
