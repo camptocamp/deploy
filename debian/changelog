@@ -1,11 +1,10 @@
 deploy (0.2-27) lenny; urgency=low
 
-  * NOT RELEASED
   * add comments in config file.
   * pass the symbolic target host to the hooks ($TARGET variable).
   * upper case variable names passed to the hooks.
 
- -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 07 Sep 2009 11:50:26 +0200
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 07 Sep 2009 12:47:28 +0200
 
 deploy (0.2-26) lenny; urgency=low
 
