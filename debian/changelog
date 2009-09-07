@@ -1,6 +1,5 @@
 deploy (0.2-26) lenny; urgency=low
 
-  * NOT RELEASED
   * change packages_dir from /var/sig/deploy-archives/ to /var/cache/deploy/
 
  -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 31 Aug 2009 09:01:29 +0200
