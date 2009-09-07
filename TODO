@@ -1,3 +1,6 @@
+hooks:
+ * replace all position variables (PROJECT, CODE_DIR, ...) by environ variables
+
 debian package:
  * create 'packages_dir'
 
