@@ -1,14 +1,12 @@
 debian package:
- * need to create /var/sig/deploy-archives/
+ * create 'packages_dir'
 
 remote:
- * [DONE] allow multiple hosts
  * display remote user in logs
 
-archives managment
- * [DONE] remove archive dir on remote server ?
+archives management
  * if the remote deploy failed, mark the archive dir ? (mv dir dir-failed)
- * what do we need to kkep on the source machine ? only the last working version ?
+ * what do we need to keep on the source machine ? only the last working version ?
 
 new mode: manage archives
 
