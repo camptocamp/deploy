@@ -138,6 +138,10 @@ if __name__ == '__main__':
             # find a remote profile
             if config.has_section('remote_hosts') and config.has_option('remote_hosts', remote_destination[0]):
                 hosts = [h.strip() for h in config.get('remote_hosts', remote_destination[0]).split(',')]
+                # push the symbolic name into the env.
+                if options.env:
+                    options.env += ','
+                options.env += 'target=' + target
             else:
                 hosts = remote_destination
         else:
