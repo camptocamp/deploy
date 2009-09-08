@@ -135,9 +135,10 @@ if __name__ == '__main__':
             parser.error("missing hosts or profile name")
         
         elif len(remote_destination) == 1:
+            target = remote_destination[0]
             # find a remote profile
-            if config.has_section('remote_hosts') and config.has_option('remote_hosts', remote_destination[0]):
-                hosts = [h.strip() for h in config.get('remote_hosts', remote_destination[0]).split(',')]
+            if config.has_section('remote_hosts') and config.has_option('remote_hosts', target):
+                hosts = [h.strip() for h in config.get('remote_hosts', target).split(',')]
                 # push the symbolic name into the env.
                 if options.env:
                     options.env += ','
