@@ -1,3 +1,9 @@
+deploy (0.2-29) lenny; urgency=low
+
+  * hooks/post-restore-code: set SVN_CO_OPTIONS
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Thu, 17 Sep 2009 12:15:16 +0200
+
 deploy (0.2-28) lenny; urgency=low
 
   * fix typo in symbolic target assign.
