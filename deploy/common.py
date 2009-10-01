@@ -17,7 +17,7 @@ _default_hookdir = '/etc/deploy/hooks'
 _verbose = None
 
 def setup_hooks(config, verbose=True):
-    global _hookdir, _default_hookdir, _env, _verbose
+    global _hookdir, _env, _verbose
     _hookdir = config.get('main', 'hookdir')
     
     # only keep the real env variables (remove the default values)
@@ -33,8 +33,6 @@ def setup_hooks(config, verbose=True):
     return os.path.normpath(_hookdir) != os.path.normpath(_default_hookdir)
 
 def run_hook(name, arguments=[], logger=None):
-    global _hookdir, _default_hookdir, _env, _verbose
-
     if logger is None:
         logger = logging.getLogger('deploy.hook')
 
