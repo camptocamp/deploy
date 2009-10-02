@@ -1,3 +1,11 @@
+deploy (0.2-30) lenny; urgency=low
+
+  * support additional config file via 'include' in the main section
+  * add a debian/conffiles
+  * moved config file from /etc/deploy.cfg to /etc/deploy/deploy.cfg
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 02 Oct 2009 08:40:38 +0200
+
 deploy (0.2-29) lenny; urgency=low
 
   * hooks/post-restore-code: set SVN_CO_OPTIONS

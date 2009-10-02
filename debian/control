@@ -13,3 +13,22 @@ Depends: ${python:Depends}
 Description: the c2c project deploy scripts
  deploy tries to deploy your projet.
 
+Package: deploy-chtopo-wms
+Architecture: all
+Depends: deploy (>= ${Source-Version})
+Description: the c2c project deploy scripts,
+ deploy tries to deploy your projet.
+ .
+ this package contains default configuration files to deploy WMS
+ projects.
+
+Package: deploy-chtopo-cw3
+Architecture: all
+Depends: deploy (>= ${Source-Version})
+Description: the c2c project deploy scripts,
+ deploy tries to deploy your projet.
+ .
+ this package contains default configuration files to deploy cartoweb3
+ projects.
+
+

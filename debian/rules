@@ -31,7 +31,13 @@ install: build
 # Add here commands to install the package into debian/deploy.
 	python setup.py install --no-compile --root=$(PREFIX)
 
+# remove the script extension
 	mv $(PREFIX)/usr/bin/deploy.py $(PREFIX)/usr/bin/deploy
+
+	dh_movefiles --sourcedir=$(PREFIX) -pdeploy-chtopo-wms
+	rmdir $(PREFIX)/etc/deploy/hooks-wms
+	dh_movefiles --sourcedir=$(PREFIX) -pdeploy-chtopo-cw3
+	rmdir $(PREFIX)/etc/deploy/hooks-cw3
 
 # Build architecture-dependent files here.
 binary-indep: build install
@@ -41,7 +47,6 @@ binary-indep: build install
 	dh_compress
 	dh_fixperms
 	dh_pysupport
-	chmod +x $(PREFIX)/etc/deploy/hooks/*
 	dh_installdeb
 	dh_gencontrol
 	dh_md5sums
