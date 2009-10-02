@@ -1,11 +1,23 @@
+import os
+import sys
 import ConfigParser
-import os, sys
-import logging
 from deploy.common import * 
+
+import logging
 logger = logging.getLogger('deploy.config')
 
+def aditional(conf):
+    config = ConfigParser.ConfigParser()
+    # setup 'here' magic variable
+    config.set('DEFAULT', 'here', dirname(conf))
+    config.read(conf)
+    if config.has_option('main', 'include'):
+        return config.get('main', 'include')
+    else:
+        return None
+
 def parse_config(f, rawenv=None):
-    globalconf = '/etc/deploy.cfg'
+    globalconf = '/etc/deploy/deploy.cfg'
     localconf = os.path.abspath(f)
     
     if not os.path.isfile(globalconf):
@@ -17,13 +29,15 @@ def parse_config(f, rawenv=None):
             logger.error("can't find project configuration file '%s'" % localconf)
             sys.exit(1)
 
-    logger.debug("using '%(globalconf)s' and '%(localconf)s'" % {'globalconf': globalconf,
-                                                                 'localconf': localconf})
-    config = ConfigParser.ConfigParser()
-    config.read([globalconf, localconf])
+    # see if we need to include an aditional config file
+    config_files = [globalconf, aditional(localconf), localconf]
+    logger.debug("configuration files: %s"%[f for f in config_files if f])
 
+    config = ConfigParser.ConfigParser()
     # setup 'here' magic variable
     config.set('DEFAULT', 'here', dirname(localconf))
+    
+    config.read(config_files)
     
     # setup env section
     if not config.has_section('env'):

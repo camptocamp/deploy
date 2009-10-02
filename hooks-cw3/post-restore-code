@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# variables set here:
+#   $TARGET: name of the symbolic remote host key (see remote_hosts 
+#            section in config file)
+#
+
+PROJECT_NAME=$1
+CODE_DIR=$2
+
+# cp $PROJECT_NAME.php index.php
+# rm index.html
+# fixme
+
+# ln -s private/$PROJECT_NAME/cartoweb3/htdocs .
+
+exit 0
