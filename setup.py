@@ -25,8 +25,8 @@ setup(name = 'deploy',
       scripts = ['deploy.py'],
       zip_safe = False,
       classifiers = classifiers,
-      data_files = [('/etc/deploy/', ['deploy.cfg', 'deploy-wms.cfg', 'deploy-cw3.cfg']),
-                    ('/etc/deploy/hooks/', glob('hooks/*')),
-                    ('/etc/deploy/hooks-wms/', glob('hooks-wms/*')),
-                    ('/etc/deploy/hooks-cw3/', glob('hooks-cw3/*'))]
+      data_files = [('/etc/deploy/', ['config/deploy.cfg', 'config/deploy-wms.cfg', 'config/deploy-cw3.cfg']),
+                    ('/etc/deploy/hooks/', glob('config/hooks/*')),
+                    ('/etc/deploy/hooks-wms/', glob('config/hooks-wms/*')),
+                    ('/etc/deploy/hooks-cw3/', glob('config/hooks-cw3/*'))]
 )
