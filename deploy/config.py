@@ -30,7 +30,7 @@ def parse_config(f, rawenv=None):
             sys.exit(1)
 
     # see if we need to include an aditional config file
-    config_files = [globalconf, aditional(localconf), localconf]
+    config_files = filter(None, [globalconf, aditional(localconf), localconf])
     logger.debug("configuration files: %s"%[f for f in config_files if f])
 
     config = ConfigParser.ConfigParser()

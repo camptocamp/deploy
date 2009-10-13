@@ -4,7 +4,7 @@ deploy (0.2-30) lenny; urgency=low
   * add a debian/conffiles
   * moved config file from /etc/deploy.cfg to /etc/deploy/deploy.cfg
 
- -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 02 Oct 2009 08:40:38 +0200
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Tue, 13 Oct 2009 15:02:54 +0200
 
 deploy (0.2-29) lenny; urgency=low
 
