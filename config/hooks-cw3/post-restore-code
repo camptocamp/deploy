@@ -10,8 +10,5 @@ CODE_DIR=$2
 
 # cp $PROJECT_NAME.php index.php
 # rm index.html
-# fixme
-
-# ln -s private/$PROJECT_NAME/cartoweb3/htdocs .
 
 exit 0
