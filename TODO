@@ -6,6 +6,8 @@ debian package:
 
 remote:
  * display remote user in logs
+ * additional options for rsync in the config file
+ * lock system in the destination host to prevent multiple deploy (/var/lock/)
 
 archives management
  * if the remote deploy failed, mark the archive dir ? (mv dir dir-failed)
