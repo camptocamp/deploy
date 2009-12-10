@@ -1,9 +1,6 @@
 hooks:
  * replace all position variables (PROJECT, CODE_DIR, ...) by environ variables
 
-debian package:
- * create 'packages_dir'
-
 remote:
  * display remote user in logs
  * additional options for rsync in the config file

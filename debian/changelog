@@ -1,3 +1,9 @@
+deploy (0.2-33) lenny; urgency=low
+
+  * create the 'packages_dir' directory
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Thu, 10 Dec 2009 16:18:08 +0100
+
 deploy (0.2-32) lenny; urgency=low
 
   * add --delete option to rsync

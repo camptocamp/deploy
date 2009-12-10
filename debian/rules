@@ -39,6 +39,9 @@ install: build
 	dh_movefiles --sourcedir=$(PREFIX) -pdeploy-chtopo-cw3
 	rmdir $(PREFIX)/etc/deploy/hooks-cw3
 
+# create the 'packages_dir' directory
+	mkdir -p $(PREFIX)/var/cache/deploy/
+
 # Build architecture-dependent files here.
 binary-indep: build install
 	dh_testdir
