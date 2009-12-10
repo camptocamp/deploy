@@ -1,3 +1,9 @@
+deploy (0.2-32) lenny; urgency=low
+
+  * add --delete option to rsync
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Tue, 08 Dec 2009 16:08:19 +0100
+
 deploy (0.2-31) lenny; urgency=low
 
   * fix remote_hosts in deploy-wms.cfg
