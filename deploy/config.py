@@ -6,7 +6,7 @@ from deploy.common import *
 import logging
 logger = logging.getLogger('deploy.config')
 
-def aditional(conf):
+def additional(conf):
     config = ConfigParser.ConfigParser()
     # setup 'here' magic variable
     config.set('DEFAULT', 'here', dirname(conf))
@@ -29,8 +29,8 @@ def parse_config(f, rawenv=None):
             logger.error("can't find project configuration file '%s'" % localconf)
             sys.exit(1)
 
-    # see if we need to include an aditional config file
-    config_files = filter(None, [globalconf, aditional(localconf), localconf])
+    # see if we need to include an additional config file
+    config_files = filter(None, [globalconf, additional(localconf), localconf])
     logger.debug("configuration files: %s"%[f for f in config_files if f])
 
     config = ConfigParser.ConfigParser()
