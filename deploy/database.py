@@ -73,10 +73,10 @@ def database_exists(name):
     exists = subprocess.Popen(['psql', name, '-c', ''], stdout=devnull, stderr=subprocess.STDOUT)
     return exists.wait() == 0
 
-def drop_database(name, tries=10):
+def drop_database(name, dropcmd=['dropdb'], tries=10):
     if database_exists(name):
         errors = tempfile.TemporaryFile()
-        cmd = ['dropdb', name]
+        cmd = dropcmd.append(name)
         logger.debug("dropping '%(name)s' with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
         while tries:
             drop = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
@@ -124,6 +124,7 @@ def restore(config, srcdir):
     restore = config['restore'].split()
     restore_table = config['restore_table'].split()
     psql = config['psql'].split()
+    drop = config['drop'].split()
 
     run_hook('pre-restore-database', get_tables_from_dir(srcdir).keys(), logger=logger)
     jobs = []
@@ -131,7 +132,7 @@ def restore(config, srcdir):
         if not tables:
             # database without a table: restore all database
             dumpfile = os.path.join(srcdir, database + '.dump')
-            drop_database(database)
+            drop_database(database, drop)
             cmd = restore + [dumpfile]
             jobs.append({'cmd': cmd})
             

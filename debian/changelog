@@ -2,8 +2,9 @@ deploy (0.2-34) lenny; urgency=low
 
   * deploy.cfg: comment the src and dest code options
   * minor spelling fix
+  * 'dropdb' command in config file
 
- -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 14 Dec 2009 10:53:10 +0100
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Tue, 15 Dec 2009 14:35:19 +0100
 
 deploy (0.2-33) lenny; urgency=low
 
