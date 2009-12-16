@@ -70,7 +70,7 @@ def dump(config, rawtables, savedir):
 
 def database_exists(name, psqlcmd=['psql']):
     devnull = tempfile.TemporaryFile()
-    exists = subprocess.Popen(psqlcmd.extend([name, '-c', '']), stdout=devnull, stderr=subprocess.STDOUT)
+    exists = subprocess.Popen(psqlcmd + [name, '-c', ''], stdout=devnull, stderr=subprocess.STDOUT)
     return exists.wait() == 0
 
 def drop_database(name, dropcmd=['dropdb'], psqlcmd=['psql'], tries=10):
@@ -99,7 +99,7 @@ def drop_database(name, dropcmd=['dropdb'], psqlcmd=['psql'], tries=10):
 def delete_table(database, table, psqlcmd=['psql']):
     if database_exists(database, psqlcmd=psqlcmd):
         errors = tempfile.TemporaryFile()
-        cmd = psqlcmd.extend(['-c', "DELETE FROM %(table)s"%{'table': table}, database])
+        cmd = psqlcmd + ['-c', "DELETE FROM %(table)s"%{'table': table}, database]
         logger.debug("deleting '%(database)s.%(table)s' with '%(cmd)s'" %{'table': table, 'database': database,
                                                                           'cmd': ' '.join(cmd)})
         drop = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
