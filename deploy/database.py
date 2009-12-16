@@ -76,7 +76,7 @@ def database_exists(name, psqlcmd=['psql']):
 def drop_database(name, dropcmd=['dropdb'], psqlcmd=['psql'], tries=10):
     if database_exists(name, psqlcmd=psqlcmd):
         errors = tempfile.TemporaryFile()
-        cmd = dropcmd.append(name)
+        cmd = dropcmd + [name]
         logger.debug("dropping '%(name)s' with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
         while tries:
             drop = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
