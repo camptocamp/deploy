@@ -1,3 +1,9 @@
+deploy (0.2-35) lenny; urgency=low
+
+  * 'psql' command in config file
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 16 Dec 2009 11:20:38 +0100
+
 deploy (0.2-34) lenny; urgency=low
 
   * deploy.cfg: comment the src and dest code options
