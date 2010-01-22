@@ -1,3 +1,9 @@
+deploy (0.2-36) lenny; urgency=low
+
+  * when remote deploying with the delete option, also remove the source package.
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 22 Jan 2010 14:10:33 +0100
+
 deploy (0.2-35) lenny; urgency=low
 
   * 'psql' command in config file

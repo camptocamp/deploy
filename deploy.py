@@ -209,14 +209,16 @@ if __name__ == '__main__':
                 for host in hosts:
                     if deploy.remote.remote_copy(dirname(destdir), host):
                         if deploy.remote.remote_extract(dirname(destdir), host, options):
-                            #remote_extract success
-                            pass
+                            # remote_extract success
+                            if options.delete:                                
+                                logger.info("deleting '%(destdir)s'"%{'destdir': destdir})
+                                rmtree_silent(destdir)
                         else:
-                            #remote_extract failed:
+                            # remote_extract failed
                             logger.error("error while deploying to '%s'."%host)
                             sys.exit(1)
                     else:                
-                         #remote_copy failed
+                         # remote_copy failed
                          logger.error("error while copying archive to '%s'."%host)
                          sys.exit(1)
             else:
