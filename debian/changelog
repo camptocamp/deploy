@@ -1,3 +1,9 @@
+deploy (0.2-37) lenny; urgency=low
+
+  * don't delete the source package too early.
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Tue, 26 Jan 2010 08:43:34 +0100
+
 deploy (0.2-36) lenny; urgency=low
 
   * when remote deploying with the delete option, also remove the source package.
