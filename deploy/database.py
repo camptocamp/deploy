@@ -10,6 +10,10 @@ def get_tables(str):
     tables = {}
 
     for table in [i.strip() for i in str.split(',') if i]:
+        # table format is:
+        # database
+        # database.table
+        # database.schema.table
         base_table = table.split('.')
         if len(base_table) == 1:
             # all database tables
@@ -18,6 +22,10 @@ def get_tables(str):
             if base_table[0] not in tables:
                 tables[base_table[0]] = []
             tables[base_table[0]].append(base_table[1])
+        elif len(base_table) == 3:
+            if base_table[0] not in tables:
+                tables[base_table[0]] = []
+            tables[base_table[0]].append('.'.join(base_table[1:]))                
         else:
             logger.error("invalid table format : %s''"%table)
             sys.exit(1)
