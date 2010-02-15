@@ -1,3 +1,9 @@
+deploy (0.2-39) lenny; urgency=low
+
+  * new hook: post-create-database
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 15 Feb 2010 09:22:03 +0100
+
 deploy (0.2-38) lenny; urgency=low
 
   * databases: handle schemas
