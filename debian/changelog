@@ -1,3 +1,9 @@
+deploy (0.2-40) lenny; urgency=low
+
+  * deploy-chtopo-wms, deploy-chtopo-cw3: update hosts
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 26 Mar 2010 08:02:42 +0100
+
 deploy (0.2-39) lenny; urgency=low
 
   * new hook: post-create-database
