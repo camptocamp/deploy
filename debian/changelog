@@ -1,3 +1,9 @@
+deploy (0.2-41) lenny; urgency=low
+
+  * deploy-chtopo-cw3: clean cartoweb3 on pre-create-code
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 31 Mar 2010 09:43:48 +0200
+
 deploy (0.2-40) lenny; urgency=low
 
   * deploy-chtopo-wms, deploy-chtopo-cw3: update hosts

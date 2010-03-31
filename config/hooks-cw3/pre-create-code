@@ -1,0 +1,9 @@
+#!/bin/sh
+
+PROJECT_NAME=$1
+CODE_DIR=$2
+
+cd $CODE_DIR/cartoweb3
+php cw3setup.php --clean --clean-views --clean-accounting
+
+exit 0
