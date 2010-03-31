@@ -8,7 +8,8 @@
 PROJECT_NAME=$1
 CODE_DIR=$2
 
-# cp $PROJECT_NAME.php index.php
-# rm index.html
+cd $CODE_DIR/cartoweb3/htdocs/
+rm -f index.html
+ln -fs client.php index.php
 
 exit 0
