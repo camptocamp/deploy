@@ -1,3 +1,9 @@
+deploy (0.2-43) lenny; urgency=low
+
+  * deploy-chtopo-cw3: call cw3setup.php in post-restore-code
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 07 Apr 2010 10:46:13 +0200
+
 deploy (0.2-42) lenny; urgency=low
 
   * deploy-chtopo-cw3: remove index.html and create index.php (symlink to client.php)
