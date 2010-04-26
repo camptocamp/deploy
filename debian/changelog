@@ -1,3 +1,9 @@
+deploy (0.2-45) lenny; urgency=low
+
+  * use 'TRUNCATE TABLE' instead of 'DELETE FROM'
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 26 Apr 2010 10:47:01 +0200
+
 deploy (0.2-44) lenny; urgency=low
 
   * Don't vacuum the databases by default (we are mostly working with read-only
