@@ -7,9 +7,13 @@
 
 DATABASES=$@
 
-for b in $DATABASES
-do
-  psql -c "VACUUM ANALYZE;" $b
-done
+## Uncomment the following lines if you want to vacuum the databases after the
+## restore. In most cases this is not needed because we are working with
+## read-only databases.
+
+# for b in $DATABASES
+# do
+#   psql -c "VACUUM ANALYZE;" $b
+# done
 
 exit 0

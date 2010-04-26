@@ -1,3 +1,10 @@
+deploy (0.2-44) lenny; urgency=low
+
+  * Don't vacuum the databases by default (we are mostly working with read-only
+    databases)
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 26 Apr 2010 10:41:21 +0200
+
 deploy (0.2-43) lenny; urgency=low
 
   * deploy-chtopo-cw3: call cw3setup.php in post-restore-code
