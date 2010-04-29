@@ -29,6 +29,13 @@ Description: the c2c project deploy scripts,
  deploy tries to deploy your projet.
  .
  this package contains default configuration files to deploy cartoweb3
- projects.
+ projects. 
 
-
+Package: deploy-chtopo-database
+Architecture: all
+Depends: deploy (>= ${Source-Version})
+Description: the c2c project deploy scripts,
+ deploy tries to deploy your projet.
+ .
+ this package contains default configuration files to deploy databases (tables
+ or full databases)

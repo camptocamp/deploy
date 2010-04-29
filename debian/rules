@@ -36,8 +36,12 @@ install: build
 
 	dh_movefiles --sourcedir=$(PREFIX) -pdeploy-chtopo-wms
 	rmdir $(PREFIX)/etc/deploy/hooks-wms
+
 	dh_movefiles --sourcedir=$(PREFIX) -pdeploy-chtopo-cw3
 	rmdir $(PREFIX)/etc/deploy/hooks-cw3
+
+	dh_movefiles --sourcedir=$(PREFIX) -pdeploy-chtopo-database
+	rmdir $(PREFIX)/etc/deploy/hooks-database
 
 # create the 'packages_dir' directory
 	mkdir -p $(PREFIX)/var/cache/deploy/

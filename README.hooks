@@ -14,11 +14,14 @@ default:
 
 cw3:
 * pre-restore
-* pre-restore-code          
+* pre-restore-code
 * post-restore-code         (cw3setup)
 * pre-restore-apache
-* post-restore-apache       
+* post-restore-apache
 * post-restore              (apache graceful)
 
-
-
+database:
+* pre-restore
+* pre-restore-database
+* post-restore-database
+* post-restore
