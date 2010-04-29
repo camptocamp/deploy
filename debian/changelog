@@ -1,3 +1,9 @@
+deploy (0.2-46) lenny; urgency=low
+
+  * cw3 restore: don't stop/start apache but graceful it at post-restore
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Thu, 29 Apr 2010 08:31:20 +0200
+
 deploy (0.2-45) lenny; urgency=low
 
   * use 'TRUNCATE TABLE' instead of 'DELETE FROM'

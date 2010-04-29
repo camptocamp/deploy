@@ -1,0 +1,24 @@
+hooks order:
+
+default:
+* pre-restore               (apache stop)
+* pre-restore-database      (apache stop)
+* post-restore-database
+* pre-restore-files
+* post-restore-files
+* pre-restore-code
+* post-restore-code         (mf deploy)
+* pre-restore-apache
+* post-restore-apache
+* post-restore              (apache start)
+
+cw3:
+* pre-restore
+* pre-restore-code          
+* post-restore-code         (cw3setup)
+* pre-restore-apache
+* post-restore-apache       
+* post-restore              (apache graceful)
+
+
+
