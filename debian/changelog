@@ -1,3 +1,9 @@
+deploy (0.2-47) lenny; urgency=low
+
+  * deploy-chtopo-database: define remote_hosts
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 30 Apr 2010 14:47:16 +0200
+
 deploy (0.2-46) lenny; urgency=low
 
   * cw3 restore: don't stop/start apache but graceful it at post-restore
