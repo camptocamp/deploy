@@ -25,7 +25,7 @@ def get_tables(str):
         elif len(base_table) == 3:
             if base_table[0] not in tables:
                 tables[base_table[0]] = []
-            tables[base_table[0]].append('.'.join(base_table[1:]))                
+            tables[base_table[0]].append('.'.join(base_table[1:]))
         else:
             logger.error("invalid table format : %s''"%table)
             sys.exit(1)
@@ -65,10 +65,10 @@ def dump(config, rawtables, savedir):
     for job in jobs:
         logger.info("dumping ('%(cmd)s') to '%(dest)s'" %{'cmd' : ' '.join(job['cmd']),
                                                           'dest': job['args']['stdout'].name})
-        
+
         p = subprocess.Popen(job['cmd'], **job['args'])
         exitcode = p.wait()
-        
+
         if exitcode != 0:
             logger.error("dump error, see '%(errors)s'" %{'errors': job['args']['stderr'].name})
             sys.exit(1)
@@ -76,7 +76,7 @@ def dump(config, rawtables, savedir):
             os.remove(job['args']['stderr'].name)
 
     run_hook('post-create-database', [savedir], logger=logger)
-        
+
 
 def database_exists(name, psqlcmd=['psql']):
     devnull = tempfile.TemporaryFile()
@@ -105,7 +105,7 @@ def drop_database(name, dropcmd=['dropdb'], psqlcmd=['psql'], tries=10):
         sys.exit(1)
     else:
         return False
-    
+
 def truncate_table(database, table, psqlcmd=['psql']):
     if database_exists(database, psqlcmd=psqlcmd):
         errors = tempfile.TemporaryFile()
@@ -123,8 +123,8 @@ def truncate_table(database, table, psqlcmd=['psql']):
         else:
             return True
     else:
-        return False        
-            
+        return False
+
 def restore(config, srcdir):
 
     if not os.path.exists(srcdir):
@@ -145,8 +145,9 @@ def restore(config, srcdir):
             drop_database(database, dropcmd=drop, psqlcmd=psql)
             cmd = restore + [dumpfile]
             jobs.append({'cmd': cmd})
-            
+
         else:
+            # restore a table
             for table in tables:
                 dumpfile = os.path.join(srcdir, database + '.' + table + '.dump')
                 truncate_table(database, table, psqlcmd=psql)
