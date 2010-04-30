@@ -1,3 +1,9 @@
+deploy (0.2-48) lenny; urgency=low
+
+  * more debug logs
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 30 Apr 2010 16:10:55 +0200
+
 deploy (0.2-47) lenny; urgency=low
 
   * deploy-chtopo-database: define remote_hosts

@@ -9,6 +9,7 @@ __all__ = ['restore']
 
 def restore(config, codedir):
     if 'active' in config and config['active'] in ('false', 'off', '0'):
+        logger.debug("apache is deactivated in config file, nothing to restore")
         return
     
     if not os.path.exists(os.path.dirname(config['dest'])):
