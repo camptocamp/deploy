@@ -137,12 +137,19 @@ def restore(config, srcdir):
     drop = config['drop'].split()
 
     run_hook('pre-restore-database', get_tables_from_dir(srcdir).keys(), logger=logger)
+    swapjobs = []
     for database, tables in get_tables_from_dir(srcdir).iteritems():
         if not tables:
             # database without a table: restore all database
             dumpfile = os.path.join(srcdir, database + '.dump')
-            drop_database(database, dropcmd=drop, psqlcmd=psql)
-            run_job(restore + [dumpfile])
+            tmpdatabase = database + '_deploy_tmp'
+            drop_database(tmpdatabase, dropcmd=drop, psqlcmd=psql)
+            run_job(("createdb %(dbname)s"%{'dbname': tmpdatabase}).split())
+            run_job(("pg_restore -Fc -d %(dbname)s %(dump)s"%{'dbname': tmpdatabase, 'dump': dumpfile}).split())
+
+            if database_exists(database, psqlcmd=psql):
+                swapjobs.append("DROP DATABASE %(newname)s;"%{'newname': database})
+            swapjobs.append("ALTER DATABASE %(oldname)s RENAME TO %(newname)s;"%{'newname': database, 'oldname': tmpdatabase})
         else:
             # restore a table
             for table in tables:
@@ -150,11 +157,16 @@ def restore(config, srcdir):
                 truncate_table(database, table, psqlcmd=psql)
                 run_job(restore_table + ['-d', database, dumpfile])
 
+
+    basecmd = psql + "-d template1 -c".split()
+    for cmd in swapjobs:
+        run_job(basecmd + ['%s'%cmd])
+
     run_hook('post-restore-database', get_tables_from_dir(srcdir).keys(), logger=logger)
 
 
 def run_job(cmd):
-    logger.info("running '%s'" %(' '.join(cmd)))
+    logger.info("running '%s'"%(' '.join(cmd)))
     errors = tempfile.TemporaryFile()
 
     p = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
