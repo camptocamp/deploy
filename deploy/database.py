@@ -137,32 +137,29 @@ def restore(config, srcdir):
     drop = config['drop'].split()
 
     run_hook('pre-restore-database', get_tables_from_dir(srcdir).keys(), logger=logger)
-    jobs = []
     for database, tables in get_tables_from_dir(srcdir).iteritems():
         if not tables:
             # database without a table: restore all database
             dumpfile = os.path.join(srcdir, database + '.dump')
             drop_database(database, dropcmd=drop, psqlcmd=psql)
-            cmd = restore + [dumpfile]
-            jobs.append({'cmd': cmd})
-
+            run_job(restore + [dumpfile])
         else:
             # restore a table
             for table in tables:
                 dumpfile = os.path.join(srcdir, database + '.' + table + '.dump')
                 truncate_table(database, table, psqlcmd=psql)
-                cmd = restore_table + ['-d', database, dumpfile]
-                jobs.append({'cmd': cmd})
-
-    for job in jobs:
-        logger.info("restoring with '%(cmd)s'" %{'cmd': ' '.join(job['cmd'])})
-        errors = tempfile.TemporaryFile()
-
-        p = subprocess.Popen(job['cmd'], stdout=errors, stderr=subprocess.STDOUT)
-        exitcode = p.wait()
-        if exitcode != 0:
-            errors.flush()
-            errors.seek(0)
-            logger.error("restore error:\n%(errors)s" %{'errors': errors.read()})
+                run_job(restore_table + ['-d', database, dumpfile])
 
     run_hook('post-restore-database', get_tables_from_dir(srcdir).keys(), logger=logger)
+
+
+def run_job(cmd):
+    logger.info("running '%s'" %(' '.join(cmd)))
+    errors = tempfile.TemporaryFile()
+
+    p = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
+    exitcode = p.wait()
+    if exitcode != 0:
+        errors.flush()
+        errors.seek(0)
+        logger.error("restore error:\n%(errors)s" %{'errors': errors.read()})
