@@ -157,10 +157,11 @@ def restore(config, srcdir):
                 truncate_table(database, table, psqlcmd=psql)
                 run_job(restore_table + ['-d', database, dumpfile])
 
-
+    run_hook('pre-restore-database-swap', get_tables_from_dir(srcdir).keys(), logger=logger)
     basecmd = psql + "-d template1 -c".split()
     for cmd in swapjobs:
         run_job(basecmd + ['%s'%cmd])
+    run_hook('post-restore-database-swap', get_tables_from_dir(srcdir).keys(), logger=logger)
 
     run_hook('post-restore-database', get_tables_from_dir(srcdir).keys(), logger=logger)
 
