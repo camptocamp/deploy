@@ -1,10 +1,12 @@
 #!/bin/sh
 #
 # variables set here:
-#   $TARGET: name of the symbolic remote host key (see remote_hosts 
+#   $TARGET: name of the symbolic remote host key (see remote_hosts
 #            section in config file)
 #
 
 DATABASES=$@
+
+sudo /etc/init.d/postgresql-8.3 restart
 
 exit 0
