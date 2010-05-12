@@ -1,3 +1,9 @@
+deploy (0.2-54) lenny; urgency=low
+
+  * deploy-chtopo-database: pre-restore-database-swap restart apache
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 12 May 2010 15:28:28 +0200
+
 deploy (0.2-53) lenny; urgency=low
 
   * deploy-chtopo-database: don't run {pre|post}-restore-database-swap
