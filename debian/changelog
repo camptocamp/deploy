@@ -1,3 +1,10 @@
+deploy (0.2-53) lenny; urgency=low
+
+  * deploy-chtopo-database: don't run {pre|post}-restore-database-swap
+    when restoring tables
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 12 May 2010 09:29:42 +0200
+
 deploy (0.2-52) lenny; urgency=low
 
   * deploy-chtopo-database: restart postgresql on pre-restore-database-swap
