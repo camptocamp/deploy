@@ -132,6 +132,7 @@ def restore(config, srcdir):
         return
 
     restore = config['restore'].split()
+    restore_tmp = config['restore_tmp'].split()
     restore_table = config['restore_table'].split()
     psql = config['psql'].split()
     drop = config['drop'].split()
@@ -146,7 +147,7 @@ def restore(config, srcdir):
             tmpdatabase = database + '_deploy_tmp'
             drop_database(tmpdatabase, dropcmd=drop, psqlcmd=psql)
             run_job(createdb + ("%(dbname)s"%{'dbname': tmpdatabase}).split())
-            run_job(("pg_restore -Fc -d %(dbname)s %(dump)s"%{'dbname': tmpdatabase, 'dump': dumpfile}).split())
+            run_job(restore_tmp + ("%(dbname)s %(dump)s"%{'dbname': tmpdatabase, 'dump': dumpfile}).split())
 
             if database_exists(database, psqlcmd=psql):
                 swapjobs.append("DROP DATABASE %(newname)s;"%{'newname': database})
