@@ -1,3 +1,9 @@
+deploy (0.2-55) lenny; urgency=low
+
+  * createdb command in config file.
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 14 May 2010 07:37:15 +0200
+
 deploy (0.2-54) lenny; urgency=low
 
   * deploy-chtopo-database: pre-restore-database-swap restart apache

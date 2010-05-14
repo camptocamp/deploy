@@ -135,6 +135,7 @@ def restore(config, srcdir):
     restore_table = config['restore_table'].split()
     psql = config['psql'].split()
     drop = config['drop'].split()
+    createdb = config['createdb'].split()
 
     run_hook('pre-restore-database', get_tables_from_dir(srcdir).keys(), logger=logger)
     swapjobs = []
@@ -144,7 +145,7 @@ def restore(config, srcdir):
             dumpfile = os.path.join(srcdir, database + '.dump')
             tmpdatabase = database + '_deploy_tmp'
             drop_database(tmpdatabase, dropcmd=drop, psqlcmd=psql)
-            run_job(("createdb %(dbname)s"%{'dbname': tmpdatabase}).split())
+            run_job(createdb + ("%(dbname)s"%{'dbname': tmpdatabase}).split())
             run_job(("pg_restore -Fc -d %(dbname)s %(dump)s"%{'dbname': tmpdatabase, 'dump': dumpfile}).split())
 
             if database_exists(database, psqlcmd=psql):
