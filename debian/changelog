@@ -1,3 +1,10 @@
+deploy (0.2-58) lenny; urgency=low
+
+  * NOT RELEASED
+  * deploy-chtopo-database: remove old server
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 04 Jun 2010 09:34:43 +0200
+
 deploy (0.2-57) lenny; urgency=low
 
   * post-restore-code: try to load the target config file
