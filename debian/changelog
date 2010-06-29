@@ -1,3 +1,9 @@
+deploy (0.2-59) lenny; urgency=low
+
+  * add --no-owner in config databases.restore_tmp
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Tue, 29 Jun 2010 12:37:11 +0200
+
 deploy (0.2-58) lenny; urgency=low
 
   * deploy-chtopo-database: remove old server
