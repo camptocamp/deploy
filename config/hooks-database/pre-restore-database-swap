@@ -7,7 +7,7 @@
 
 DATABASES=$@
 
-sudo /etc/init.d/apache2 restart
+sudo /etc/init.d/apache2 stop
 sudo /etc/init.d/postgresql-8.3 restart
 
 exit 0
