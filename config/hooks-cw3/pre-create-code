@@ -7,7 +7,7 @@ cd $CODE_DIR/cartoweb3
 php cw3setup.php --clean --clean-views --clean-accounting
 
 cd $CODE_DIR/cartoweb3/projects/$CW_PROJECT/
-svn info -r HEAD | grep '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}' |cut -c20-29 > htdocs/LAST_CHANGED
+svn info | grep '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}' |cut -c20-29 > htdocs/LAST_CHANGED
 svnversion > htdocs/REVISION
 
 exit 0

@@ -1,3 +1,9 @@
+deploy (0.2-61) lenny; urgency=low
+
+  * deploy-chtopo-cw3: don't use the HEAD tag to create htdocs/LAST_CHANGED (see #24060)
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 21 Jul 2010 16:34:34 +0200
+
 deploy (0.2-60) lenny; urgency=low
 
   * deploy-chtopo-cw3: create the htdocs/LAST_CHANGED and htdocs/REVISION files (see #24060)
