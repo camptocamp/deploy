@@ -179,10 +179,11 @@ if __name__ == '__main__':
                 # remove hook dir ?
                 pass
 
-            if 'databases' in options.components and not (config.has_option('databases', 'reverse') and config.getboolean('databases', 'reverse')):
-                deploy.database.dump(dict(config.items('databases')),
-                                     options.tables,
-                                     destpath['databases'])
+            if 'databases' in options.components:
+                if not options.remote or not (config.has_option('databases', 'reverse') and config.getboolean('databases', 'reverse')):
+                    deploy.database.dump(dict(config.items('databases')),
+                                        options.tables,
+                                        destpath['databases'])
             else:
                 logger.debug("removing '%(path)s'" %{'path': destpath['databases']})
                 rmtree_silent(destpath['databases'])
