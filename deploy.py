@@ -5,6 +5,7 @@ import os, sys, socket, time
 import logging
 from logging.handlers import SysLogHandler
 import deploy
+import subprocess
 from deploy.common import rmtree_silent, setup_hooks, run_hook, dirname
 
 def setup_logging(verbose=False):
@@ -178,7 +179,7 @@ if __name__ == '__main__':
                 # remove hook dir ?
                 pass
 
-            if 'databases' in options.components:
+            if 'databases' in options.components and not (config.has_option('databases', 'reverse') and config.getboolean('databases', 'reverse')):
                 deploy.database.dump(dict(config.items('databases')),
                                      options.tables,
                                      destpath['databases'])
@@ -208,7 +209,20 @@ if __name__ == '__main__':
             if options.remote:
                 for host in hosts:
                     if deploy.remote.remote_copy(dirname(destdir), host):
-                        if deploy.remote.remote_extract(dirname(destdir), host, options):
+                        if config.has_option('databases', 'reverse') and config.getboolean('databases', 'reverse'):
+                            # reverse db deploy
+                            rdir = deploy.remote.remote_create_dir(host, config, packages_dir)
+                            deploy.remote.remote_create_archive(
+                                os.path.join(destdir, os.path.basename(args[0])),
+                                rdir,
+                                host,
+                                options
+                            )
+                            deploy.remote.local_copy(rdir, host)
+                            cmd = "deploy -x %(dir)s" %{'dir': rdir}
+                            p = subprocess.Popen(cmd, shell=True)
+                            p.wait()
+                        elif deploy.remote.remote_extract(dirname(destdir), host, options):
                             # remote_extract success
                             pass
                         else:

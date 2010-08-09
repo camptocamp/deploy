@@ -19,7 +19,7 @@ _verbose = None
 def setup_hooks(config, verbose=True):
     global _hookdir, _env, _verbose
     _hookdir = config.get('main', 'hookdir')
-    
+
     # only keep the real env variables (remove the default values)
     _env = dict(config.items('env'))
     for k in config.defaults():
@@ -27,7 +27,7 @@ def setup_hooks(config, verbose=True):
 
     # uppercase the keys
     _env = dict([(k.upper(), v) for k, v in _env.iteritems()])
-    
+
     _verbose = verbose
     # return if the project has custom hooks
     return os.path.normpath(_hookdir) != os.path.normpath(_default_hookdir)
@@ -40,12 +40,12 @@ def run_hook(name, arguments=[], logger=None):
     if not os.path.exists(hook):
         # back to default hook
         hook = os.path.join(_default_hookdir, name)
-        
+
     if os.path.exists(hook):
         stdout = None
         if not _verbose:
             stdout = TemporaryFile()
-            
+
         logger.info("running '%(name)s'" %{'name': hook})
         h = subprocess.Popen(' '.join([hook] + arguments), shell=True, cwd=dirname(hook), env=_env,
                              stderr=subprocess.STDOUT, stdout=stdout)
@@ -85,7 +85,7 @@ def copytree(src, dst, symlinks=False, ignore=None, keepdst=False):
         ignored_names = ignore(src, names)
     else:
         ignored_names = set()
-    
+
     if not keepdst and os.path.exists(dst):
         shutil.rmtree(dst)
     makedirs_silent(dst)
@@ -121,9 +121,9 @@ def copytree(src, dst, symlinks=False, ignore=None, keepdst=False):
         raise shutil.Error, errors
 
 def ignore_patterns(*patterns):
-    """Function that can be used as copytree() ignore parameter.                
-                                                                                
-    Patterns is a sequence of glob-style patterns                               
+    """Function that can be used as copytree() ignore parameter.
+
+    Patterns is a sequence of glob-style patterns
     that are used to exclude files"""
     def _ignore_patterns(path, names):
         ignored_names = []

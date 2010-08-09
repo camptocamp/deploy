@@ -77,7 +77,6 @@ def dump(config, rawtables, savedir):
 
     run_hook('post-create-database', [savedir], logger=logger)
 
-
 def database_exists(name, psqlcmd=['psql']):
     devnull = tempfile.TemporaryFile()
     exists = subprocess.Popen(psqlcmd + [name, '-c', ''], stdout=devnull, stderr=subprocess.STDOUT)
