@@ -1,3 +1,21 @@
+deploy (0.2-64) lenny; urgency=low
+
+  * deploy-chtopo-cw3: really fixes remote db dump
+
+ -- Antoine Abt <antoine.abt@camptocamp.com>  Tue, 10 Aug 2010 10:39:26 +0200
+
+deploy (0.2-63) lenny; urgency=low
+
+  * deploy-chtopo-cw3: fixes broken remote db dump
+
+ -- Antoine Abt <antoine.abt@camptocamp.com>  Mon, 09 Aug 2010 16:53:33 +0200
+
+deploy (0.2-62) lenny; urgency=low
+
+  * deploy-chtopo-cw3: add ability to reverse deploy db (see #22738)
+
+ -- Antoine Abt <antoine.abt@camptocamp.com>  Mon, 09 Aug 2010 13:40:49 +0200
+
 deploy (0.2-61) lenny; urgency=low
 
   * deploy-chtopo-cw3: don't use the HEAD tag to create htdocs/LAST_CHANGED (see #24060)
