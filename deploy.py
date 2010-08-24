@@ -214,7 +214,7 @@ if __name__ == '__main__':
                             # reverse db deploy
                             rdir = deploy.remote.remote_create_dir(host, config, packages_dir)
                             deploy.remote.remote_create_archive(
-                                os.path.join(destdir, os.path.basename(args[0])),
+                                os.path.join(destdir, 'deploy.cfg'),
                                 rdir,
                                 host,
                                 options
