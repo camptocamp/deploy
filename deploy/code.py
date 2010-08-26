@@ -1,5 +1,5 @@
 from deploy.common import * 
-import os, sys, logging
+import os, logging
 logger = logging.getLogger('deploy.code')
 
 __all__ = ['dump', 'restore']

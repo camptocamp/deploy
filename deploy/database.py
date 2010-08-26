@@ -1,6 +1,6 @@
 from deploy.common import *
 import subprocess
-import os, sys, glob, tempfile, time
+import os, sys, tempfile, time
 import logging
 logger = logging.getLogger('deploy.databases')
 

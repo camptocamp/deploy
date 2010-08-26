@@ -1,4 +1,4 @@
-import os, sys
+import os
 
 def get_archive_dir(path):
     if not path.endswith('/'):
