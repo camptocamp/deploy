@@ -1,3 +1,10 @@
+deploy (0.2-67) lenny; urgency=low
+
+  * exit if pre-create-code or post-create-database failed.
+  * fix pre-create-code and post-create-code exec bit.
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 17 Sep 2010 09:37:10 +0200
+
 deploy (0.2-66) lenny; urgency=low
 
   * deploy-chtopo-cw3: add ability to limit reverse deploy to passed tables
@@ -7,8 +14,6 @@ deploy (0.2-66) lenny; urgency=low
 deploy (0.2-65) lenny; urgency=low
 
   * deploy-chtopo-cw3: fixes use witch custom config file name
-  * exit if pre-create-code or post-create-database failed.
-  * fix pre-create-code and post-create-code exec bit.
 
  -- Antoine Abt <antoine.abt@camptocamp.com>  Tue, 24 Aug 2010 10:21:37 +0200
 
