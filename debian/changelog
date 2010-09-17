@@ -1,3 +1,10 @@
+deploy (0.2-65) lenny; urgency=low
+
+  * exit if pre-create-code or post-create-database failed.
+  * fix pre-create-code and post-create-code exec bit.
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 17 Sep 2010 08:31:16 +0200
+
 deploy (0.2-64) lenny; urgency=low
 
   * deploy-chtopo-cw3: really fixes remote db dump

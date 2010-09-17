@@ -75,7 +75,7 @@ def dump(config, rawtables, savedir):
         else:
             os.remove(job['args']['stderr'].name)
 
-    run_hook('post-create-database', [savedir], logger=logger)
+    run_hook('post-create-database', [savedir], logger=logger, exit_on_error=True)
 
 def database_exists(name, psqlcmd=['psql']):
     devnull = tempfile.TemporaryFile()

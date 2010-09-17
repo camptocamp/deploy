@@ -18,7 +18,7 @@ def dump(config, savedir, symlink=False):
     else:
         ignore = None
 
-    run_hook('pre-create-code', [config['project'], src], logger=logger)
+    run_hook('pre-create-code', [config['project'], src], logger=logger, exit_on_error=True)
 
     makedirs_silent(savedir)
     dest = os.path.join(savedir, config['project'])

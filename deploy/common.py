@@ -1,4 +1,5 @@
 import os
+import sys
 import shutil
 import subprocess
 import logging
@@ -32,7 +33,7 @@ def setup_hooks(config, verbose=True):
     # return if the project has custom hooks
     return os.path.normpath(_hookdir) != os.path.normpath(_default_hookdir)
 
-def run_hook(name, arguments=[], logger=None):
+def run_hook(name, arguments=[], logger=None, exit_on_error=False):
     if logger is None:
         logger = logging.getLogger('deploy.hook')
 
@@ -50,6 +51,10 @@ def run_hook(name, arguments=[], logger=None):
         h = subprocess.Popen(' '.join([hook] + arguments), shell=True, cwd=dirname(hook), env=_env,
                              stderr=subprocess.STDOUT, stdout=stdout)
         exitcode = h.wait()
+
+        if exit_on_error and exitcode != 0:
+            logger.error("hook failed ('%s')"%hook)
+            sys.exit(1)
 
         return exitcode == 0
     else:
