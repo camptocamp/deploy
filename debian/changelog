@@ -1,9 +1,9 @@
-deploy (0.2-67) lenny; urgency=low
+deploy (0.2-67~c2c+1) lenny; urgency=low
 
   * exit if pre-create-code or post-create-database failed.
   * fix pre-create-code and post-create-code exec bit.
 
- -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 17 Sep 2010 09:37:10 +0200
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 29 Oct 2010 11:50:42 +0200
 
 deploy (0.2-66) lenny; urgency=low
 
