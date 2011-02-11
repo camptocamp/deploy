@@ -1,13 +1,7 @@
 #!/usr/bin/env python
 
+from distutils.core import setup
 from glob import glob
-
-try:
-    from setuptools import setup
-except:
-    from ez_setup import use_setuptools
-    use_setuptools()
-    from setuptools import setup
 
 classifiers = [
         'Development Status :: 4 - Beta',
