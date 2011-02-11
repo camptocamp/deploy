@@ -1,9 +1,16 @@
-deploy (0.2-67~c2c+1) lenny; urgency=low
+deploy (0.2-68~c2c+1) lenny; urgency=low
+
+  * log formatter: replace brackets with parentheses
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Tue, 04 Jan 2011 08:52:07 +0100
+
+deploy (0.2-67~c2c+2) lenny; urgency=low
 
   * exit if pre-create-code or post-create-database failed.
   * fix pre-create-code and post-create-code exec bit.
+  * remove .svn dirs
 
- -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 29 Oct 2010 11:50:42 +0200
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 03 Nov 2010 14:14:46 +0100
 
 deploy (0.2-66) lenny; urgency=low
 
