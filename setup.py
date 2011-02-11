@@ -13,8 +13,10 @@ classifiers = [
 
 setup(name = 'deploy',
       version = '0.2',
+      url = 'http://www.camptocamp.com/',
       description = 'the c2c project deploy scripts',
       author = 'Camptocamp SA',
+      author_email = 'frederic.junod@camptocamp.com',
       packages = ['deploy'],
       scripts = ['deploy.py'],
       zip_safe = False,
