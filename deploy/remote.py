@@ -53,8 +53,8 @@ def remote_create_archive(configfile, dir, host, options):
         cmd += "-k "
     if not options.verbose:
         cmd += "-q "
-    if options.tables:
-        cmd += "--tables "+options.tables+" "
+    # if options.tables:
+    #     cmd += "--tables "+options.tables+" "
 
     cmd += "-c %(configfile)s %(dir)s" %{'dir': dir, 'configfile': configfile}
     logger.info("running '%(cmd)s'"%{'cmd': cmd})
