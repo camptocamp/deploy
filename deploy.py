@@ -213,12 +213,16 @@ if __name__ == '__main__':
                         if config.has_option('databases', 'reverse') and config.getboolean('databases', 'reverse'):
                             # reverse db deploy
                             rdir = deploy.remote.remote_create_dir(host, config, packages_dir)
-                            deploy.remote.remote_create_archive(
+                            success = deploy.remote.remote_create_archive(
                                 os.path.join(destdir, 'deploy.cfg'),
                                 rdir,
                                 host,
                                 options
                             )
+                            if not success:
+                                logger.error("error while creating remote archive.")
+                                sys.exit(1)
+                                
                             deploy.remote.local_copy(rdir, host)
                             cmd = "deploy -x %(dir)s" %{'dir': rdir}
                             p = subprocess.Popen(cmd, shell=True)
