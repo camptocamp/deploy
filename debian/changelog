@@ -1,3 +1,10 @@
+deploy (0.2-69~c2c+1) lenny squeeze; urgency=low
+
+  * on remote mode, don't take the tables cmd line arg (#22738)
+  * exit if the remote archive creation fail
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 11 Feb 2011 10:14:55 +0100
+
 deploy (0.2-68~c2c+1) lenny; urgency=low
 
   * log formatter: replace brackets with parentheses
