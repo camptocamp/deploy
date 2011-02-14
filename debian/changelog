@@ -7,6 +7,12 @@ deploy (0.3~c2c+1) lenny squeeze; urgency=low
 
  -- Stéphane Brunner <stephane.brunner@camptocamp.com>  Tue, 09 Apr 2013 11:16:25 +0200
 
+deploy (0.2.1~c2c+2) lenny squeeze; urgency=low
+
+  * rename deploy.py to bin/deploy
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 14 Feb 2011 15:26:54 +0100
+
 deploy (0.2-69~c2c+1) lenny squeeze; urgency=low
 
   * on remote mode, don't take the tables cmd line arg (#22738)

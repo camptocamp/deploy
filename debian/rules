@@ -31,7 +31,7 @@ install: build
 	python setup.py install --no-compile --install-layout=deb --root=$(PREFIX)
 
 # remove the script extension
-	mv $(PREFIX)/usr/bin/deploy.py $(PREFIX)/usr/bin/deploy
+#	mv $(PREFIX)/usr/bin/deploy.py $(PREFIX)/usr/bin/deploy
 
 	dh_movefiles --sourcedir=$(PREFIX) -pdeploy-chtopo-wms
 	rmdir $(PREFIX)/etc/deploy/hooks-wms
