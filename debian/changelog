@@ -7,6 +7,12 @@ deploy (0.3~c2c+1) lenny squeeze; urgency=low
 
  -- Stéphane Brunner <stephane.brunner@camptocamp.com>  Tue, 09 Apr 2013 11:16:25 +0200
 
+deploy (0.2.2~c2c+1) lenny squeeze; urgency=low
+
+  * remote call: only filter deploy cmd
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 11 Mar 2011 17:33:09 +0100
+
 deploy (0.2.1~c2c+2) lenny squeeze; urgency=low
 
   * rename deploy.py to bin/deploy
