@@ -10,6 +10,8 @@ CODE_DIR=$2
 SVN_CO_OPTIONS="--username readonly --password readonly"
 
 cd $CODE_DIR
-sh deploy-$PROJECT_NAME.sh -r -c $PROJECT_NAME/configs/$TARGET
+if [ -f deploy-$PROJECT_NAME.sh ]; then
+    sh deploy-$PROJECT_NAME.sh -r -c $PROJECT_NAME/configs/$TARGET
+fi
 
 exit 0
