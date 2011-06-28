@@ -1,10 +1,12 @@
 #!/bin/sh
 #
 # variables set here:
-#   $TARGET: name of the symbolic remote host key (see remote_hosts 
+#   $TARGET: name of the symbolic remote host key (see remote_hosts
 #            section in config file)
 #
 
-sudo /etc/init.d/apache2 start
+if [ -x /etc/init.d/apache2 ]; then
+    sudo /etc/init.d/apache2 start
+fi
 
 exit 0

@@ -5,6 +5,8 @@
 #            section in config file)
 #
 
-sudo apache2ctl graceful
+if [ -x /usr/sbin/apache2ctl ]; then
+    sudo /usr/sbin/apache2ctl graceful
+fi
 
 exit 0

@@ -5,6 +5,8 @@
 #            section in config file)
 #
 
-sudo /etc/init.d/apache2 reload
+if [ -x /etc/init.d/apache2 ]; then
+    sudo /etc/init.d/apache2 reload
+fi
 
 exit 0
