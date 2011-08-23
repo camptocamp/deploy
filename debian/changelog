@@ -7,6 +7,14 @@ deploy (0.3~c2c+1) lenny squeeze; urgency=low
 
  -- Stéphane Brunner <stephane.brunner@camptocamp.com>  Tue, 09 Apr 2013 11:16:25 +0200
 
+deploy (0.2.3~c2c+2) lenny squeeze; urgency=low
+
+  * fix install prefix
+  * fix install prefix
+  * fix install prefix
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Tue, 23 Aug 2011 12:56:11 +0200
+
 deploy (0.2.3~c2c+1) lenny squeeze; urgency=low
 
   * post-restore-code: check if deploy script exists
