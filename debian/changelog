@@ -12,8 +12,9 @@ deploy (0.2.3~c2c+1) lenny squeeze; urgency=low
   * post-restore-code: check if deploy script exists
   * deploy-wms.cfg: update remote hosts
   * all hooks: check presence of commands before running it
+  * try to run buildout in hooks/post-restore-code
 
- -- Frederic Junod <frederic.junod@camptocamp.com>  Tue, 28 Jun 2011 09:09:56 +0200
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Tue, 23 Aug 2011 12:17:42 +0200
 
 deploy (0.2.2~c2c+1) lenny squeeze; urgency=low
 
