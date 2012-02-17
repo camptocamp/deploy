@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     usage = "usage: %prog -c [OPTIONS]... CONFIG_FILE DIRECTORY\n" + \
             "   or: %prog -x [OPTIONS]... DIRECTORY\n" + \
-            "   or: %prog -r [OPTIONS] CONFIG_FILE HOST"
+            "   or: %prog -r [OPTIONS] CONFIG_FILE HOST [DIRECTORY]"
 
     parser = OptionParser(usage)
     c_group = OptionGroup(parser, "Create an archive")
@@ -128,11 +128,17 @@ if __name__ == '__main__':
         config = deploy.config.parse_config(args[0], options.env)
         packages_dir = config.get('main', 'packages_dir')
         remote_destination = args[1:]
+        destdir = None
 
         if not remote_destination:
             parser.error("missing hosts or profile name")
 
-        elif len(remote_destination) == 1:
+        if os.path.isdir(remote_destination[-1]):
+            destdir = os.path.join(remote_destination.pop(), config.get('DEFAULT', 'project'))
+            if not os.path.isdir(destdir):
+                parser.error("invalid archive: '%s'" % destdir)
+
+        if len(remote_destination) == 1:
             target = remote_destination[0]
             # find a remote profile
             if config.has_section('remote_hosts') and config.has_option('remote_hosts', target):
@@ -149,13 +155,15 @@ if __name__ == '__main__':
 
         logger.info("remote deploy to '%(remote)s'" %{'remote': hosts})
 
-        destpath = config.get('DEFAULT', 'project')
-        if options.timedir:
-            destpath += '_' + str(int(time.time()))
-        args[1] = os.path.join(packages_dir, destpath)
-
-        # let's start creating the archive
-        options.create = True
+        if destdir is None:
+            destpath = config.get('DEFAULT', 'project')
+            if options.timedir:
+                destpath += '_' + str(int(time.time()))
+            args[1] = os.path.join(packages_dir, destpath)
+            # let's start creating the archive
+            options.create = True
+        else:
+            options.create = False
 
     if options.create:
         if len(args) < 2:
@@ -204,48 +212,45 @@ if __name__ == '__main__':
             run_hook('post-create')
 
             logger.info("done creating archive")
-            if options.remote:
-                for host in hosts:
-                    if deploy.remote.remote_copy(dirname(destdir), host):
-                        if config.has_option('databases', 'reverse') and config.getboolean('databases', 'reverse'):
-                            # reverse db deploy
-                            rdir = deploy.remote.remote_create_dir(host, config, packages_dir)
-                            success = deploy.remote.remote_create_archive(
-                                os.path.join(destdir, 'deploy.cfg'),
-                                rdir,
-                                host,
-                                options
-                            )
-                            if not success:
-                                logger.error("error while creating remote archive.")
-                                sys.exit(1)
 
-                            deploy.remote.local_copy(rdir, host)
-                            cmd = "deploy -x %(dir)s" %{'dir': rdir}
-                            p = subprocess.Popen(cmd, shell=True)
-                            p.wait()
-                        elif deploy.remote.remote_extract(dirname(destdir), host, options):
-                            # remote_extract success
-                            pass
-                        else:
-                            # remote_extract failed
-                            logger.error("error while deploying to '%s'."%host)
-                            sys.exit(1)
-                    else:
-                         # remote_copy failed
-                         logger.error("error while copying archive to '%s'."%host)
-                         sys.exit(1)
+    if options.remote and destdir:
+        for host in hosts:
+            if deploy.remote.remote_copy(dirname(destdir), host):
+                if config.has_option('databases', 'reverse') and config.getboolean('databases', 'reverse'):
+                    # reverse db deploy
+                    rdir = deploy.remote.remote_create_dir(host, config, packages_dir)
+                    success = deploy.remote.remote_create_archive(os.path.join(destdir, 'deploy.cfg'),
+                                                                  rdir, host, options)
+                    if not success:
+                        logger.error("error while creating remote archive.")
+                        sys.exit(1)
 
-                if options.delete:
-                    # remote deploy done for all hosts, delete source archive
-                    logger.info("deleting '%(destdir)s'"%{'destdir': destdir})
-                    rmtree_silent(destdir)
-
+                    deploy.remote.local_copy(rdir, host)
+                    cmd = "deploy -x %(dir)s" %{'dir': rdir}
+                    p = subprocess.Popen(cmd, shell=True)
+                    p.wait()
+                elif deploy.remote.remote_extract(dirname(destdir), host, options):
+                    # remote_extract success
+                    pass
+                else:
+                    # remote_extract failed
+                    logger.error("error while deploying to '%s'."%host)
+                    sys.exit(1)
             else:
-                # no remote mode
-                sys.exit(0)
+                # remote_copy failed
+                logger.error("error while copying archive to '%s'."%host)
+                sys.exit(1)
 
-    elif options.extract:
+        if options.delete:
+            # remote deploy done for all hosts, delete source archive
+            logger.info("deleting '%(destdir)s'"%{'destdir': destdir})
+            rmtree_silent(destdir)
+
+    else:
+        # no remote mode
+        sys.exit(0)
+
+    if options.extract:
         if len(args) < 1:
             parser.error("missing archive path")
         else:
