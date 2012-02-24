@@ -137,6 +137,8 @@ if __name__ == '__main__':
             destdir = os.path.join(remote_destination.pop(), config.get('DEFAULT', 'project'))
             if not os.path.isdir(destdir):
                 parser.error("invalid archive: '%s'" % destdir)
+            # we need to keep the archive
+            options.delete = False
 
         if len(remote_destination) == 1:
             target = remote_destination[0]
