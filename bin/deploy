@@ -248,10 +248,6 @@ if __name__ == '__main__':
             logger.info("deleting '%(destdir)s'"%{'destdir': destdir})
             rmtree_silent(destdir)
 
-    else:
-        # no remote mode
-        sys.exit(0)
-
     if options.extract:
         if len(args) < 1:
             parser.error("missing archive path")
