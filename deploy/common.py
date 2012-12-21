@@ -22,12 +22,16 @@ def setup_hooks(config, verbose=True):
     _hookdir = config.get('main', 'hookdir')
 
     # only keep the real env variables (remove the default values)
-    _env = dict(config.items('env'))
+    env = dict(config.items('env'))
     for k in config.defaults():
-        del _env[k]
+        del env[k]
 
     # uppercase the keys
-    _env = dict([(k.upper(), v) for k, v in _env.iteritems()])
+    env = dict([(k.upper(), v) for k, v in env.iteritems()])
+
+    # merge with original environ
+    _env = os.environ.copy()
+    _env.update(env)
 
     _verbose = verbose
     # return if the project has custom hooks
