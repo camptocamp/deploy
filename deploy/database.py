@@ -55,7 +55,10 @@ def dump(config, rawtables, savedir):
                          'args': {'stdout': output, 'stderr': errors}})
         else:
             for table in tables:
-                cmd = dump + ['-a', '-t', table, database]
+                cmd = dump + ['-n'] \
+                    if config['use_schema'] in ('true', 'yes', '1') \
+                    else ['-a', '-t']
+                cmd += [table, database]
                 output = file(os.path.join(savedir, database + '.' + table + '.dump'), 'w+b')
                 errors = file(os.path.join(savedir, database + '.' + table + '.dump.log'), 'w')
 
@@ -105,10 +108,16 @@ def drop_database(name, dropcmd=['dropdb'], psqlcmd=['psql'], tries=10):
     else:
         return False
 
-def truncate_table(database, table, psqlcmd=['psql']):
+def truncate_table(database, table, psqlcmd=['psql'], is_schema=False):
     if database_exists(database, psqlcmd=psqlcmd):
         errors = tempfile.TemporaryFile()
-        cmd = psqlcmd + ['-c', "TRUNCATE TABLE %(table)s"%{'table': table}, database]
+        cmd = psqlcmd + [
+            '-c',
+            "TRUNCATE TABLE %(table)s" % {'table': table}
+            if not is_schema else
+            "DROP SCHEMA IF EXISTS %(schema)s CASCADE" % {'schema': table},
+            database
+        ]
         logger.debug("deleting '%(database)s.%(table)s' with '%(cmd)s'" %{'table': table, 'database': database,
                                                                           'cmd': ' '.join(cmd)})
         drop = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
@@ -154,7 +163,10 @@ def restore(config, srcdir):
             # restore a table
             for table in tables:
                 dumpfile = os.path.join(srcdir, database + '.' + table + '.dump')
-                truncate_table(database, table, psqlcmd=psql)
+                truncate_table(
+                    database, table, psqlcmd=psql,
+                    is_schema=config['use_schema'] in ('true', 'yes', '1')
+                )
                 run_job(restore_table + ['-d', database, dumpfile])
 
     if swapjobs:
