@@ -130,7 +130,6 @@ def restore(config, srcdir):
         logger.debug("'%(srcdir)s' don't exists, no database to restore" %{'srcdir': srcdir})
         return
 
-    restore = config['restore'].split()
     restore_tmp = config['restore_tmp'].split()
     restore_table = config['restore_table'].split()
     psql = config['psql'].split()
