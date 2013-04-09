@@ -1,3 +1,12 @@
+deploy (0.3~c2c+1) lenny squeeze; urgency=low
+
+  * move on git
+  * keep the original environement, see #1
+  * don't copy perms, owner and group, see #2
+  * deploy database schema, see #3
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Tue, 09 Apr 2013 11:16:25 +0200
+
 deploy (0.2-69~c2c+1) lenny squeeze; urgency=low
 
   * on remote mode, don't take the tables cmd line arg (#22738)

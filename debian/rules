@@ -28,7 +28,7 @@ install: build
 	dh_installdirs
 
 # Add here commands to install the package into debian/deploy.
-	python setup.py install --no-compile --root=$(PREFIX)
+	python setup.py install --no-compile --install-layout=deb --root=$(PREFIX)
 
 # remove the script extension
 	mv $(PREFIX)/usr/bin/deploy.py $(PREFIX)/usr/bin/deploy
