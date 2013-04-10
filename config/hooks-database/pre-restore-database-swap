@@ -7,7 +7,15 @@
 
 DATABASES=$@
 
-sudo /etc/init.d/apache2 stop
-sudo /etc/init.d/postgresql-8.3 restart
+if [ -x /etc/init.d/apache2 ]; then
+    sudo /etc/init.d/apache2 stop
+fi
+
+if [ -x /etc/init.d/postgresql-8.3 ]; then
+    sudo /etc/init.d/postgresql-8.3 restart
+fi
+if [ -x /etc/init.d/postgresql ]; then
+    sudo /etc/init.d/postgresql restart
+fi
 
 exit 0

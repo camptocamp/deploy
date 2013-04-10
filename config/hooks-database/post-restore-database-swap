@@ -7,6 +7,8 @@
 
 DATABASES=$@
 
-sudo /etc/init.d/apache2 start
+if [ -x /etc/init.d/apache2 ]; then
+    sudo /etc/init.d/apache2 start
+fi
 
 exit 0
