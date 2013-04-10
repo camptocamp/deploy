@@ -1,3 +1,9 @@
+deploy (0.3.1~c2c+1) lenny squeeze; urgency=low
+
+  * readd missing commit, see #4
+
+ -- Stéphane Brunner <stephane.brunner@camptocamp.com>  Wed, 10 Apr 2013 17:10:19 +0200
+
 deploy (0.3~c2c+1) lenny squeeze; urgency=low
 
   * move on git
