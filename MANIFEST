@@ -1,4 +1,5 @@
 deploy.py
+bin/deploy
 setup.py
 deploy/__init__.py
 deploy/apache.py
