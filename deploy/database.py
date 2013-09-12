@@ -55,8 +55,8 @@ def dump(config, rawtables, savedir):
                          'args': {'stdout': output, 'stderr': errors}})
         else:
             for table in tables:
-                cmd = dump + ['-n'] \
-                    if config['use_schema'] in ('true', 'yes', '1') \
+                cmd = dump
+                cmd += ['-n'] if config['use_schema'] in ('true', 'yes', '1') \
                     else ['-a', '-t']
                 cmd += [table, database]
                 output = file(os.path.join(savedir, database + '.' + table + '.dump'), 'w+b')
