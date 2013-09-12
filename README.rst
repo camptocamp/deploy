@@ -12,4 +12,4 @@ This tool is used do deploy a geospatial application an related data:
 RPM build
 ---------
 
-`python setup.py bdist --formats=rpm`
+python setup.py bdist_rpm --install-script rpm/install-script
