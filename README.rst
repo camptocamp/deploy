@@ -8,3 +8,8 @@ This tool is used do deploy a geospatial application an related data:
 * The Application code with local build.
 * The Database.
 * The Geospatial files (Geotiff, shapefile, ...).
+
+RPM build
+---------
+
+`python setup.py bdist --formats=rpm`
