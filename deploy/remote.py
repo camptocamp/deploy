@@ -5,7 +5,7 @@ import time, os
 logger = logging.getLogger('deploy.remote')
 
 def remote_copy(src, host):
-    cmd = "rsync -rz --delete %(srcdir)s %(host)s:%(dstdir)s"% {'srcdir': src,
+    cmd = "rsync -rlz --delete %(srcdir)s %(host)s:%(dstdir)s"% {'srcdir': src,
                                                                 'dstdir': dirname(src),
                                                                 'host': host}
     logger.info("running '%(cmd)s' "%{'cmd': cmd})
@@ -13,7 +13,7 @@ def remote_copy(src, host):
     return p.wait() == 0
 
 def local_copy(src, host):
-    cmd = "rsync -rz --delete %(host)s:%(srcdir)s %(dstdir)s"% {'srcdir': src,
+    cmd = "rsync -rlz --delete %(host)s:%(srcdir)s %(dstdir)s"% {'srcdir': src,
                                                                 'dstdir': dirname(src),
                                                                 'host': host}
     logger.info("running '%(cmd)s' "%{'cmd': cmd})
