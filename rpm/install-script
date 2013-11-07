@@ -1,1 +1,1 @@
-python2.6 setup.py install --no-compile --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES --install-lib=/usr/lib/python2.6/site-packages
+python2.6 setup.py install --no-compile --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES --install-lib=/usr/lib/python2.6/site-packages --install-scripts=/usr/bin
