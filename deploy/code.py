@@ -1,8 +1,13 @@
-from deploy.common import * 
-import os, logging
+import os
+import logging
+
+from deploy.common import ignore_patterns, run_hook, makedirs_silent, symlink_silent, copytree, rmtree_silent
+
+
 logger = logging.getLogger('deploy.code')
 
 __all__ = ['dump', 'restore']
+
 
 def dump(config, savedir, symlink=False):
     if 'active' in config and config['active'] in ('false', 'off', '0'):
@@ -23,14 +28,15 @@ def dump(config, savedir, symlink=False):
     makedirs_silent(savedir)
     dest = os.path.join(savedir, config['project'])
     if symlink:
-        logger.info("symlink '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
+        logger.info("symlink '%(src)s' to '%(dest)s'" % {'src': src, 'dest': dest})
         symlink_silent(src, dest)
     else:
-        logger.info("copy '%(src)s' to '%(dest)s'" %{'src': src, 'dest': dest})
+        logger.info("copy '%(src)s' to '%(dest)s'" % {'src': src, 'dest': dest})
         copytree(src, dest, symlinks=True, ignore=ignore)
 
     run_hook('post-create-code', [config['project'], src], logger=logger)
-        
+
+
 def restore(config, srcdir):
     if 'dest' in config:
         dest = config['dest']
@@ -41,16 +47,16 @@ def restore(config, srcdir):
     if os.path.exists(srcdir):
         run_hook('pre-restore-code', [config['project'], dest], logger=logger)
 
-        logger.info("deleting '%(dest)s'" %{'dest': dest})
+        logger.info("deleting '%(dest)s'" % {'dest': dest})
         rmtree_silent(dest)
         os.makedirs(dest)
-        
-        logger.info("copying '%(src)s' to '%(dest)s'" %{'src': srcdir, 'dest': dest})
+
+        logger.info("copying '%(src)s' to '%(dest)s'" % {'src': srcdir, 'dest': dest})
         copytree(srcdir, dest, symlinks=True, keepdst=True)
 
         run_hook('post-restore-code', [config['project'], dest], logger=logger)
-        
+
         return dest
     else:
-        logger.debug("'%(srcdir)s' don't exists, no code to restore" %{'srcdir': srcdir})
+        logger.debug("'%(srcdir)s' don't exists, no code to restore" % {'srcdir': srcdir})
         return None
