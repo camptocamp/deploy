@@ -1,10 +1,17 @@
-from deploy.common import *
 import subprocess
-import os, sys, tempfile, time
+import os
+import sys
+import tempfile
+import time
 import logging
+
+from deploy.common import makedirs_silent, run_hook
+
+
 logger = logging.getLogger('deploy.databases')
 
 __all__ = ['dump', 'restore']
+
 
 def get_tables(str):
     tables = {}
@@ -27,14 +34,16 @@ def get_tables(str):
                 tables[base_table[0]] = []
             tables[base_table[0]].append('.'.join(base_table[1:]))
         else:
-            logger.error("invalid table format : %s''"%table)
+            logger.error("invalid table format : %s''" % table)
             sys.exit(1)
 
     return tables
 
+
 def get_tables_from_dir(srcdir):
     files = [f.replace('.dump', '') for f in os.listdir(srcdir) if f.endswith('.dump')]
     return get_tables(','.join(files))
+
 
 def dump(config, rawtables, savedir):
     if 'active' in config and config['active'] in ('false', 'off', '0'):
@@ -51,7 +60,7 @@ def dump(config, rawtables, savedir):
             output = file(os.path.join(savedir, database + '.dump'), 'w+b')
             errors = file(os.path.join(savedir, database + '.dump.log'), 'w')
 
-            jobs.append({'cmd' : cmd,
+            jobs.append({'cmd': cmd,
                          'args': {'stdout': output, 'stderr': errors}})
         else:
             for table in tables:
@@ -62,51 +71,58 @@ def dump(config, rawtables, savedir):
                 output = file(os.path.join(savedir, database + '.' + table + '.dump'), 'w+b')
                 errors = file(os.path.join(savedir, database + '.' + table + '.dump.log'), 'w')
 
-                jobs.append({'cmd' : cmd,
+                jobs.append({'cmd': cmd,
                              'args': {'stdout': output, 'stderr': errors}})
 
     for job in jobs:
-        logger.info("dumping ('%(cmd)s') to '%(dest)s'" %{'cmd' : ' '.join(job['cmd']),
-                                                          'dest': job['args']['stdout'].name})
+        logger.info("dumping ('%(cmd)s') to '%(dest)s'" % {
+            'cmd': ' '.join(job['cmd']),
+            'dest': job['args']['stdout'].name
+        })
 
         p = subprocess.Popen(job['cmd'], **job['args'])
         exitcode = p.wait()
 
         if exitcode != 0:
-            logger.error("dump error, see '%(errors)s'" %{'errors': job['args']['stderr'].name})
+            logger.error("dump error, see '%(errors)s'" % {'errors': job['args']['stderr'].name})
             sys.exit(1)
         else:
             os.remove(job['args']['stderr'].name)
 
     run_hook('post-create-database', [savedir], logger=logger, exit_on_error=True)
 
+
 def database_exists(name, psqlcmd=['psql']):
     devnull = tempfile.TemporaryFile()
     exists = subprocess.Popen(psqlcmd + [name, '-c', ''], stdout=devnull, stderr=subprocess.STDOUT)
     return exists.wait() == 0
 
+
 def drop_database(name, dropcmd=['dropdb'], psqlcmd=['psql'], tries=10):
     if database_exists(name, psqlcmd=psqlcmd):
         errors = tempfile.TemporaryFile()
         cmd = dropcmd + [name]
-        logger.debug("dropping '%(name)s' with '%(cmd)s'" %{'name': name, 'cmd': ' '.join(cmd)})
+        logger.debug("dropping '%(name)s' with '%(cmd)s'" % {'name': name, 'cmd': ' '.join(cmd)})
         while tries:
             drop = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
             exitcode = drop.wait()
 
             if exitcode != 0:
                 tries -= 1
-                logger.debug("'%(name)s' drop error, sleeping 5s, %(tries)d tries left" %{'name': name, 'tries': tries})
+                logger.debug("'%(name)s' drop error, sleeping 5s, %(tries)d tries left" % {
+                    'name': name, 'tries': tries
+                })
                 time.sleep(5)
             else:
                 return True
 
         errors.flush()
         errors.seek(0)
-        logger.error("'%(name)s' drop error:\n%(errors)s" %{'name': name, 'errors': errors.read()})
+        logger.error("'%(name)s' drop error:\n%(errors)s" % {'name': name, 'errors': errors.read()})
         sys.exit(1)
     else:
         return False
+
 
 def truncate_table(database, table, psqlcmd=['psql'], is_schema=False):
     if database_exists(database, psqlcmd=psqlcmd):
@@ -118,25 +134,30 @@ def truncate_table(database, table, psqlcmd=['psql'], is_schema=False):
             "DROP SCHEMA IF EXISTS %(schema)s CASCADE" % {'schema': table},
             database
         ]
-        logger.debug("deleting '%(database)s.%(table)s' with '%(cmd)s'" %{'table': table, 'database': database,
-                                                                          'cmd': ' '.join(cmd)})
+        logger.debug("deleting '%(database)s.%(table)s' with '%(cmd)s'" % {
+            'table': table, 'database': database,
+            'cmd': ' '.join(cmd)
+        })
         drop = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
         exitcode = drop.wait()
         if exitcode != 0:
             errors.flush()
             errors.seek(0)
-            logger.error("'%(database)s.%(table)s' drop error:\n%(errors)s" %{'table': table, 'database': database,
-                                                                              'errors': errors.read()})
+            logger.error("'%(database)s.%(table)s' drop error:\n%(errors)s" % {
+                'table': table, 'database': database,
+                'errors': errors.read()
+            })
             sys.exit(1)
         else:
             return True
     else:
         return False
 
+
 def restore(config, srcdir):
 
     if not os.path.exists(srcdir):
-        logger.debug("'%(srcdir)s' don't exists, no database to restore" %{'srcdir': srcdir})
+        logger.debug("'%(srcdir)s' don't exists, no database to restore" % {'srcdir': srcdir})
         return
 
     restore_tmp = config['restore_tmp'].split()
@@ -153,12 +174,14 @@ def restore(config, srcdir):
             dumpfile = os.path.join(srcdir, database + '.dump')
             tmpdatabase = database + '_deploy_tmp'
             drop_database(tmpdatabase, dropcmd=drop, psqlcmd=psql)
-            run_job(createdb + ("%(dbname)s"%{'dbname': tmpdatabase}).split())
-            run_job(restore_tmp + ("%(dbname)s %(dump)s"%{'dbname': tmpdatabase, 'dump': dumpfile}).split())
+            run_job(createdb + ("%(dbname)s" % {'dbname': tmpdatabase}).split())
+            run_job(restore_tmp + ("%(dbname)s %(dump)s" % {'dbname': tmpdatabase, 'dump': dumpfile}).split())
 
             if database_exists(database, psqlcmd=psql):
-                swapjobs.append("DROP DATABASE %(newname)s;"%{'newname': database})
-            swapjobs.append("ALTER DATABASE %(oldname)s RENAME TO %(newname)s;"%{'newname': database, 'oldname': tmpdatabase})
+                swapjobs.append("DROP DATABASE %(newname)s;" % {'newname': database})
+            swapjobs.append("ALTER DATABASE %(oldname)s RENAME TO %(newname)s;" % {
+                'newname': database, 'oldname': tmpdatabase
+            })
         else:
             # restore a table
             for table in tables:
@@ -173,14 +196,14 @@ def restore(config, srcdir):
         run_hook('pre-restore-database-swap', get_tables_from_dir(srcdir).keys(), logger=logger)
         basecmd = psql + "-d template1 -c".split()
         for cmd in swapjobs:
-            run_job(basecmd + ['%s'%cmd])
+            run_job(basecmd + ['%s' % cmd])
         run_hook('post-restore-database-swap', get_tables_from_dir(srcdir).keys(), logger=logger)
 
     run_hook('post-restore-database', get_tables_from_dir(srcdir).keys(), logger=logger)
 
 
 def run_job(cmd):
-    logger.info("running '%s'"%(' '.join(cmd)))
+    logger.info("running '%s'" % (' '.join(cmd)))
     errors = tempfile.TemporaryFile()
 
     p = subprocess.Popen(cmd, stdout=errors, stderr=subprocess.STDOUT)
@@ -188,4 +211,4 @@ def run_job(cmd):
     if exitcode != 0:
         errors.flush()
         errors.seek(0)
-        logger.error("restore error:\n%(errors)s" %{'errors': errors.read()})
+        logger.error("restore error:\n%(errors)s" % {'errors': errors.read()})

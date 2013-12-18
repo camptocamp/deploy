@@ -17,6 +17,7 @@ _hookdir = None
 _default_hookdir = '/etc/deploy/hooks'
 _verbose = None
 
+
 def setup_hooks(config, verbose=True):
     global _hookdir, _env, _verbose
     _hookdir = config.get('main', 'hookdir')
@@ -37,6 +38,7 @@ def setup_hooks(config, verbose=True):
     # return if the project has custom hooks
     return os.path.normpath(_hookdir) != os.path.normpath(_default_hookdir)
 
+
 def run_hook(name, arguments=[], logger=None, exit_on_error=False):
     if logger is None:
         logger = logging.getLogger('deploy.hook')
@@ -51,18 +53,19 @@ def run_hook(name, arguments=[], logger=None, exit_on_error=False):
         if not _verbose:
             stdout = TemporaryFile()
 
-        logger.info("running '%(name)s'" %{'name': hook})
+        logger.info("running '%(name)s'" % {'name': hook})
         h = subprocess.Popen(' '.join([hook] + arguments), shell=True, cwd=dirname(hook), env=_env,
                              stderr=subprocess.STDOUT, stdout=stdout)
         exitcode = h.wait()
 
         if exit_on_error and exitcode != 0:
-            logger.error("hook failed ('%s')"%hook)
+            logger.error("hook failed ('%s')" % hook)
             sys.exit(1)
 
         return exitcode == 0
     else:
         return True
+
 
 def basename(path):
     if path.endswith('/'):
@@ -70,23 +73,28 @@ def basename(path):
     else:
         return os.path.basename(path)
 
+
 def dirname(path):
     if path.endswith('/'):
         return os.path.dirname(path[:-1])
     else:
         return os.path.dirname(path)
 
+
 def rmtree_silent(path, ignore_errors=False, onerror=None):
     if os.path.exists(path):
         shutil.rmtree(path, ignore_errors, onerror)
+
 
 def symlink_silent(src, dst):
     if not os.path.exists(dst):
         os.symlink(src, dst)
 
+
 def makedirs_silent(name, mode=0777):
     if not os.path.exists(name):
         os.makedirs(name, mode)
+
 
 def copytree(src, dst, symlinks=False, ignore=None, keepdst=False):
     names = os.listdir(src)
@@ -128,6 +136,7 @@ def copytree(src, dst, symlinks=False, ignore=None, keepdst=False):
         pass
     if errors:
         raise shutil.Error, errors
+
 
 def ignore_patterns(*patterns):
     """Function that can be used as copytree() ignore parameter.
