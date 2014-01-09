@@ -1,7 +1,7 @@
 Source: deploy
 Section: sysadmin/admin
 Priority: extra
-Maintainer: Frederic Junod <frederic.junod@camptocamp.com>
+Maintainer: Frederic Junod <frederic.junod@camptocamp.com>, Stéphane Brunner <stephane.brunner@camptocamp.com>
 Build-Depends: debhelper (>= 5)
 Build-Depends-Indep: python (>= 2.1), python-support (>= 0.3), python-setuptools
 Standards-Version: 3.8
