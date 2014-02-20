@@ -13,7 +13,7 @@ def setup_logging(verbose=False):
     fqdn = socket.getfqdn()
     logging.getLogger('').setLevel(logging.DEBUG)
 
-    format = "(%(name)s) %(message)s"
+    format = "%(name)s: %(message)s"
 
     syslog = SysLogHandler(address='/dev/log')
     syslog.setFormatter(logging.Formatter(format))
