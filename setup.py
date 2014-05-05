@@ -12,7 +12,7 @@ classifiers = [
 ]
 
 setup(name = 'deploy',
-      version = '0.3.2',
+      version = '0.3.3',
       url = 'http://www.camptocamp.com/',
       description = 'the c2c project deploy scripts',
       author = 'Camptocamp SA',
