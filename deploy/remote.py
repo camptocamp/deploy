@@ -31,7 +31,7 @@ def local_copy(src, host):
 
 
 def remote_extract(dir, host, options):
-    cmd = "ssh %(host)s deploy " % {'host': host}
+    cmd = "ssh -t %(host)s deploy " % {'host': host}
     if options.env:
         cmd += "-e %(env)s " % {'env': options.env}
     if not options.timedir:
@@ -47,7 +47,7 @@ def remote_extract(dir, host, options):
 
 
 def remote_create_dir(host, config, packages_dir):
-    cmd = "ssh %(host)s mkdir -p " % {'host': host}
+    cmd = "ssh -t %(host)s mkdir -p " % {'host': host}
     destpath = config.get('DEFAULT', 'project')
     destpath += '_' + str(int(time.time()))
     dir = os.path.join(packages_dir, destpath)
@@ -60,7 +60,7 @@ def remote_create_dir(host, config, packages_dir):
 
 
 def remote_create_archive(configfile, dir, host, options):
-    cmd = "ssh %(host)s deploy " % {'host': host}
+    cmd = "ssh -t %(host)s deploy " % {'host': host}
     if not options.timedir:
         cmd += "-k "
     if not options.verbose:
