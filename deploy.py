@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 
 from optparse import OptionParser, OptionGroup
-import os, sys, socket, time
+import os
+import sys
+import socket
+import time
 import logging
 from logging.handlers import SysLogHandler
 import deploy
 import subprocess
 from deploy.common import rmtree_silent, setup_hooks, run_hook, dirname
+
 
 def setup_logging(verbose=False):
     # configure the root logger
@@ -14,7 +18,7 @@ def setup_logging(verbose=False):
     logging.getLogger('').setLevel(logging.DEBUG)
 
     format = "(%(name)s) %(message)s"
-   
+
     syslog = SysLogHandler(address='/dev/log')
     syslog.setFormatter(logging.Formatter(format))
     logging.getLogger('').addHandler(syslog)
@@ -29,7 +33,7 @@ def setup_logging(verbose=False):
 components = ['databases', 'files', 'code']
 
 if __name__ == '__main__':
-    
+
     usage = "usage: %prog -c [OPTIONS]... CONFIG_FILE DIRECTORY\n" + \
             "   or: %prog -x [OPTIONS]... DIRECTORY\n" + \
             "   or: %prog -r [OPTIONS] CONFIG_FILE HOST"
@@ -42,7 +46,7 @@ if __name__ == '__main__':
     c_group.add_option("-c", "--create",
                        action="store_true",
                        help="create a new archive")
-    
+
     c_group.add_option("--components",
                        default="all",
                        help="restrict component to update. [%s]. default to all" % ','.join(components))
@@ -59,13 +63,13 @@ if __name__ == '__main__':
     c_group.add_option("--no-symlink",
                        action="store_false", dest="symlink", default=False,
                        help="don't use symlinks for 'files' and 'code' (copy content) [default]")
-    
+
     x_group.add_option("-x", "--extract",
                        action="store_true",
                        help="extract files from an archive")
 
     x_group.add_option("-d", "--delete",
-                       action="store_true", dest="delete" ,default=True,
+                       action="store_true", dest="delete", default=True,
                        help="delete the archive after the restoration [default]")
 
     x_group.add_option("-k", "--keep",
@@ -98,7 +102,7 @@ if __name__ == '__main__':
     # handle remote call: only allow rsync and extract
     sshcmd = os.getenv('SSH_ORIGINAL_COMMAND')
 
-    if sshcmd is None:        
+    if sshcmd is None:
         # local mode
         (options, args) = parser.parse_args()
     else:
@@ -110,14 +114,14 @@ if __name__ == '__main__':
         else:
             # FIXME: remote command error
             pass
-        
+
     setup_logging(options.verbose)
     # get the main logger
     logger = logging.getLogger('deploy.main')
 
     if options.create and options.extract:
         parser.error("options -c and -x are mutually exclusive")
-        
+
     if not options.create and not options.extract and not options.remote:
         parser.error("missing action")
 
@@ -126,7 +130,7 @@ if __name__ == '__main__':
 
     if options.tables and 'databases' not in options.components:
         parser.error("can't have a 'tables' option without the 'databases' components")
-    
+
     if options.remote:
         config = deploy.config.parse_config(args[0], options.env)
         packages_dir = config.get('main', 'packages_dir')
@@ -134,7 +138,7 @@ if __name__ == '__main__':
 
         if not remote_destination:
             parser.error("missing hosts or profile name")
-        
+
         elif len(remote_destination) == 1:
             target = remote_destination[0]
             # find a remote profile
@@ -150,7 +154,7 @@ if __name__ == '__main__':
             # simple hosts list
             hosts = remote_destination
 
-        logger.info("remote deploy to '%(remote)s'" %{'remote': hosts})
+        logger.info("remote deploy to '%(remote)s'" % {'remote': hosts})
 
         destpath = config.get('DEFAULT', 'project')
         if options.timedir:
@@ -159,14 +163,14 @@ if __name__ == '__main__':
 
         # let's start creating the archive
         options.create = True
-        
+
     if options.create:
         if len(args) < 2:
             parser.error("missing config and/or archive destination")
         else:
             config = deploy.config.parse_config(args[0], options.env)
             has_custom_hooks = setup_hooks(config, options.verbose)
-            
+
             destdir = os.path.join(args[1], config.get('DEFAULT', 'project'))
             destpath = dict([(c, os.path.join(destdir, c)) for c in components])
 
@@ -180,28 +184,32 @@ if __name__ == '__main__':
                 pass
 
             if 'databases' in options.components:
-                if not options.remote or not (config.has_option('databases', 'reverse') and config.getboolean('databases', 'reverse')):
-                    deploy.database.dump(dict(config.items('databases')),
-                                        options.tables,
-                                        destpath['databases'])
+                if not options.remote or not (
+                        config.has_option('databases', 'reverse')
+                        and config.getboolean('databases', 'reverse')):
+                    deploy.database.dump(
+                        dict(config.items('databases')),
+                        options.tables,
+                        destpath['databases']
+                    )
             else:
-                logger.debug("removing '%(path)s'" %{'path': destpath['databases']})
+                logger.debug("removing '%(path)s'" % {'path': destpath['databases']})
                 rmtree_silent(destpath['databases'])
-                
+
             if 'files' in options.components:
                 deploy.files.dump(dict(config.items('files')),
                                   destpath['files'],
                                   options.symlink)
             else:
-                logger.debug("removing '%(path)s'" %{'path': destpath['files']})
+                logger.debug("removing '%(path)s'" % {'path': destpath['files']})
                 rmtree_silent(destpath['files'])
-                
+
             if 'code' in options.components:
                 deploy.code.dump(dict(config.items('code')),
                                  destpath['code'],
                                  options.symlink)
             else:
-                logger.debug("removing '%(path)s'" %{'path': destpath['code']})
+                logger.debug("removing '%(path)s'" % {'path': destpath['code']})
                 rmtree_silent(destpath['code'])
 
             run_hook('post-create')
@@ -222,9 +230,9 @@ if __name__ == '__main__':
                             if not success:
                                 logger.error("error while creating remote archive.")
                                 sys.exit(1)
-                                
+
                             deploy.remote.local_copy(config, rdir, host)
-                            cmd = "deploy -x %(dir)s" %{'dir': rdir}
+                            cmd = "deploy -x %(dir)s" % {'dir': rdir}
                             p = subprocess.Popen(cmd, shell=True)
                             p.wait()
                         elif deploy.remote.remote_extract(dirname(destdir), host, options):
@@ -232,40 +240,40 @@ if __name__ == '__main__':
                             pass
                         else:
                             # remote_extract failed
-                            logger.error("error while deploying to '%s'."%host)
+                            logger.error("error while deploying to '%s'." % host)
                             sys.exit(1)
-                    else:                
-                         # remote_copy failed
-                         logger.error("error while copying archive to '%s'."%host)
-                         sys.exit(1)
-                         
+                    else:
+                        # remote_copy failed
+                        logger.error("error while copying archive to '%s'." % host)
+                        sys.exit(1)
+
                 if options.delete:
                     # remote deploy done for all hosts, delete source archive
-                    logger.info("deleting '%(destdir)s'"%{'destdir': destdir})
+                    logger.info("deleting '%(destdir)s'" % {'destdir': destdir})
                     rmtree_silent(destdir)
 
             else:
                 # no remote mode
                 sys.exit(0)
-            
+
     elif options.extract:
         if len(args) < 1:
             parser.error("missing archive path")
         else:
             srcdir = deploy.extract.get_archive_dir(args[0])
             config = deploy.config.parse_config(srcdir, options.env)
-            logger.info("restoring archive from '%(archive)s'" %{'archive': srcdir})
-            
+            logger.info("restoring archive from '%(archive)s'" % {'archive': srcdir})
+
             setup_hooks(config, options.verbose)
-            
+
             run_hook('pre-restore')
 
-            deploy.database.restore(dict(config.items('databases')), 
+            deploy.database.restore(dict(config.items('databases')),
                                     os.path.join(srcdir, 'databases'))
 
-            deploy.files.restore(dict(config.items('files')), 
+            deploy.files.restore(dict(config.items('files')),
                                  os.path.join(srcdir, 'files'))
-        
+
             destdir = deploy.code.restore(dict(config.items('code')),
                                           os.path.join(srcdir, 'code'))
             if destdir:
@@ -274,9 +282,9 @@ if __name__ == '__main__':
             run_hook('post-restore')
 
             if options.delete:
-                logger.info("deleting '%(srcdir)s'"%{'srcdir': srcdir})
+                logger.info("deleting '%(srcdir)s'" % {'srcdir': srcdir})
                 rmtree_silent(srcdir)
-                
+
             logger.info("done restoring")
-            
+
             sys.exit(0)
