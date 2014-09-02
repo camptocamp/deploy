@@ -209,7 +209,7 @@ if __name__ == '__main__':
             logger.info("done creating archive")
             if options.remote:
                 for host in hosts:
-                    if deploy.remote.remote_copy(dirname(destdir), host):
+                    if deploy.remote.remote_copy(config, dirname(destdir), host):
                         if config.has_option('databases', 'reverse') and config.getboolean('databases', 'reverse'):
                             # reverse db deploy
                             rdir = deploy.remote.remote_create_dir(host, config, packages_dir)
@@ -223,7 +223,7 @@ if __name__ == '__main__':
                                 logger.error("error while creating remote archive.")
                                 sys.exit(1)
                                 
-                            deploy.remote.local_copy(rdir, host)
+                            deploy.remote.local_copy(config, rdir, host)
                             cmd = "deploy -x %(dir)s" %{'dir': rdir}
                             p = subprocess.Popen(cmd, shell=True)
                             p.wait()

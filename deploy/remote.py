@@ -8,8 +8,9 @@ from deploy.common import dirname
 logger = logging.getLogger('deploy.remote')
 
 
-def remote_copy(src, host):
-    cmd = "rsync -rlz --delete %(srcdir)s %(host)s:%(dstdir)s" % {
+def remote_copy(config, src, host):
+    cmd = "rsync %(rsync_args) %(srcdir)s %(host)s:%(dstdir)s" % {
+        'rsync_args': config.get('main', 'rsync_args'),
         'srcdir': src,
         'dstdir': dirname(src),
         'host': host
@@ -19,8 +20,9 @@ def remote_copy(src, host):
     return p.wait() == 0
 
 
-def local_copy(src, host):
-    cmd = "rsync -rlz --delete %(host)s:%(srcdir)s %(dstdir)s" % {
+def local_copy(config, src, host):
+    cmd = "rsync %(rsync_args) %(host)s:%(srcdir)s %(dstdir)s" % {
+        'rsync_args': config.get('main', 'rsync_args'),
         'srcdir': src,
         'dstdir': dirname(src),
         'host': host
