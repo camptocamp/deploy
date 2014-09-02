@@ -120,7 +120,7 @@ def copytree(src, dst, symlinks=False, ignore=None, keepdst=False):
             elif os.path.isdir(srcname):
                 copytree(srcname, dstname, symlinks, ignore, keepdst)
             else:
-                shutil.copy2(srcname, dstname)
+                shutil.copy(srcname, dstname)
             # XXX What about devices, sockets etc.?
         except (IOError, os.error), why:
             errors.append((srcname, dstname, str(why)))
