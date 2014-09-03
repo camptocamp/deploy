@@ -39,7 +39,7 @@ def setup_hooks(config, verbose=True):
     return os.path.normpath(_hookdir) != os.path.normpath(_default_hookdir)
 
 
-def run_hook(name, arguments=[], logger=None, exit_on_error=False):
+def run_hook(name, arguments=[], logger=None, exit_on_error=True):
     if logger is None:
         logger = logging.getLogger('deploy.hook')
 
