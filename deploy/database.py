@@ -66,7 +66,7 @@ def dump(config, rawtables, savedir):
             for table in tables:
                 cmd = [] + dump  # clone dump
                 cmd += ['-n'] if config['use_schema'] in ('true', 'yes', '1') \
-                    else ['-a', '-t']
+                    else ['-t']
                 cmd += [table, database]
                 output = file(os.path.join(savedir, database + '.' + table + '.dump'), 'w+b')
                 errors = file(os.path.join(savedir, database + '.' + table + '.dump.log'), 'w')
