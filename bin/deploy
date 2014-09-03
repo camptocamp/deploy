@@ -17,7 +17,7 @@ def setup_logging(verbose=False):
     fqdn = socket.getfqdn()
     logging.getLogger('').setLevel(logging.DEBUG)
 
-    format = " % (name)s: % (message)s"
+    format = "%(name)s: %(message)s"
 
     syslog = SysLogHandler(address='/dev/log')
     syslog.setFormatter(logging.Formatter(format))
@@ -34,9 +34,9 @@ components = ['databases', 'files', 'code']
 
 if __name__ == '__main__':
 
-    usage = "usage: % prog -c [OPTIONS]... CONFIG_FILE DIRECTORY\n" + \
-            "   or: % prog -x [OPTIONS]... DIRECTORY\n" + \
-            "   or: % prog -r [OPTIONS] CONFIG_FILE HOST [DIRECTORY]"
+    usage = "usage: %prog -c [OPTIONS]... CONFIG_FILE DIRECTORY\n" + \
+            "   or: %prog -x [OPTIONS]... DIRECTORY\n" + \
+            "   or: %prog -r [OPTIONS] CONFIG_FILE HOST [DIRECTORY]"
 
     parser = OptionParser(usage)
     c_group = OptionGroup(parser, "Create an archive")
@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
     c_group.add_option("--components",
                        default="all",
-                       help="restrict component to update. [ % s]. default to all" % ','.join(components))
+                       help="restrict component to update. [%s]. default to all" % ','.join(components))
 
     c_group.add_option("--tables",
                        default=None,
@@ -140,7 +140,7 @@ if __name__ == '__main__':
         if os.path.isdir(remote_destination[-1]):
             destdir = os.path.join(remote_destination.pop(), config.get('DEFAULT', 'project'))
             if not os.path.isdir(destdir):
-                parser.error("invalid archive: ' % s'" % destdir)
+                parser.error("invalid archive: '%s'" % destdir)
             # we need to keep the archive
             options.delete = False
 
@@ -159,7 +159,7 @@ if __name__ == '__main__':
             # simple hosts list
             hosts = remote_destination
 
-        logger.info("remote deploy to ' % (remote)s'" % {'remote': hosts})
+        logger.info("remote deploy to '%(remote)s'" % {'remote': hosts})
 
         if destdir is None:
             destpath = config.get('DEFAULT', 'project')
@@ -200,7 +200,7 @@ if __name__ == '__main__':
                         destpath['databases']
                     )
             else:
-                logger.debug("removing ' % (path)s'" % {'path': destpath['databases']})
+                logger.debug("removing '%(path)s'" % {'path': destpath['databases']})
                 rmtree_silent(destpath['databases'])
 
             if 'files' in options.components:
@@ -208,7 +208,7 @@ if __name__ == '__main__':
                                   destpath['files'],
                                   options.symlink)
             else:
-                logger.debug("removing ' % (path)s'" % {'path': destpath['files']})
+                logger.debug("removing '%(path)s'" % {'path': destpath['files']})
                 rmtree_silent(destpath['files'])
 
             if 'code' in options.components:
@@ -216,7 +216,7 @@ if __name__ == '__main__':
                                  destpath['code'],
                                  options.symlink)
             else:
-                logger.debug("removing ' % (path)s'" % {'path': destpath['code']})
+                logger.debug("removing '%(path)s'" % {'path': destpath['code']})
                 rmtree_silent(destpath['code'])
 
             run_hook('post-create')
@@ -244,16 +244,16 @@ if __name__ == '__main__':
                     pass
                 else:
                     # remote_extract failed
-                    logger.error("error while deploying to ' % s'." % host)
+                    logger.error("error while deploying to '%s'." % host)
                     sys.exit(1)
             else:
                 # remote_copy failed
-                logger.error("error while copying archive to ' % s'." % host)
+                logger.error("error while copying archive to '%s'." % host)
                 sys.exit(1)
 
         if options.delete:
             # remote deploy done for all hosts, delete source archive
-            logger.info("deleting ' % (destdir)s'" % {'destdir': destdir})
+            logger.info("deleting '%(destdir)s'" % {'destdir': destdir})
             rmtree_silent(destdir)
 
     if options.extract:
@@ -262,7 +262,7 @@ if __name__ == '__main__':
         else:
             srcdir = deploy.extract.get_archive_dir(args[0])
             config = deploy.config.parse_config(srcdir, options.env)
-            logger.info("restoring archive from ' % (archive)s'" % {'archive': srcdir})
+            logger.info("restoring archive from '%(archive)s'" % {'archive': srcdir})
 
             setup_hooks(config, options.verbose)
 
@@ -282,7 +282,7 @@ if __name__ == '__main__':
             run_hook('post-restore')
 
             if options.delete:
-                logger.info("deleting ' % (srcdir)s'" % {'srcdir': srcdir})
+                logger.info("deleting '%(srcdir)s'" % {'srcdir': srcdir})
                 rmtree_silent(srcdir)
 
             logger.info("done restoring")
