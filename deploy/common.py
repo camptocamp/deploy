@@ -91,7 +91,7 @@ def symlink_silent(src, dst):
         os.symlink(src, dst)
 
 
-def makedirs_silent(name, mode=0777):
+def makedirs_silent(name, mode=2775):
     if not os.path.exists(name):
         os.makedirs(name, mode)
 
@@ -120,7 +120,7 @@ def copytree(src, dst, symlinks=False, ignore=None, keepdst=False):
             elif os.path.isdir(srcname):
                 copytree(srcname, dstname, symlinks, ignore, keepdst)
             else:
-                shutil.copy2(srcname, dstname)
+                shutil.copy(srcname, dstname)
             # XXX What about devices, sockets etc.?
         except (IOError, os.error), why:
             errors.append((srcname, dstname, str(why)))
@@ -132,7 +132,7 @@ def copytree(src, dst, symlinks=False, ignore=None, keepdst=False):
         shutil.copystat(src, dst)
     except OSError, why:
         # don't care about permission errors
-        #errors.extend((src, dst, str(why)))
+        # errors.extend((src, dst, str(why)))
         pass
     if errors:
         raise shutil.Error, errors
