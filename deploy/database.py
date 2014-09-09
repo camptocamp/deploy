@@ -66,8 +66,8 @@ def dump(config, rawtables, savedir):
             for table in tables:
                 cmd = [] + dump  # clone dump
                 cmd += ['-n'] if config['use_schema'] in ('true', 'yes', '1') \
-                    else ['-a', '-t']
-                cmd += [table, database]
+                    else ['-t']
+                cmd += ["%s" % table, database]
                 output = file(os.path.join(savedir, database + '.' + table + '.dump'), 'w+b')
                 errors = file(os.path.join(savedir, database + '.' + table + '.dump.log'), 'w')
 
@@ -129,9 +129,9 @@ def truncate_table(database, table, psqlcmd=['psql'], is_schema=False):
         errors = tempfile.TemporaryFile()
         cmd = psqlcmd + [
             '-c',
-            "TRUNCATE TABLE %(table)s" % {'table': table}
+            'TRUNCATE TABLE "%(table)s"' % {'table': table}
             if not is_schema else
-            "DROP SCHEMA IF EXISTS %(schema)s CASCADE" % {'schema': table},
+            'DROP SCHEMA IF EXISTS "%(schema)s" CASCADE' % {'schema': table},
             database
         ]
         logger.debug("deleting '%(database)s.%(table)s' with '%(cmd)s'" % {
