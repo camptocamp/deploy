@@ -5,4 +5,4 @@
 #            section in config file)
 #
 
-# FIXME: should run a 'apache2ctl configtest' here
+/usr/sbin/apache2ctl configtest
