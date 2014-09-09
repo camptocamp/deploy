@@ -1,3 +1,14 @@
+deploy (0.4.0~c2c+1) wheezy; urgency=low
+
+  * Fix some rights issues #15
+  * run_hook always exit on error #16
+  * Disable pupped during the deploy #17
+  * Deploy table without -a option #18
+  * Fix wrong correction in codestyle #19
+  * Do an Apache configtest after restoring the Apache configuration #20
+
+ -- Stéphane Brunner <stephane.brunner@camptocamp.com>  Tue, 09 Sep 2014 13:46:11 +0200
+
 deploy (0.3.3~c2c+1) lenny wheezy squeeze; urgency=low
 
   * Fix dump command, see #8
