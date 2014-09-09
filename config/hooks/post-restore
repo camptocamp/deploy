@@ -5,6 +5,8 @@
 #            section in config file)
 #
 
+rm /tmp/np
+
 if [ -x /etc/init.d/apache2 ]; then
     sudo /etc/init.d/apache2 start
 fi
