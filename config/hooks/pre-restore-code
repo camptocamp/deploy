@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 #
 # variables set here:
 #   $TARGET: name of the symbolic remote host key (see remote_hosts 
@@ -7,5 +7,3 @@
 
 PROJECT_NAME=$1
 CODE_DIR=$2
-
-exit 0

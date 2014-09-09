@@ -39,7 +39,7 @@ def setup_hooks(config, verbose=True):
     return os.path.normpath(_hookdir) != os.path.normpath(_default_hookdir)
 
 
-def run_hook(name, arguments=[], logger=None, exit_on_error=False):
+def run_hook(name, arguments=[], logger=None, exit_on_error=True):
     if logger is None:
         logger = logging.getLogger('deploy.hook')
 
@@ -58,9 +58,10 @@ def run_hook(name, arguments=[], logger=None, exit_on_error=False):
                              stderr=subprocess.STDOUT, stdout=stdout)
         exitcode = h.wait()
 
-        if exit_on_error and exitcode != 0:
+        if exitcode != 0:
             logger.error("hook failed ('%s')" % hook)
-            sys.exit(1)
+            if exit_on_error:
+                sys.exit(1)
 
         return exitcode == 0
     else:
