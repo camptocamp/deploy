@@ -91,7 +91,7 @@ def symlink_silent(src, dst):
         os.symlink(src, dst)
 
 
-def makedirs_silent(name, mode=2775):
+def makedirs_silent(name, mode=02775):
     if not os.path.exists(name):
         os.makedirs(name, mode)
 
