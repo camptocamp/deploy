@@ -9,7 +9,7 @@ logger = logging.getLogger('deploy.remote')
 
 
 def remote_copy(config, src, host):
-    cmd = "rsync %(rsync_args) %(srcdir)s %(host)s:%(dstdir)s" % {
+    cmd = "rsync %(rsync_args)s %(srcdir)s %(host)s:%(dstdir)s" % {
         'rsync_args': config.get('main', 'rsync_args'),
         'srcdir': src,
         'dstdir': dirname(src),
@@ -21,7 +21,7 @@ def remote_copy(config, src, host):
 
 
 def local_copy(config, src, host):
-    cmd = "rsync %(rsync_args) %(host)s:%(srcdir)s %(dstdir)s" % {
+    cmd = "rsync %(rsync_args)s %(host)s:%(srcdir)s %(dstdir)s" % {
         'rsync_args': config.get('main', 'rsync_args'),
         'srcdir': src,
         'dstdir': dirname(src),
