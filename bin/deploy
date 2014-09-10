@@ -116,6 +116,11 @@ if __name__ == '__main__':
     # get the main logger
     logger = logging.getLogger('deploy.main')
 
+    # Handle all exceptions in the logger
+    def log_unhandled_exception(*exc_info):
+        logger.critical(traceback.format_exception(*exc_info))
+        sys.exit(1)
+
     if options.create and options.extract:
         parser.error("options -c and -x are mutually exclusive")
 
