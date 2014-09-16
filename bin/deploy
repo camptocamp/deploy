@@ -30,6 +30,7 @@ def setup_logging(verbose=False):
 
     logging.getLogger('').addHandler(console)
 
+
 components = ['databases', 'files', 'code']
 
 if __name__ == '__main__':
@@ -234,9 +235,11 @@ if __name__ == '__main__':
                 if deploy.remote.remote_copy(config, dirname(destdir), host):
                     if config.has_option('databases', 'reverse') and config.getboolean('databases', 'reverse'):
                         # reverse db deploy
-                        rdir = deploy.remote.remote_create_dir(host, config, packages_dir)
-                        success = deploy.remote.remote_create_archive(os.path.join(destdir, 'deploy.cfg'),
-                                                                      rdir, host, options)
+                        rdir = deploy.remote.remote_create_dir(config, host, packages_dir)
+                        success = deploy.remote.remote_create_archive(
+                            config, os.path.join(destdir, 'deploy.cfg'),
+                            rdir, host, options
+                        )
                         if not success:
                             logger.error("error while creating remote archive.")
                             sys.exit(1)
@@ -245,7 +248,7 @@ if __name__ == '__main__':
                         cmd = "deploy -x % (dir)s" % {'dir': rdir}
                         p = subprocess.Popen(cmd, shell=True)
                         p.wait()
-                    elif deploy.remote.remote_extract(dirname(destdir), host, options):
+                    elif deploy.remote.remote_extract(deploy, dirname(destdir), host, options):
                         # remote_extract success
                         pass
                     else:
