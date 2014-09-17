@@ -32,8 +32,11 @@ def local_copy(config, src, host):
     return p.wait() == 0
 
 
-def remote_extract(dir, host, options):
-    cmd = "ssh -t %(host)s deploy " % {'host': host}
+def remote_extract(config, dir, host, options):
+    cmd = "ssh %(ssh_args)s %(host)s deploy " % {
+        'ssh_args': config.get('main', 'ssh_args'),
+        'host': host
+    }
     if options.env:
         cmd += "-e %(env)s " % {'env': options.env}
     if not options.timedir:
@@ -48,8 +51,11 @@ def remote_extract(dir, host, options):
     return p.wait() == 0
 
 
-def remote_create_dir(host, config, packages_dir):
-    cmd = "ssh -t %(host)s mkdir -p " % {'host': host}
+def remote_create_dir(config, host, packages_dir):
+    cmd = "ssh %(ssh_args)s %(host)s mkdir -p " % {
+        'ssh_args': config.get('main', 'ssh_args'),
+        'host': host
+    }
     destpath = config.get('DEFAULT', 'project')
     destpath += '_' + str(int(time.time()))
     dir = os.path.join(packages_dir, destpath)
@@ -61,8 +67,11 @@ def remote_create_dir(host, config, packages_dir):
     return dir
 
 
-def remote_create_archive(configfile, dir, host, options):
-    cmd = "ssh -t %(host)s deploy " % {'host': host}
+def remote_create_archive(config, configfile, dir, host, options):
+    cmd = "ssh %(ssh_args)s %(host)s deploy " % {
+        'ssh_args': config.get('main', 'ssh_args'),
+        'host': host
+    }
     if not options.timedir:
         cmd += "-k "
     if not options.verbose:
@@ -70,7 +79,10 @@ def remote_create_archive(configfile, dir, host, options):
     # if options.tables:
     #     cmd += "--tables "+options.tables+" "
 
-    cmd += "-c %(configfile)s %(dir)s" % {'dir': dir, 'configfile': configfile}
+    cmd += "-c %(configfile)s %(dir)s" % {
+        'dir': dir,
+        'configfile': configfile
+    }
     logger.info("running '%(cmd)s'" % {'cmd': cmd})
 
     p = subprocess.Popen(cmd, shell=True)
