@@ -1,0 +1,10 @@
+0.4
+===
+
+* Fix default rights on deferent operations
+* run_hook should always exit on error
+* Disable puppet on deploy
+* Deploy table without -a option
+* Enclose table name in doublequote
+* Add rsync_args
+* Add ssh_args and remove the -t option
