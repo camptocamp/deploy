@@ -248,7 +248,7 @@ if __name__ == '__main__':
                         cmd = "deploy -x % (dir)s" % {'dir': rdir}
                         p = subprocess.Popen(cmd, shell=True)
                         p.wait()
-                    elif deploy.remote.remote_extract(deploy, dirname(destdir), host, options):
+                    elif deploy.remote.remote_extract(config, dirname(destdir), host, options):
                         # remote_extract success
                         pass
                     else:
