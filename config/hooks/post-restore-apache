@@ -5,4 +5,4 @@
 #            section in config file)
 #
 
-/usr/sbin/apache2ctl configtest
+sudo /usr/sbin/apache2ctl configtest

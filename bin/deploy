@@ -279,14 +279,20 @@ if __name__ == '__main__':
             try:
                 run_hook('pre-restore')
 
-                deploy.database.restore(dict(config.items('databases')),
-                                        os.path.join(srcdir, 'databases'))
+                deploy.database.restore(
+                    dict(config.items('databases')),
+                    os.path.join(srcdir, 'databases')
+                )
 
-                deploy.files.restore(dict(config.items('files')),
-                                     os.path.join(srcdir, 'files'))
+                deploy.files.restore(
+                    dict(config.items('files')),
+                    os.path.join(srcdir, 'files')
+                )
 
-                destdir = deploy.code.restore(dict(config.items('code')),
-                                              os.path.join(srcdir, 'code'))
+                destdir = deploy.code.restore(
+                    dict(config.items('code')),
+                    os.path.join(srcdir, 'code')
+                )
                 if destdir:
                     deploy.apache.restore(dict(config.items('apache')), destdir)
 
@@ -297,7 +303,7 @@ if __name__ == '__main__':
                     logger.info("deleting '%(srcdir)s'" % {'srcdir': srcdir})
                     rmtree_silent(srcdir)
 
-                if success:
+                if not success:
                     sys.exit(1)
 
             logger.info("done restoring")
