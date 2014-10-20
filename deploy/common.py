@@ -98,7 +98,7 @@ def makedirs_silent(name, mode=02775):
         os.makedirs(name, mode)
 
 
-def copytree(src, dst, symlinks=False, ignore=None, keepdst=False, noexec=False):
+def copytree(src, dst, symlinks=False, ignore=None, keepdst=False, update_rights=False):
     names = os.listdir(src)
     if ignore is not None:
         ignored_names = ignore(src, names)
@@ -120,18 +120,23 @@ def copytree(src, dst, symlinks=False, ignore=None, keepdst=False, noexec=False)
                 linkto = os.readlink(srcname)
                 os.symlink(linkto, dstname)
             elif os.path.isdir(srcname):
-                copytree(srcname, dstname, symlinks, ignore, keepdst, noexec)
+                copytree(srcname, dstname, symlinks, ignore, keepdst, update_rights)
             else:
                 shutil.copy(srcname, dstname)
-                if noexec:
+                if update_rights:
                     mode = os.stat(dstname).st_mode
 
+                    # no exec
                     if mode & stat.S_IXUSR:
                         mode ^= stat.S_IXUSR
                     if mode & stat.S_IXGRP:
                         mode ^= stat.S_IXGRP
                     if mode & stat.S_IXOTH:
                         mode ^= stat.S_IXOTH
+
+                    # read/write for user and group
+                    mode |= stat.S_IRUSR | stat.S_IWUSR
+                    mode |= stat.S_IRGRP | stat.S_IWGRP
 
                     os.chmod(dstname, mode)
 
