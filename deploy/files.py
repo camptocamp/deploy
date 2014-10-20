@@ -42,7 +42,7 @@ def dump(config, savedir, symlink=False):
             symlink_silent(src, dest)
         else:
             logger.info("copying '%(src)s' to '%(dest)s'" % {'src': src, 'dest': dest})
-            copytree(src, dest, symlinks=True, ignore=ignore)
+            copytree(src, dest, symlinks=True, ignore=ignore, noexec=True)
 
 
 def restore(config, srcdir):

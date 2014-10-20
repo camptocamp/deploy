@@ -4,6 +4,7 @@ import shutil
 import subprocess
 import logging
 import fnmatch
+import stat
 from tempfile import TemporaryFile
 
 __all__ = ['run_hook', 'setup_hooks',
@@ -97,7 +98,7 @@ def makedirs_silent(name, mode=02775):
         os.makedirs(name, mode)
 
 
-def copytree(src, dst, symlinks=False, ignore=None, keepdst=False):
+def copytree(src, dst, symlinks=False, ignore=None, keepdst=False, noexec=False):
     names = os.listdir(src)
     if ignore is not None:
         ignored_names = ignore(src, names)
@@ -119,9 +120,21 @@ def copytree(src, dst, symlinks=False, ignore=None, keepdst=False):
                 linkto = os.readlink(srcname)
                 os.symlink(linkto, dstname)
             elif os.path.isdir(srcname):
-                copytree(srcname, dstname, symlinks, ignore, keepdst)
+                copytree(srcname, dstname, symlinks, ignore, keepdst, noexec)
             else:
                 shutil.copy(srcname, dstname)
+                if noexec:
+                    mode = os.stat(dstname).st_mode
+
+                    if mode & stat.S_IXUSR:
+                        mode ^= stat.S_IXUSR
+                    if mode & stat.S_IXGRP:
+                        mode ^= stat.S_IXGRP
+                    if mode & stat.S_IXOTH:
+                        mode ^= stat.S_IXOTH
+
+                    os.chmod(dstname, mode)
+
             # XXX What about devices, sockets etc.?
         except (IOError, os.error), why:
             errors.append((srcname, dstname, str(why)))
