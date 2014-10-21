@@ -65,9 +65,11 @@ def dump(config, rawtables, savedir):
         else:
             for table in tables:
                 cmd = [] + dump  # clone dump
+                # Enclose table name in doubl quote
+                qtable = '.'.join(['"%s"' % e for e in table.split('.')])
                 cmd += ['-n'] if config['use_schema'] in ('true', 'yes', '1') \
                     else ['-t']
-                cmd += ["%s" % table, database]
+                cmd += [qtable, database]
                 output = file(os.path.join(savedir, database + '.' + table + '.dump'), 'w+b')
                 errors = file(os.path.join(savedir, database + '.' + table + '.dump.log'), 'w')
 
@@ -127,11 +129,13 @@ def drop_database(name, dropcmd=['dropdb'], psqlcmd=['psql'], tries=10):
 def truncate_table(database, table, psqlcmd=['psql'], is_schema=False):
     if database_exists(database, psqlcmd=psqlcmd):
         errors = tempfile.TemporaryFile()
+        # Enclose table name in doubl quote
+        qtable = '.'.join(['"%s"' % e for e in table.split('.')])
         cmd = psqlcmd + [
             '-c',
-            'TRUNCATE TABLE "%(table)s"' % {'table': table}
+            'TRUNCATE TABLE %(table)s' % {'table': qtable}
             if not is_schema else
-            'DROP SCHEMA IF EXISTS "%(schema)s" CASCADE' % {'schema': table},
+            'DROP SCHEMA IF EXISTS %(schema)s CASCADE' % {'schema': qtable},
             database
         ]
         logger.debug("deleting '%(database)s.%(table)s' with '%(cmd)s'" % {
