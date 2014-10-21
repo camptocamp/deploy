@@ -1,3 +1,9 @@
+deploy (0.4.7~c2c+1) wheezy; urgency=low
+
+  * Bug fix only #31
+
+ -- Stéphane Brunner <stephane.brunner@camptocamp.com>  Tue, 21 Oct 2014 11:41:35 +0200
+
 deploy (0.4.6~c2c+1) wheezy; urgency=low
 
   * Bug fix only #28
