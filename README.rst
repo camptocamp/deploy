@@ -12,4 +12,5 @@ This tool is used do deploy a geospatial application an related data:
 RPM build
 ---------
 
-python setup.py bdist_rpm --install-script rpm/install-script
+echo "%_unpackaged_files_terminate_build 0" >> ~/.rpmmacros
+python setup.py bdist_rpm --dist-dir ~/ --install-script rpm/install-script
