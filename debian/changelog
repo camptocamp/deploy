@@ -1,3 +1,9 @@
+deploy (0.4.7~c2c+2) wheezy jessie; urgency=low
+
+  * Build for Jessie
+
+ -- Stéphane Brunner <stephane.brunner@camptocamp.com>  Fri, 10 Apr 2015 12:04:24 +0200
+
 deploy (0.4.7~c2c+1) wheezy; urgency=low
 
   * Bug fix only #31
