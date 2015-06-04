@@ -9,6 +9,8 @@ This tool is used do deploy a geospatial application and related data:
 * The Database.
 * The Geospatial files (Geotiff, shapefile, ...).
 
+Usage documentation is printed with `deploy -h`
+
 RPM build
 ---------
 
