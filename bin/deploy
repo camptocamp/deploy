@@ -276,25 +276,33 @@ if __name__ == '__main__':
 
             setup_hooks(config, options.verbose)
 
-            try:
-                run_hook('pre-restore')
-
+            def deploy_database():
                 deploy.database.restore(
                     dict(config.items('databases')),
                     os.path.join(srcdir, 'databases')
                 )
-
+            def deploy_files():
                 deploy.files.restore(
                     dict(config.items('files')),
                     os.path.join(srcdir, 'files')
                 )
-
+            def deploy_code():
                 destdir = deploy.code.restore(
                     dict(config.items('code')),
                     os.path.join(srcdir, 'code')
                 )
                 if destdir:
                     deploy.apache.restore(dict(config.items('apache')), destdir)
+
+            restore_order = config.get('main', 'restore_order')
+            fct_calls = restore_order.split(',')
+            logger.info("restore order: %s" % restore_order)
+
+            try:
+                run_hook('pre-restore')
+                
+                for fct in fct_calls:
+                    locals()['deploy_%s' % fct]()
 
             finally:
                 success = run_hook('post-restore', exit_on_error=False)
