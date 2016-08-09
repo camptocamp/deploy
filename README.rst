@@ -11,6 +11,15 @@ This tool is used to deploy a geospatial application and related data:
 
 Usage documentation is printed with `deploy -h`
 
+Development
+-----------
+
+The developer environment is set up using:
+
+python -c "import setuptools; execfile('setup.py')" develop
+
+Then it is possible to call bin/deploy.
+
 RPM build
 ---------
 
