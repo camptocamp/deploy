@@ -189,7 +189,7 @@ if __name__ == '__main__':
 
             run_hook('pre-create')
 
-            deploy.create.create_update_archive(destdir, args[0])
+            deploy.create.create_update_archive(destdir, config)
             if has_custom_hooks:
                 deploy.create.copy_hooks(config.get('main', 'hookdir'), destdir)
             else:
