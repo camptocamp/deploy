@@ -1,4 +1,6 @@
 /MANIFEST
 /build
 /dist
+/deploy.egg-info/
+*.pyc
 
