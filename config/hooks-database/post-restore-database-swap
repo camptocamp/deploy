@@ -7,7 +7,9 @@
 
 DATABASES=$@
 
-if [ -x /etc/init.d/apache2 ]; then
+if [ -x /bin/systemctl ]; then
+    sudo /bin/systemctl start apache2
+elif [ -x /etc/init.d/apache2 ]
     sudo /etc/init.d/apache2 start
 fi
 

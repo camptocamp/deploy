@@ -9,6 +9,8 @@ DATABASES=$@
 
 # apache must be stopped to prevent database connection during
 # databases / tables restore.
-if [ -x /etc/init.d/apache2 ]; then
+if [ -x /bin/systemctl ]; then
+    sudo /bin/systemctl stop apache2
+elif [ -x /etc/init.d/apache2 ]
     sudo /etc/init.d/apache2 stop
 fi
