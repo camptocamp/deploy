@@ -5,7 +5,9 @@
 #            section in config file)
 #
 
-if [ -x /etc/init.d/apache2 ]; then
+if [ -x /bin/systemctl ]; then
+    sudo /bin/systemctl stop apache2
+elif [ -x /etc/init.d/apache2 ]
     sudo /etc/init.d/apache2 stop
 fi
 
