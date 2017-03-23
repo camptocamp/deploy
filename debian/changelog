@@ -1,3 +1,9 @@
+deploy (0.4.9~c2c+1) jessie; urgency=low
+
+  * New release
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Thu, 23 Mar 2017 13:49:58 +0100
+
 deploy (0.4.8~c2c+1) jessie; urgency=low
 
   * New jessie release for https://github.com/camptocamp/deploy/pull/34
