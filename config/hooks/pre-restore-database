@@ -11,6 +11,6 @@ DATABASES=$@
 # databases / tables restore.
 if [ -x /bin/systemctl ]; then
     sudo /bin/systemctl stop apache2
-elif [ -x /etc/init.d/apache2 ]
+elif [ -x /etc/init.d/apache2 ]; then
     sudo /etc/init.d/apache2 stop
 fi
