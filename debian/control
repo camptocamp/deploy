@@ -1,5 +1,5 @@
 Source: deploy
-Section: bl_mgmtsrv/sysadmin/admin
+Section: deploy-bl-0.4/sysadmin/admin
 Priority: extra
 Maintainer: Frederic Junod <frederic.junod@camptocamp.com>, Stéphane Brunner <stephane.brunner@camptocamp.com>
 Build-Depends: debhelper (>= 5)
