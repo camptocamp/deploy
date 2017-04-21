@@ -1,3 +1,9 @@
+deploy (0.4.91~c2cbl+2) jessie; urgency=low
+
+  * New release from bl fork
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 21 Apr 2017 10:57:07 +0200
+
 deploy (0.4.91~c2c+1) jessie; urgency=low
 
   * New release
