@@ -7,10 +7,9 @@
 
 DATABASES=$@
 
-# apache must be stopped to prevent database connection during
-# databases / tables restore.
-if [ -x /bin/systemctl ]; then
-    sudo /bin/systemctl stop apache2
-elif [ -x /etc/init.d/apache2 ]; then
-    sudo /etc/init.d/apache2 stop
-fi
+for database in $DATABASES
+do
+  psql -d template1 -c "ALTER DATABASE $database CONNECTION LIMIT 0;"
+  psql -d $database -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid();"
+done
+echo "connections locked and cleared"

@@ -16,8 +16,15 @@ DATABASES=$@
 #   psql -c "VACUUM ANALYZE;" $b
 # done
 
+for database in $DATABASES
+do
+  psql -d template1 -c "ALTER DATABASE $database CONNECTION LIMIT -1;"
+done
+echo "connections restored"
+
 if [ -x /bin/systemctl ]; then
-    sudo /bin/systemctl start apache2
+    sudo /bin/systemctl reload apache2
 elif [ -x /etc/init.d/apache2 ]; then
-    sudo /etc/init.d/apache2 start
+    sudo /etc/init.d/apache2 reload
 fi
+echo "reload apache"
