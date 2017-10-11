@@ -37,10 +37,9 @@ def parse_config(f, rawenv=None):
     logger.debug("configuration files: %s" % [cf for cf in config_files if cf])
 
     config = ConfigParser.ConfigParser()
+    config.read(config_files)
     # setup 'here' magic variable
     config.set('DEFAULT', 'here', dirname(localconf))
-
-    config.read(config_files)
 
     # setup env section
     if not config.has_section('env'):
