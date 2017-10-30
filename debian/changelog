@@ -1,3 +1,9 @@
+deploy (0.4.91~c2c+2) stretch; urgency=low
+
+  * New stretch release
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 30 Oct 2017 09:40:44 +0100
+
 deploy (0.4.91~c2c+1) jessie; urgency=low
 
   * New release
