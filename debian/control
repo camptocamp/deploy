@@ -2,8 +2,8 @@ Source: deploy
 Section: deploy-0.4/sysadmin/admin
 Priority: extra
 Maintainer: Frederic Junod <frederic.junod@camptocamp.com>, Stéphane Brunner <stephane.brunner@camptocamp.com>
-Build-Depends: debhelper (>= 5)
-Build-Depends-Indep: python (>= 2.7), python-support (>= 0.3), python-setuptools
+Build-Depends: debhelper (>= 5), dh-python
+Build-Depends-Indep: python (>= 2.7), python-setuptools
 Standards-Version: 3.8
 
 Package: deploy
