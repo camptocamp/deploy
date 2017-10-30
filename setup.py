@@ -23,7 +23,5 @@ setup(name = 'deploy',
       classifiers = classifiers,
       data_files = [('/etc/deploy/', glob('config/*.cfg')),
                     ('/etc/deploy/hooks/', glob('config/hooks/*')),
-                    ('/etc/deploy/hooks-database/', glob('config/hooks-database/*')),
-                    ('/etc/deploy/hooks-wms/', glob('config/hooks-wms/*')),
-                    ('/etc/deploy/hooks-cw3/', glob('config/hooks-cw3/*'))]
+                    ('/etc/deploy/hooks-database/', glob('config/hooks-database/*'))]
 )
